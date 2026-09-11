@@ -1,0 +1,410 @@
+@import './header.css';
+@import './product.css';
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    background: #ffffff;
+    color: #333;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.main-nav {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 38px;
+    padding: 0 20px;
+    background: #fff;
+    border-top: 1px solid #f5c842;
+    border-bottom: 1px solid #f5c842;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.main-nav a {
+    flex-shrink: 0;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+    font-size: 16px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    text-shadow: none;
+    -webkit-text-stroke: 0;
+    filter: none;
+
+    transition: all 0.2s ease;
+}
+
+.main-nav a:hover {
+    color: #f5c842;
+}
+
+
+/* =========================================
+   HOME
+========================================= */
+
+.home-page {
+    width: 100%;
+    padding-top: 29px;
+    flex: 1;
+}
+
+
+/* =========================================
+   BANNER
+========================================= */
+
+/* =========================================
+   BANNER
+========================================= */
+
+.home-banner {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+}
+
+.home-banner img {
+    width: 100%;
+    height: auto;
+
+    margin: 0;
+    padding: 0;
+
+    display: block;
+
+    object-fit: cover;
+
+    transform: none;
+}
+
+
+/* =========================================
+   BANNER 1
+========================================= */
+
+.home-page > .home-banner:first-child {
+    position: relative;
+    width: 100vw;
+
+    left: 50%;
+    margin-left: -50vw;
+    margin-right: 0;
+
+    margin-top: 0;
+    padding: 0;
+}
+
+.home-page > .home-banner:first-child img {
+    width: 105%;
+    max-width: none;
+
+    margin: 0;
+    padding: 0;
+
+    transform: translateX(-2.4%);
+}
+
+/* =========================================
+   SẢN PHẨM BÁN CHẠY
+========================================= */
+
+.best-selling {
+    width: 100%;
+
+    padding: 25px 20px 50px;
+
+    background: #ffffff;
+}
+
+.best-selling h2 {
+    margin: 0 0 30px;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    text-align: left;
+}
+
+
+.best-selling:not(.recommended-products) {
+    padding-bottom: 0;
+}
+
+.best-selling:not(.recommended-products) .product-list {
+    padding-bottom: 0;
+}
+
+/* =========================================
+   BANNER 2
+========================================= */
+/* =========================================
+   BANNER 2
+========================================= */
+
+/* =========================================
+   BANNER 2
+========================================= */
+
+.banner-two {
+    position: relative;
+
+    width: 100vw;
+
+    margin-top: -40px;
+    margin-left: calc(50% - 50vw);
+
+    padding: 0;
+
+    overflow: hidden;
+}
+
+.banner-two img {
+    width: 100%;
+    height: 450px;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.site-footer {
+    position: relative;
+
+    width: 100%;
+    min-width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    height: auto;
+    aspect-ratio: 2968 / 694;
+
+    background-color: #FFD85A;
+    background-image: url('../../../public/images/footer.png');
+    background-repeat: no-repeat;
+
+    background-position: left center;
+
+    /* Phóng ảnh lớn hơn một chút để cắt phần trắng bên phải */
+    background-size: 100% 95%;
+
+    flex-shrink: 0;
+}
+   
+
+/* =========================================
+   FOOTER TEXT
+========================================= */
+
+.site-footer h3 {
+    margin: 0 0 10px 0;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.site-footer a {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 16px;
+    line-height: 1.4;
+
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+/* =========================================
+   VỊ TRÍ FOOTER
+========================================= */
+
+.footer-contact {
+    position: absolute;
+
+    top: 40px;
+    left: 18%;
+    width: 17%;
+}
+
+.footer-policy {
+    position: absolute;
+
+    top: 40px;
+    left: 38%;
+    width: 17%;
+}
+
+.footer-shopping {
+    position: absolute;
+
+    top: 40px;
+    left: 58%;
+    width: 17%;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1024px) {
+
+    .header-main {
+        padding: 0 25px;
+    }
+
+    .header-logo img {
+        width: 130px;
+    }
+
+    .header-search {
+        width: 170px;
+    }
+
+    .header-actions {
+        gap: 15px;
+    }
+
+    .main-nav {
+        gap: 22px;
+    }
+
+    .main-nav a {
+        font-size: 16px;
+    }
+    
+
+}
+
+
+@media (max-width: 768px) {
+
+    .header-top {
+        height: 30px;
+        padding-left: 10px;
+    }
+
+    .header-promo {
+        font-size: 11px;
+    }
+
+    .header-main {
+        height: 76px;
+        min-height: 0;
+        padding: 0 12px;
+        gap: 10px;
+    }
+
+    .header-logo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .header-search {
+        order: initial;
+        width: min(150px, 38vw);
+    }
+
+    .header-actions {
+        order: initial;
+        margin-left: auto;
+    }
+
+    .main-nav {
+        height: auto;
+
+        padding: 15px;
+
+        flex-wrap: wrap;
+
+        gap: 12px 20px;
+    }
+
+    .main-nav a {
+        font-size: 11px;
+    }
+
+    .best-selling {
+        padding: 35px 20px;
+    }
+
+    .footer-contact,
+    .footer-policy,
+    .footer-shopping {
+        position: static;
+
+        margin: 20px;
+    }
+
+    .site-footer {
+        height: auto;
+
+        padding: 30px 20px;
+    }
+}

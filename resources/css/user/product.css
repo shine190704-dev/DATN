@@ -1,0 +1,258 @@
+/* =========================================
+   PRODUCT LIST
+========================================= */
+
+.product-list {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    column-gap: 10px;
+    row-gap: 70px;
+
+    padding: 0 25px 70px;
+
+    box-sizing: border-box;
+}
+
+/* =========================================
+   PRODUCT CARD
+========================================= */
+.product-card {
+    width: 240px;
+    height: 240px;
+
+    background: #59A78E;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    font-family: 'Merriweather', serif;
+
+    justify-self: center;
+
+    transition: transform 0.2s ease;
+}
+
+/* =========================================
+   PRODUCT IMAGE
+========================================= */
+
+.product-image {
+    width: 240px;
+    height: 165px;
+
+    flex-shrink: 0;
+
+    background: #59A78E;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+/* =========================================
+   PRODUCT NAME
+========================================= */
+
+.product-name {
+    width: 240px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #FFFFFF;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+/* =========================================
+   PRODUCT INFO
+========================================= */
+.product-info {
+    width: 240px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 15px 8px;
+
+    box-sizing: border-box;
+
+    color: #FFFFFF;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   RATING
+========================================= */
+
+.product-rating {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: #FFFFFF;
+
+    white-space: nowrap;
+}
+
+.product-rating img {
+    width: 14px;
+    height: 14px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+/* =========================================
+   PRICE
+========================================= */
+
+.product-price {
+    color: #FFFFFF;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   FAVORITE
+========================================= */
+
+.product-favorite {
+    width: 20px;
+    height: 20px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.product-favorite img {
+    width: 17px;
+    height: 17px;
+
+    display: block;
+
+    object-fit: contain;
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.product-card:hover {
+    transform: translateY(-3px);
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .product-list {
+        grid-template-columns: repeat(2, 220px);
+
+        column-gap: 50px;
+        row-gap: 50px;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 550px) {
+
+    .product-list {
+        grid-template-columns: repeat(2, 160px);
+
+        column-gap: 20px;
+        row-gap: 30px;
+
+        padding: 0 15px 50px;
+    }
+
+    .product-card {
+        width: 160px;
+        height: 160px;
+    }
+
+    .product-image {
+        width: 160px;
+        height: 110px;
+    }
+
+    .product-name {
+        width: 160px;
+        height: 22px;
+        font-size: 10px;
+    }
+
+    .product-info {
+        width: 160px;
+        height: 28px;
+
+        padding-left: 8px;
+        padding-right: 8px;
+
+        font-size: 8px;
+    }
+
+    .product-price {
+        font-size: 8px;
+    }
+
+}
