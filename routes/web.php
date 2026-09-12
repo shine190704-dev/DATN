@@ -9,3 +9,4 @@ require __DIR__ . '/user/cart.php';
 require __DIR__ . '/user/checkout.php';
 require __DIR__ . '/user/order.php';
 require __DIR__ . '/user/profile.php';
+require __DIR__ . '/user/auth.php';

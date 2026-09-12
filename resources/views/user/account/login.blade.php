@@ -5,10 +5,13 @@
 @section('content')
 
 <main class="auth-page login-page">
+    <section class="auth-box" aria-labelledby="login-title">
 
-    <div class="auth-box">
+        <h2 id="login-title">ĐĂNG NHẬP</h2>
 
-        <h2>ĐĂNG NHẬP</h2>
+        @if (session('success'))
+            <div class="auth-success">{{ session('success') }}</div>
+        @endif
 
         <form action="{{ route('login.submit') }}" method="POST">
             @csrf
@@ -16,39 +19,46 @@
             <div class="auth-field">
                 <label for="email">Email</label>
                 <input
-                    type="email"
                     id="email"
                     name="email"
+                    type="email"
                     autocomplete="email"
+                    value="{{ old('email') }}"
                     required
                 >
+
+                @error('email')
+                    <div class="auth-error">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="auth-field">
                 <label for="password">Mật khẩu</label>
                 <input
-                    type="password"
                     id="password"
                     name="password"
+                    type="password"
                     autocomplete="current-password"
                     required
                 >
+
+                @error('password')
+                    <div class="auth-error">{{ $message }}</div>
+                @enderror
             </div>
 
-            <button type="submit" class="auth-button">
+            <button class="auth-button" type="submit">
                 ĐĂNG NHẬP
             </button>
-
         </form>
 
         <div class="auth-links">
-            <a href="#">Quên mật khẩu?</a>
+            <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
             <span>|</span>
             <a href="{{ route('register') }}">Đăng ký ngay</a>
         </div>
 
-    </div>
-
+    </section>
 </main>
 
 @endsection

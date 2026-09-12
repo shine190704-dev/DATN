@@ -25,7 +25,7 @@
             <a href="#" class="header-icon">
                 <img src="{{ asset('images/ICONS/shoppingcart_icon.png') }}" alt="Giỏ hàng">
             </a>
-            <a href="#" class="header-icon">
+            <a href="{{ route('login') }}" class="header-icon">
                 <img src="{{ asset('images/ICONS/profile_icon.png') }}" alt="Tài khoản">
             </a>
         </div>

@@ -11,7 +11,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Momo+Signature&display=swap" rel="stylesheet">
 
-    @vite(['resources/css/user/home.css'])
+    @vite(['resources/css/user/home.css', 'resources/css/user/auth.css'])
 </head>
 
 <body>
