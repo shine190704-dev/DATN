@@ -1,18 +1,32 @@
-
 <nav class="main-nav">
-    <a href="/">
+
+    {{-- KHÁM PHÁ TẤT CẢ --}}
+    <a
+        href="{{ route('product.all') }}"
+        class="{{ request()->routeIs('product.all') ? 'active' : '' }}"
+    >
         KHÁM PHÁ TẤT CẢ
     </a>
-    <a href="#">
+
+    {{-- SẢN PHẨM MỚI --}}
+    <a
+        href="{{ route('product.new') }}"
+        class="{{ request()->routeIs('product.new') ? 'active' : '' }}"
+    >
         SẢN PHẨM MỚI
     </a>
-    <!-- LẤY DANH MỤC TỪ DATABASE -->
+
+    {{-- DANH MỤC --}}
     @foreach($danhMucs as $danhMuc)
-        <a href="{{ route('category.show', $danhMuc->DanhMucID) }}">
+        <a
+            href="{{ route('category.show', $danhMuc->DanhMucID) }}"
+            class="{{ request()->routeIs('category.show') && request()->route('id') == $danhMuc->DanhMucID ? 'active' : '' }}"
+        >
             {{ mb_strtoupper($danhMuc->TenDanhMuc, 'UTF-8') }}
         </a>
     @endforeach
-    
+
+    {{-- VỀ CHÚNG TÔI --}}
     <a href="#">
         VỀ CHÚNG TÔI
     </a>

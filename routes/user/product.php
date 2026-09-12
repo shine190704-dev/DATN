@@ -1,7 +1,9 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\user\ProductController;
+use App\Http\Controllers\user\CategoryController;
 
-Route::get('/san-pham', [ProductController::class, 'index'])
-    ->name('product.index');
+Route::get('/tim-kiem', [CategoryController::class, 'search'])
+	->name('product.search');
+

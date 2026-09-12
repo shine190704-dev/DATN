@@ -33,20 +33,43 @@
     </section>
 
 
+    
+
     <!-- BANNER 2 -->
     <section class="banner-two">
 
-        <img
-            src="{{ asset('images/Banner2.png') }}"
-            alt="Banner 2"
-        >
+    <img
+        src="{{ asset('images/Banner2.png') }}"
+        alt="Banner"
+    >
 
-    </section>
+    <div class="banner-two-content">
+
+        <div class="banner-two-text">
+            Cảm ơn bạn đã đến với chúng tôi.<br>
+            Hãy cùng khám phá những bộ sưu<br>
+            tập gấu bông mới đầy đáng yêu.
+        </div>
+        <a href="{{ route('product.new') }}" class="banner-two-button">
+            Khám phá thêm
+            <span>→</span>
+        </a>
+
+    </div>
+
+        <div class="banner-two-right-image">
+            <img
+            src="{{ asset('images/image_banner2.png') }}"
+            alt="Gấu bông"
+        >
+</div>
+    
+
+</section>
 
 
     <!-- =========================================
          DÀNH CHO BẠN
-         4 sản phẩm bán ít hơn
     ========================================== -->
 
     <section class="best-selling recommended-products">

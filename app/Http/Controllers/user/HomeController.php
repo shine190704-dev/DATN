@@ -9,7 +9,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Danh mục cho navbar
+        // =========================================
+        // DANH MỤC CHO NAVBAR
+        // =========================================
         $danhMucs = DB::table('danhmuc')
             ->where('TrangThai', 'HoatDong')
             ->get();
@@ -17,60 +19,75 @@ class HomeController extends Controller
 
         // =========================================
         // SẢN PHẨM NỔI BẬT
-        // 4 sản phẩm bán nhiều nhất
+        // 8 sản phẩm bán nhiều nhất
         // =========================================
-
         $sanPhamNoiBat = DB::table('SanPham')
             ->where('SanPham.TrangThai', 'HoatDong')
+
+            // DaBan cao nhất → bán nhiều nhất
             ->orderByDesc('SanPham.DaBan')
+
+            // Nếu cùng DaBan → ưu tiên sản phẩm có ID nhỏ hơn
+            ->orderBy('SanPham.SanPhamID', 'asc')
+
             ->limit(8)
+
             ->select('SanPham.*')
 
-            ->selectSub(function ($query) {
-
-                $query->from('HinhAnhSanPham')
-                    ->select('DuongDanAnh')
-                    ->whereColumn(
-                        'HinhAnhSanPham.SanPhamID',
-                        'SanPham.SanPhamID'
-                    )
-                    ->orderByDesc('AnhDaiDien')
-                    ->orderBy('HinhAnhSanPhamID')
-                    ->limit(1);
-
-            }, 'HinhAnh')
+            // Lấy ảnh đại diện
+            ->selectSub(
+                $this->subQueryHinhAnh(),
+                'HinhAnh'
+            )
 
             ->get();
+
+
+        // =========================================
+        // LẤY ID SẢN PHẨM NỔI BẬT
+        // Để DÀNH CHO BẠN không bị trùng
+        // =========================================
+        $idDaLayNoiBat = $sanPhamNoiBat
+            ->pluck('SanPhamID')
+            ->toArray();
 
 
         // =========================================
         // DÀNH CHO BẠN
-        // 4 sản phẩm bán ít hơn
+        // 8 sản phẩm bán ít nhất
+        // Không trùng với SẢN PHẨM NỔI BẬT
         // =========================================
-
         $sanPhamDanhChoBan = DB::table('SanPham')
             ->where('SanPham.TrangThai', 'HoatDong')
+
+            // Loại những sản phẩm đã nằm trong Nổi bật
+            ->whereNotIn(
+                'SanPham.SanPhamID',
+                $idDaLayNoiBat
+            )
+
+            // DaBan thấp nhất → bán ít nhất
             ->orderBy('SanPham.DaBan', 'asc')
-            ->limit(4)
+
+            // Nếu cùng DaBan → ưu tiên ID nhỏ hơn
+            ->orderBy('SanPham.SanPhamID', 'asc')
+
+            ->limit(8)
+
             ->select('SanPham.*')
 
-            ->selectSub(function ($query) {
-
-                $query->from('HinhAnhSanPham')
-                    ->select('DuongDanAnh')
-                    ->whereColumn(
-                        'HinhAnhSanPham.SanPhamID',
-                        'SanPham.SanPhamID'
-                    )
-                    ->orderByDesc('AnhDaiDien')
-                    ->orderBy('HinhAnhSanPhamID')
-                    ->limit(1);
-
-            }, 'HinhAnh')
+            // Lấy ảnh đại diện
+            ->selectSub(
+                $this->subQueryHinhAnh(),
+                'HinhAnh'
+            )
 
             ->get();
 
 
+        // =========================================
+        // TRẢ DỮ LIỆU VỀ HOMEPAGE
+        // =========================================
         return view(
             'user.homepage.home',
             compact(
@@ -79,5 +96,32 @@ class HomeController extends Controller
                 'sanPhamDanhChoBan'
             )
         );
+    }
+
+
+    // =========================================
+    // LẤY ẢNH ĐẠI DIỆN SẢN PHẨM
+    // =========================================
+    private function subQueryHinhAnh()
+    {
+        return function ($query) {
+
+            $query->from('HinhAnhSanPham')
+                ->select('DuongDanAnh')
+
+                ->whereColumn(
+                    'HinhAnhSanPham.SanPhamID',
+                    'SanPham.SanPhamID'
+                )
+
+                // Ưu tiên ảnh đại diện
+                ->orderByDesc('AnhDaiDien')
+
+                // Nếu có nhiều ảnh cùng trạng thái
+                // → lấy ảnh được thêm trước
+                ->orderBy('HinhAnhSanPhamID')
+
+                ->limit(1);
+        };
     }
 }

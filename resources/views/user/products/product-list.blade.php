@@ -52,16 +52,19 @@
 
 
                 <!-- YÊU THÍCH -->
+        
                 <button
                     type="button"
                     class="product-favorite"
+                    data-product-id="{{ $product->SanPhamID }}"
+                    data-product-name="{{ $product->TenSanPham }}"
+                    aria-pressed="false"
+                    title="Thêm vào yêu thích"
                 >
-
                     <img
-                        src="{{ asset('images/ICONS/heart_icon.png') }}"
+                        src="{{ asset('images/ICONS/product_heart.png') }}"
                         alt="Yêu thích"
                     >
-
                 </button>
 
             </div>

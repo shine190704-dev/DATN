@@ -1,4 +1,9 @@
 <footer class="site-footer">
+
+    <div class="footer-logo">
+        <img src="{{ asset('images/ICONS/logo.png') }}" alt="Dollie">
+    </div>
+
     <div class="footer-contact">
         <h3>LIÊN HỆ</h3>
 
@@ -27,6 +32,11 @@
         <a href="#">Quà tặng</a>
         <a href="#">An toàn & Bảo quản</a>
         <a href="#">Hướng dẫn chọn kích thước</a>
+    </div>
+
+
+    <div class="footer-bear">
+        <img src="{{ asset('images/bear.png') }}" alt="Bear">
     </div>
 
 </footer>
