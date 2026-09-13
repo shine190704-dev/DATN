@@ -45,8 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // =========================
 
                 if (response.status === 401) {
-                    showWishlistNotification(data.message);
-
                     setTimeout(function () {
                         window.location.href = '/dang-nhap';
                     }, 1500);
@@ -84,7 +82,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             : 'Thêm vào yêu thích'
                     );
 
-                    showWishlistNotification(data.message);
+                    if (
+                        !data.favorite &&
+                        button.dataset.removeOnUnfavorite === 'true'
+                    ) {
+                        button.closest('.product-card')?.remove();
+                    }
+
                     return;
                 }
 
@@ -92,17 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 // LỖI KHÁC (404, 422, 500...)
                 // =========================
 
-                showWishlistNotification(
-                    data.message || 'Có lỗi xảy ra, vui lòng thử lại.'
-                );
-
             } catch (error) {
 
                 console.error('Lỗi wishlist:', error);
-
-                showWishlistNotification(
-                    'Không thể kết nối, vui lòng thử lại.'
-                );
 
             } finally {
 
@@ -114,37 +110,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-
-    // =========================
-    // THÔNG BÁO
-    // =========================
-
-    function showWishlistNotification(message) {
-
-        if (!message) {
-            return;
-        }
-
-        let notification =
-            document.querySelector('.wishlist-notification');
-
-        if (!notification) {
-
-            notification = document.createElement('div');
-
-            notification.className =
-                'wishlist-notification';
-
-            document.body.appendChild(notification);
-        }
-
-        notification.textContent = message;
-
-        notification.classList.add('show');
-
-        setTimeout(function () {
-            notification.classList.remove('show');
-        }, 2000);
-    }
 
 });

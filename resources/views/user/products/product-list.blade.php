@@ -2,6 +2,7 @@
 
     @php
         $favoriteProductIds = $favoriteProductIds ?? collect();
+        $removeOnUnfavorite = $removeOnUnfavorite ?? false;
     @endphp
 
     @foreach($products as $product)
@@ -69,6 +70,7 @@
                     data-product-name="{{ $product->TenSanPham }}"
                     data-wishlist-url="{{ route('wishlist.toggle') }}"
                     data-csrf-token="{{ csrf_token() }}"
+                    data-remove-on-unfavorite="{{ $removeOnUnfavorite ? 'true' : 'false' }}"
                     class="product-favorite {{ $favoriteProductIds->contains($product->SanPhamID) ? 'active' : '' }}"
                     aria-pressed="{{ $favoriteProductIds->contains($product->SanPhamID) ? 'true' : 'false' }}"
                     title="{{ $favoriteProductIds->contains($product->SanPhamID) ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích' }}"

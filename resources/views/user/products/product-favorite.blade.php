@@ -12,7 +12,8 @@
         @if($products->count() > 0)
 
             @include('user.products.product-list', [
-                'products' => $products
+                'products' => $products,
+                'removeOnUnfavorite' => true
             ])
 
         @else
