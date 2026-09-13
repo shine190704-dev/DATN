@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Quên mật khẩu')
+@section('title', 'Dollie-Quên mật khẩu')
 
 @section('content')
 

@@ -1,5 +1,9 @@
 <div class="product-list">
 
+    @php
+        $favoriteProductIds = $favoriteProductIds ?? collect();
+    @endphp
+
     @foreach($products as $product)
 
         <div class="product-card">
@@ -9,10 +13,16 @@
 
                 @if($product->HinhAnh)
 
-                    <img
-                        src="{{ asset('images/' . $product->HinhAnh) }}"
-                        alt="{{ $product->TenSanPham }}"
+                    <a
+                        href="#"
+                        class="product-image-link"
+                        aria-label="Xem chi tiết {{ $product->TenSanPham }}"
                     >
+                        <img
+                            src="{{ asset('images/' . $product->HinhAnh) }}"
+                            alt="{{ $product->TenSanPham }}"
+                        >
+                    </a>
 
                 @endif
 
@@ -55,16 +65,15 @@
         
                 <button
                     type="button"
-                    class="product-favorite"
                     data-product-id="{{ $product->SanPhamID }}"
                     data-product-name="{{ $product->TenSanPham }}"
-                    aria-pressed="false"
-                    title="Thêm vào yêu thích"
+                    data-wishlist-url="{{ route('wishlist.toggle') }}"
+                    data-csrf-token="{{ csrf_token() }}"
+                    class="product-favorite {{ $favoriteProductIds->contains($product->SanPhamID) ? 'active' : '' }}"
+                    aria-pressed="{{ $favoriteProductIds->contains($product->SanPhamID) ? 'true' : 'false' }}"
+                    title="{{ $favoriteProductIds->contains($product->SanPhamID) ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích' }}"
                 >
-                    <img
-                        src="{{ asset('images/ICONS/product_heart.png') }}"
-                        alt="Yêu thích"
-                    >
+                    <i class="{{ $favoriteProductIds->contains($product->SanPhamID) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
                 </button>
 
             </div>

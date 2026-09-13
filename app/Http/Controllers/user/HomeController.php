@@ -84,6 +84,12 @@ class HomeController extends Controller
 
             ->get();
 
+        $favoriteProductIds = session()->has('NguoiDungID')
+            ? DB::table('danhsachyeuthich')
+                ->where('NguoiDungID', session('NguoiDungID'))
+                ->pluck('SanPhamID')
+            : collect();
+
 
         // =========================================
         // TRẢ DỮ LIỆU VỀ HOMEPAGE
@@ -93,7 +99,8 @@ class HomeController extends Controller
             compact(
                 'danhMucs',
                 'sanPhamNoiBat',
-                'sanPhamDanhChoBan'
+                'sanPhamDanhChoBan',
+                'favoriteProductIds'
             )
         );
     }

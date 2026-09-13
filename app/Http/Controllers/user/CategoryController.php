@@ -46,7 +46,7 @@ public function newProducts()
 {
     $danhMucs = $this->getDanhMucs();
 
-    $products = DB::table('SanPham')
+    $query = DB::table('SanPham')
         ->where('SanPham.TrangThai', 'HoatDong')
 
         // Chỉ lấy sản phẩm được tạo trong 30 ngày gần nhất
@@ -56,10 +56,6 @@ public function newProducts()
             now()->subDays(30)
         )
 
-        // Sản phẩm mới nhất hiển thị trước
-        ->orderByDesc('SanPham.NgayTao')
-        ->orderByDesc('SanPham.SanPhamID')
-
         ->select('SanPham.*')
 
         // Lấy ảnh đại diện
@@ -68,7 +64,9 @@ public function newProducts()
             'HinhAnh'
         )
 
-        ->get();
+        ;
+
+    $products = $this->applySort($query)->get();
 
     return view(
         'user.products.product-new',
@@ -290,8 +288,6 @@ public function newProducts()
 
 
     
-
-
 
 
 }

@@ -10,3 +10,4 @@ require __DIR__ . '/user/checkout.php';
 require __DIR__ . '/user/order.php';
 require __DIR__ . '/user/profile.php';
 require __DIR__ . '/user/auth.php';
+require __DIR__ . '/user/wishlist.php';

@@ -9,7 +9,7 @@
 
         <a href="#">Địa chỉ: Quận 1, TP-HCM</a>
         <a href="#">Hotline: 0123 456 789</a>
-        <a href="#">Email: support@gmail.com</a>
+        <a href="#">Email: dollieshop@gmail.com</a>
         <a href="#">Facebook / Instagram: Dollie</a>
     </div>
 

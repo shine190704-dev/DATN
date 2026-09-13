@@ -19,7 +19,7 @@
 
         <!-- ICON BÊN PHẢI -->
         <div class="header-actions">
-            <a href="#" class="header-icon">
+            <a href="{{ route('wishlist.index') }}" class="header-icon">
                 <img src="{{ asset('images/ICONS/heart_icon.png') }}" alt="Yêu thích">
             </a>
             <a href="#" class="header-icon">

@@ -35,6 +35,15 @@ class ProductController extends Controller
             )
             ->get();
 
-        return view('user.products.product-search', compact('keyword', 'products'));
+        $favoriteProductIds = session()->has('NguoiDungID')
+            ? DB::table('danhsachyeuthich')
+                ->where('NguoiDungID', session('NguoiDungID'))
+                ->pluck('SanPhamID')
+            : collect();
+
+        return view(
+            'user.products.product-search',
+            compact('keyword', 'products', 'favoriteProductIds')
+        );
     }
 }

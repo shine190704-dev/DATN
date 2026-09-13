@@ -77,6 +77,12 @@
     display: block;
 }
 
+.product-image-link {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
 /* =========================================
    PRODUCT NAME
 ========================================= */
@@ -155,13 +161,8 @@
 
 
 
-
-/* =========================================
-   HOVER
-========================================= */
-
 .product-card:hover {
-    transform: translateY(-3px);
+    transform: none;
 }
 
 
@@ -181,38 +182,25 @@
     height: 20px;
     padding: 0;
     margin-top: 10px;
-
     border: none;
     background: transparent;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     cursor: pointer;
     z-index: 10;
 }
 
-.product-favorite img {
-    width: 18px;
-    height: 18px;
-
-    display: block;
-    object-fit: contain;
-    transform: translateY(-8px);
-
+.product-favorite i {
+    font-size: 18px;
+    margin-top: -12px;
+    color: #FFD45A;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.product-favorite.active img {
-    filter: brightness(0) saturate(100%)
-            invert(20%)
-            sepia(100%)
-            saturate(5000%)
-            hue-rotate(350deg)
-            brightness(95%)
-            contrast(110%);
+.product-favorite.active i {
+    color: #FFD45A;
 }
-
 
 
 
@@ -288,4 +276,37 @@
 .product-sort select:focus {
     border-color: #59A78E;
     outline: none;
+}
+
+
+
+
+
+/* =========================
+   THÔNG BÁO TRANG YÊU THÍCH
+   ========================= */
+
+.wishlist-empty {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.wishlist-empty p {
+    margin: 0;
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Tiêu đề SẢN PHẨM YÊU THÍCH */
+.all-products > h2 {
+    width: 100%;
+    margin: 0 0 25px;
+    text-align: center;
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 18px;
+    font-weight: 700;
 }
