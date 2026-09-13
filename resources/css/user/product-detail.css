@@ -3,8 +3,9 @@
 ========================================= */
 
 .product-detail-page {
-    width: 100%;
+    width: min(100%, 1400px);
     min-height: 620px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 43% 57%;
     gap: 18px;
@@ -94,7 +95,7 @@
 
 .product-detail-info {
     min-width: 0;
-    padding: 8px 20px 0 8px;
+    padding: 8px 20px 0 68px;
 }
 
 .product-detail-heading,
@@ -128,6 +129,10 @@
     cursor: pointer;
 }
 
+.product-detail-favorite.active {
+    background: #59A78E;
+}
+
 .product-detail-card {
     gap: 24px;
     min-height: 42px;
@@ -159,6 +164,11 @@
     font: 700 16px 'Merriweather', serif;
 }
 
+.product-detail-options button.active {
+    background: #FFD45A;
+    color: #FFFFFF;
+}
+
 .product-detail-options button,
 .quantity-control button {
     cursor: pointer;
@@ -179,7 +189,7 @@
 }
 
 .product-detail-price-row strong {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .product-detail-actions {

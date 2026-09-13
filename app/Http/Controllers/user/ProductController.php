@@ -64,35 +64,80 @@ class ProductController extends Controller
     // =========================
     public function detail($id)
     {
-        // Lấy thông tin sản phẩm
+        // =========================
+        // LẤY THÔNG TIN SẢN PHẨM
+        // =========================
+
         $product = DB::table('SanPham')
             ->where('SanPhamID', $id)
             ->where('TrangThai', 'HoatDong')
             ->first();
+
 
         // Không tìm thấy sản phẩm
         if (!$product) {
             abort(404);
         }
 
-        // Lấy tất cả hình ảnh của sản phẩm
+
+        // =========================
+        // LẤY TẤT CẢ HÌNH ẢNH
+        // =========================
+
         $images = DB::table('HinhAnhSanPham')
             ->where('SanPhamID', $id)
             ->orderByDesc('AnhDaiDien')
             ->orderBy('HinhAnhSanPhamID')
             ->get();
 
-        // Lấy danh mục cho navbar
+        $variants = DB::table('bienthe')
+            ->where('SanPhamID', $id)
+            ->orderBy('BienTheID')
+            ->get();
+
+
+        // =========================
+        // LẤY DANH MỤC CHO NAVBAR
+        // =========================
+
         $danhMucs = DB::table('danhmuc')
             ->where('TrangThai', 'HoatDong')
             ->get();
+
+
+        // =========================
+        // KIỂM TRA YÊU THÍCH
+        // =========================
+
+        $isFavorite = false;
+
+        if (session()->has('NguoiDungID')) {
+
+            $isFavorite = DB::table('danhsachyeuthich')
+                ->where(
+                    'NguoiDungID',
+                    session('NguoiDungID')
+                )
+                ->where(
+                    'SanPhamID',
+                    $id
+                )
+                ->exists();
+        }
+
+
+        // =========================
+        // TRẢ VỀ TRANG CHI TIẾT
+        // =========================
 
         return view(
             'user.products.product-detail',
             compact(
                 'product',
                 'images',
-                'danhMucs'
+                'variants',
+                'danhMucs',
+                'isFavorite'
             )
         );
     }

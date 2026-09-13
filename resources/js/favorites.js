@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const favoriteButtons = document.querySelectorAll('.product-favorite');
+    const favoriteButtons = document.querySelectorAll(
+        '.product-favorite, .product-detail-favorite'
+    );
 
     favoriteButtons.forEach(function (button) {
 
@@ -68,6 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (icon) {
                         icon.classList.toggle('fa-solid', data.favorite);
                         icon.classList.toggle('fa-regular', !data.favorite);
+                    }
+
+                    if (button.classList.contains('product-detail-favorite')) {
+                        button.textContent = data.favorite
+                            ? 'Đã thêm vào yêu thích'
+                            : 'Thêm vào yêu thích';
                     }
 
                     button.setAttribute(
