@@ -14,6 +14,8 @@
     @vite([
         'resources/css/user/home.css',
         'resources/css/user/auth.css',
+        'resources/css/user/profile.css',
+        'resources/css/user/product-detail.css',
         'resources/js/app.js'
     ])
 </head>

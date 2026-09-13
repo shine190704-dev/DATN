@@ -15,7 +15,7 @@
                 @if($product->HinhAnh)
 
                     <a
-                        href="#"
+                        href="{{ route('product.detail', $product->SanPhamID) }}"
                         class="product-image-link"
                         aria-label="Xem chi tiết {{ $product->TenSanPham }}"
                     >

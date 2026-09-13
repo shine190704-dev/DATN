@@ -628,11 +628,19 @@ Mail::html(
         // ĐĂNG NHẬP THÀNH CÔNG
         // =====================================================
 
-        return redirect()
-            ->route('home')
-            ->with(
-                'success',
-                'Đăng nhập thành công.'
-            );
+        return redirect()->route('home');
     }
+
+
+
+    public function logout(Request $request)
+{
+    $request->session()->forget('NguoiDungID');
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()
+        ->route('home')
+        ->with('success', 'Đăng xuất thành công.');
+}
 }

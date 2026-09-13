@@ -1,0 +1,213 @@
+/* =========================================
+   ACCOUNT PAGE
+========================================= */
+
+.account-page {
+    width: 100%;
+    min-height: 625px;
+    display: flex;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.account-sidebar {
+    width: 230px;
+    min-height: 625px;
+
+    transform: translateX(10px);
+
+    border-right: 1px solid #FFD45A;
+
+    box-sizing: border-box;
+
+    padding-top: 25px;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+
+/* =========================================
+   WELCOME
+========================================= */
+
+.account-welcome {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #FFD45A;
+}
+
+.account-welcome img {
+    width: 30px;
+    height: 30px;
+
+    object-fit: contain;
+
+    margin-right: 5px;
+}
+
+.account-welcome-text {
+    display: flex;
+    flex-direction: column;
+
+    font-family: 'Merriweather', serif;
+
+    line-height: 1.2;
+}
+
+.account-welcome-text span {
+    color: #59A78E;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.account-welcome-text strong {
+    color: #59A78E;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+.account-menu {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding-top: 20px;
+}
+
+
+/* =========================================
+   MENU ITEM
+========================================= */
+
+.account-menu-item {
+    width: 165px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 15px;
+
+    background-color: #59A78E;
+
+    color: #FFD45A;
+
+    font-family: 'Merriweather', serif;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+/* MỤC ĐANG CHỌN */
+
+.account-menu-item.active {
+    background-color: #59A78E;
+    color: #FFD45A;
+}
+
+
+/* HOVER */
+
+.account-menu-item:hover {
+    background-color: #FFD45A;
+    color: #FFFFFF;
+}
+
+.account-menu form {
+    margin: 0;
+}
+
+/* =========================================
+   ACCOUNT CONTENT
+========================================= */
+
+.account-content {
+    flex: 1;
+    padding: 38px 55px;
+}
+
+.account-content h1 {
+    margin: 0 0 35px;
+    color: #59A78E;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.account-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 360px));
+    gap: 24px 40px;
+}
+
+.account-info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1d77b;
+}
+
+.account-info-field span {
+    color: #777;
+    font-size: 12px;
+}
+
+.account-info-field strong {
+    color: #59A78E;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .account-page {
+        display: block;
+    }
+
+    .account-sidebar {
+        width: 100%;
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid #FFD45A;
+        padding: 20px;
+    }
+
+    .account-welcome {
+        max-width: 230px;
+    }
+
+    .account-content {
+        padding: 28px 20px;
+    }
+
+    .account-info-grid {
+        grid-template-columns: 1fr;
+    }
+}

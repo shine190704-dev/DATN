@@ -17,6 +17,15 @@ class CategoryController extends Controller
             ->get();
     }
 
+    private function getFavoriteProductIds()
+    {
+        return session()->has('NguoiDungID')
+            ? DB::table('danhsachyeuthich')
+                ->where('NguoiDungID', session('NguoiDungID'))
+                ->pluck('SanPhamID')
+            : collect();
+    }
+
 
     // =========================================
     // KHÁM PHÁ TẤT CẢ
@@ -31,10 +40,11 @@ class CategoryController extends Controller
         ->selectSub($this->subQueryHinhAnh(), 'HinhAnh');
 
     $products = $this->applySort($query)->get();
+    $favoriteProductIds = $this->getFavoriteProductIds();
 
     return view(
         'user.products.product-all',
-        compact('danhMucs', 'products')
+        compact('danhMucs', 'products', 'favoriteProductIds')
     );
 }
 
@@ -67,12 +77,14 @@ public function newProducts()
         ;
 
     $products = $this->applySort($query)->get();
+    $favoriteProductIds = $this->getFavoriteProductIds();
 
     return view(
         'user.products.product-new',
         compact(
             'danhMucs',
-            'products'
+            'products',
+            'favoriteProductIds'
         )
     );
 }
@@ -145,13 +157,15 @@ public function newProducts()
     }
 
     $products = $query->get();
+    $favoriteProductIds = $this->getFavoriteProductIds();
 
     return view(
         'user.products.product-category',
         compact(
             'danhMucs',
             'danhMuc',
-            'products'
+            'products',
+            'favoriteProductIds'
         )
     );
 }
@@ -276,12 +290,15 @@ public function newProducts()
             ->get();
     }
 
+    $favoriteProductIds = $this->getFavoriteProductIds();
+
     return view(
         'user.products.product-search',
         compact(
             'danhMucs',
             'products',
-            'keyword'
+            'keyword',
+            'favoriteProductIds'
         )
     );
 }

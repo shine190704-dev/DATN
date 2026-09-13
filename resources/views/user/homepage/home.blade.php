@@ -52,7 +52,6 @@
         </div>
         <a href="{{ route('product.new') }}" class="banner-two-button">
             Khám phá thêm
-            <span>→</span>
         </a>
 
     </div>

@@ -1,5 +1,6 @@
 @import './header.css';
 @import './product.css';
+@import './product-detail.css';
 
 * {
     box-sizing: border-box;
@@ -238,7 +239,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 8px;
     background: #ffffff;
     color: #59A78E;
     border-radius: 25px;
