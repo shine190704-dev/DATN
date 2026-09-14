@@ -22,8 +22,11 @@
             <a href="{{ route('wishlist.index') }}" class="header-icon">
                 <img src="{{ asset('images/ICONS/heart_icon.png') }}" alt="Yêu thích">
             </a>
-            <a href="#" class="header-icon">
+            <a href="{{ route('cart.index') }}" class="header-icon header-cart-icon">
                 <img src="{{ asset('images/ICONS/shoppingcart_icon.png') }}" alt="Giỏ hàng">
+                @if(($cartCount ?? 0) > 0)
+                    <span class="cart-count-badge">{{ $cartCount }}</span>
+                @endif
             </a>
             <a href="{{ route('profile') }}" class="header-icon">
                 <img src="{{ asset('images/ICONS/profile_icon.png') }}" alt="Tài khoản">

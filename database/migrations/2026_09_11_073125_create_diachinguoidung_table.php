@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('TenNguoiNhan', 200);
             $table->string('SoDienThoai', 10);
             $table->string('DiaChi', 225);
+            $table->string('ThanhPho', 100);
             $table->boolean('MacDinh')->default(false);
             $table->dateTime('NgayTao')->useCurrent();
             $table->dateTime('NgayCapNhat')->useCurrentOnUpdate()->useCurrent();

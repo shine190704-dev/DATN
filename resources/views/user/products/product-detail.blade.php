@@ -115,7 +115,14 @@
         </div>
 
         <div class="product-detail-actions">
-            <button type="button" class="product-add-cart">Thêm vào giỏ</button>
+            <button
+                type="button"
+                class="product-add-cart"
+                data-cart-url="{{ route('cart.add') }}"
+                data-csrf-token="{{ csrf_token() }}"
+            >
+                Thêm vào giỏ
+            </button>
             <button type="button" class="product-buy-now">Mua ngay</button>
         </div>
 

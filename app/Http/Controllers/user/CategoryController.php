@@ -17,15 +17,6 @@ class CategoryController extends Controller
             ->get();
     }
 
-    private function getFavoriteProductIds()
-    {
-        return session()->has('NguoiDungID')
-            ? DB::table('danhsachyeuthich')
-                ->where('NguoiDungID', session('NguoiDungID'))
-                ->pluck('SanPhamID')
-            : collect();
-    }
-
 
     // =========================================
     // KHÁM PHÁ TẤT CẢ
@@ -171,6 +162,16 @@ public function newProducts()
 }
 
 
+private function getFavoriteProductIds()
+{
+    return session()->has('NguoiDungID')
+        ? DB::table('danhsachyeuthich')
+            ->where('NguoiDungID', session('NguoiDungID'))
+            ->pluck('SanPhamID')
+        : collect();
+}
+
+
 
     private function applySort($query)
 {
@@ -290,15 +291,12 @@ public function newProducts()
             ->get();
     }
 
-    $favoriteProductIds = $this->getFavoriteProductIds();
-
     return view(
         'user.products.product-search',
         compact(
             'danhMucs',
             'products',
-            'keyword',
-            'favoriteProductIds'
+            'keyword'
         )
     );
 }

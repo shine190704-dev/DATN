@@ -157,6 +157,7 @@
 }
 
 .header-icon {
+    position: relative;
     width: 30px;
     height: 30px;
 
@@ -191,6 +192,20 @@
 
 .header-icon:hover {
     opacity: 0.75;
+}
+
+.cart-count-badge {
+    position: absolute;
+    top: -7px;
+    right: -8px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: #FFD45A;
+    color: #ffffff;
+    font: 700 10px/16px 'Merriweather', serif;
+    text-align: center;
 }
 
 

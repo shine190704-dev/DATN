@@ -26,6 +26,8 @@
 
     @include('partials.navbar')
 
+    <div class="cart-toast" role="status" aria-live="polite"></div>
+
     @yield('content')
 
     @include('partials.footer')
