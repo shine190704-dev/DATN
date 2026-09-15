@@ -8,6 +8,44 @@ use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
+    private function pageData()
+    {
+        return DB::table('danhmuc')
+            ->where('TrangThai', 'HoatDong')
+            ->get();
+    }
+
+    public function create()
+    {
+        if (!session()->has('NguoiDungID')) {
+            return redirect()->route('login');
+        }
+
+        return view('user.account.address-create', [
+            'danhMucs' => $this->pageData(),
+            'address' => null,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        if (!session()->has('NguoiDungID')) {
+            return redirect()->route('login');
+        }
+
+        $address = DB::table('DiaChiNguoiDung')
+            ->where('DiaChiNguoiDungID', $id)
+            ->where('NguoiDungID', session('NguoiDungID'))
+            ->first();
+
+        abort_unless($address, 404);
+
+        return view('user.account.address-create', [
+            'danhMucs' => $this->pageData(),
+            'address' => $address,
+        ]);
+    }
+
     /**
      * Hiển thị sổ địa chỉ
      */
