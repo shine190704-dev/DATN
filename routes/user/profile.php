@@ -6,5 +6,8 @@ use App\Http\Controllers\user\ProfileController;
 Route::get('/thong-tin-ca-nhan', [ProfileController::class, 'index'])
     ->name('profile');
 
-Route::post('/thong-tin-ca-nhan', [ProfileController::class, 'update'])
+Route::get('/thong-tin-ca-nhan/chinh-sua', [ProfileController::class, 'edit'])
+    ->name('profile.edit');
+
+Route::put('/thong-tin-ca-nhan', [ProfileController::class, 'update'])
     ->name('profile.update');

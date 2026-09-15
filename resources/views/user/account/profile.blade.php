@@ -150,7 +150,10 @@
     {{-- NÚT CHỈNH SỬA --}}
     <div class="account-edit">
 
-        <a href="#" class="account-edit-button">
+        <a
+            href="{{ route('profile.edit') }}"
+            class="account-edit-button"
+        >
             Chỉnh sửa
         </a>
 

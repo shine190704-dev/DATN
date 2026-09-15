@@ -16,11 +16,15 @@
             >
 
             <div class="account-welcome-text">
-                <span>Xin chào bạn!</span>
+
+                <span>
+                    Xin chào bạn!
+                </span>
 
                 <strong>
                     {{ trim(($user->Ho ?? '') . ' ' . ($user->Ten ?? '')) }}
                 </strong>
+
             </div>
 
         </div>
@@ -112,101 +116,136 @@
             @method('PUT')
 
 
-            {{-- HỌ --}}
+            <div class="profile-edit-fields">
 
-            <div class="account-info-field">
 
-                <label for="Ho">
-                    Họ
-                </label>
+                {{-- HỌ VÀ TÊN --}}
 
-                <input
-                    type="text"
-                    id="Ho"
-                    name="Ho"
-                    value="{{ old('Ho', $user->Ho ?? '') }}"
-                    required
-                >
+                <div class="account-info-field">
+
+                    <label for="HoTen">
+                        Họ và tên
+                    </label>
+
+                    <div class="input-error-row">
+
+                        <input
+                            type="text"
+                            id="HoTen"
+                            name="HoTen"
+                            value="{{ old('HoTen', trim(($user->Ho ?? '') . ' ' . ($user->Ten ?? ''))) }}"
+                            required
+                        >
+
+                        @error('HoTen')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+
+                {{-- SỐ ĐIỆN THOẠI --}}
+
+                <div class="account-info-field">
+
+                    <label for="SoDienThoai">
+                        Số điện thoại
+                    </label>
+
+                    <div class="input-error-row">
+
+                        <input
+                            type="text"
+                            id="SoDienThoai"
+                            name="SoDienThoai"
+                            value="{{ old('SoDienThoai', $user->SoDienThoai ?? '') }}"
+                            required
+                        >
+
+                        @error('SoDienThoai')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+
+                {{-- EMAIL --}}
+
+                <div class="account-info-field">
+
+                    <label for="Email">
+                        Email
+                    </label>
+
+                    <div class="input-error-row">
+
+                        <input
+                            type="email"
+                            id="Email"
+                            name="Email"
+                            value="{{ old('Email', $user->Email ?? '') }}"
+                            required
+                        >
+
+                        @error('Email')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+
+                {{-- NGÀY SINH --}}
+
+                <div class="account-info-field">
+
+                    <label for="NgaySinh">
+                        Ngày sinh
+                    </label>
+
+                    <div class="input-error-row">
+
+                        <input
+                            type="date"
+                            id="NgaySinh"
+                            name="NgaySinh"
+                            value="{{ old('NgaySinh', $user->NgaySinh ?? '') }}"
+                        >
+
+                        @error('NgaySinh')
+
+                            <span class="field-error">
+                                {{ $message }}
+                            </span>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
 
             </div>
 
 
-            {{-- TÊN --}}
-
-            <div class="account-info-field">
-
-                <label for="Ten">
-                    Tên
-                </label>
-
-                <input
-                    type="text"
-                    id="Ten"
-                    name="Ten"
-                    value="{{ old('Ten', $user->Ten ?? '') }}"
-                    required
-                >
-
-            </div>
-
-
-            {{-- SỐ ĐIỆN THOẠI --}}
-
-            <div class="account-info-field">
-
-                <label for="SoDienThoai">
-                    Số điện thoại
-                </label>
-
-                <input
-                    type="text"
-                    id="SoDienThoai"
-                    name="SoDienThoai"
-                    value="{{ old('SoDienThoai', $user->SoDienThoai ?? '') }}"
-                    required
-                >
-
-            </div>
-
-
-            {{-- EMAIL --}}
-
-            <div class="account-info-field">
-
-                <label for="Email">
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    id="Email"
-                    name="Email"
-                    value="{{ old('Email', $user->Email ?? '') }}"
-                    required
-                >
-
-            </div>
-
-
-            {{-- NGÀY SINH --}}
-
-            <div class="account-info-field">
-
-                <label for="NgaySinh">
-                    Ngày sinh
-                </label>
-
-                <input
-                    type="date"
-                    id="NgaySinh"
-                    name="NgaySinh"
-                    value="{{ old('NgaySinh', $user->NgaySinh ?? '') }}"
-                >
-
-            </div>
-
-
-            {{-- NÚT --}}
+            {{-- NÚT HỦY / LƯU --}}
 
             <div class="account-edit">
 
@@ -225,6 +264,7 @@
                 </button>
 
             </div>
+
 
         </form>
 

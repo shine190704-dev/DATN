@@ -445,3 +445,161 @@
     font-size: 16px;
     font-weight: 700;
 }
+
+/* =========================================
+   CHỈNH SỬA THÔNG TIN
+========================================= */
+
+.account-edit-form {
+    width: 100%;
+}
+
+.account-edit-form .account-info-grid {
+    margin-top: 0;
+}
+
+.account-info-field label {
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    margin-bottom: 2px;
+}
+
+.account-info-field input {
+    width: 100%;
+    height: 30px;
+
+    padding: 0;
+
+    border: none;
+    border-bottom: 1px solid #f1d77b;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+    font-size: 16px;
+    font-weight: 700;
+
+    box-sizing: border-box;
+}
+
+.account-info-field input:focus {
+    border-bottom: 1px solid #FFD45A;
+}
+
+
+/* =========================================
+   NÚT HỦY / LƯU
+========================================= */
+
+.account-edit-form .account-edit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+.account-edit-form .account-edit-button {
+    border: none;
+    cursor: pointer;
+}
+
+
+
+
+/* =========================================
+   CHỈNH SỬA THÔNG TIN
+========================================= */
+
+.account-edit-form {
+    width: 100%;
+}
+
+.profile-edit-fields {
+    width: 100%;
+}
+
+.profile-edit-fields .account-info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    width: 100%;
+    max-width: 700px;
+
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+
+    border-bottom: 1px solid #f1d77b;
+}
+
+.profile-edit-fields .account-info-field label {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.profile-edit-fields .account-info-field input {
+    width: 100%;
+    height: 32px;
+
+    padding: 7px 0 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+    font-size: 16px;
+    font-weight: 700;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   NÚT HỦY / LƯU
+========================================= */
+
+.account-edit-form .account-edit {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+.account-edit-form .account-edit-button {
+    border: none;
+    cursor: pointer;
+}
+
+.profile-edit-fields .field-error {
+    flex-shrink: 0;
+
+    color: red !important;
+
+    font-family: 'Merriweather', serif;
+    font-size: 12px;
+    font-weight: 400;
+
+    white-space: nowrap;
+}
