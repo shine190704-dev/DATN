@@ -95,21 +95,63 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		try {
 			if (removeButton) {
-				const data = await sendCartRequest(removeUrl, {
-					ChiTietGioHangID: itemId
-				});
 
-				item.remove();
-				updateCartBadge(data.cartCount);
-				updateCartTitle(data.cartCount);
-				showToast(data.message);
+    const data = await sendCartRequest(removeUrl, {
+        ChiTietGioHangID: itemId
+    });
 
-				if (Number(data.cartCount) === 0) {
-					window.location.reload();
-				}
+    // Xóa sản phẩm khỏi giao diện
+    item.remove();
 
-				return;
-			}
+    // Cập nhật số lượng trên icon giỏ hàng
+    updateCartBadge(data.cartCount);
+
+    // Cập nhật tiêu đề giỏ hàng
+    updateCartTitle(data.cartCount);
+
+    // Tính lại tổng tiền ngay lập tức
+    const total = Array.from(
+        cartPage.querySelectorAll('.cart-item')
+    ).reduce(function (sum, cartItem) {
+
+        const quantity = Number(
+            cartItem
+                .querySelector('.cart-quantity')
+                .textContent
+                .trim()
+        );
+
+        const unitPrice = Number(
+            cartItem.dataset.unitPrice
+        );
+
+        return sum + (unitPrice * quantity);
+
+    }, 0);
+
+
+    const cartTotal =
+        cartPage.querySelector('#cartTotal');
+
+
+    if (cartTotal) {
+
+        cartTotal.textContent =
+            formatPrice(total);
+
+    }
+
+
+    showToast(data.message);
+
+
+    // Nếu hết sản phẩm thì reload để hiện giao diện giỏ hàng trống
+    if (Number(data.cartCount) === 0) {
+        window.location.reload();
+    }
+
+    return;
+}
 
 			const quantityElement = item.querySelector('.cart-quantity');
 			const currentQuantity = Number(quantityElement.textContent.trim());

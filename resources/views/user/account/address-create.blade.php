@@ -10,7 +10,10 @@
             <img src="{{ asset('images/ICONS/profile_icon.png') }}" alt="Tài khoản">
             <div class="account-welcome-text">
                 <span>Xin chào bạn!</span>
-                <strong>July</strong>
+                <strong>
+                    {{ trim(($user->Ho ?? '') . ' ' . ($user->Ten ?? '')) }}
+                </strong>
+
             </div>
         </div>
 

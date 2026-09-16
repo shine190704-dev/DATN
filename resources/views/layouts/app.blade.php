@@ -16,7 +16,9 @@
         'resources/css/user/auth.css',
         'resources/css/user/profile.css',
         'resources/css/user/address.css',
+        'resources/css/user/cart.css',
         'resources/css/user/product-detail.css',
+        'resources/js/user/checkout.js',
         'resources/js/app.js'
     ])
     @stack('styles')

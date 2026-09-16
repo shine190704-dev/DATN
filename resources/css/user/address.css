@@ -175,7 +175,7 @@
 
 .empty-address {
     padding: 35px 20px;
-    color: #FFFFFF;
+    color: #59A78E;
     text-align: center;
 }
 
@@ -344,4 +344,949 @@
     .address-actions {
         flex-wrap: wrap;
     }
+}
+
+
+
+
+
+
+
+/* =========================================================
+   CHECKOUT - ĐỊA CHỈ + TỔNG TIỀN
+========================================================= */
+
+.checkout-page {
+    width: 100%;
+    min-height: 625px;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+}
+
+.checkout-container {
+    width: min(100%, 980px);
+    margin: 0 auto;
+    padding: 20px 0 35px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   TIÊU ĐỀ
+========================================================= */
+
+.checkout-title {
+    margin: 0 0 2px;
+    text-align: center;
+    color: #59A78E;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   HEADER ĐỊA CHỈ
+========================================================= */
+
+.checkout-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    padding: 0 0 4px;
+
+    border-bottom: 1px solid #FFD45A;
+    box-sizing: border-box;
+}
+
+.checkout-section-header span,
+.checkout-section-header a {
+    color: #59A78E;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.checkout-section-header a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.checkout-section-header a:hover {
+    color: #4E987F;
+}
+
+/* =========================================================
+   DANH SÁCH ĐỊA CHỈ
+========================================================= */
+
+.checkout-address-section {
+    width: 100%;
+    margin-bottom: 22px;
+}
+
+.checkout-address-list {
+    width: 100%;
+    margin-top: 11px;
+}
+
+.checkout-address-item {
+    display: flex;
+    align-items: flex-start;
+
+    width: 100%;
+    min-height: 51px;
+
+    margin-bottom: 13px;
+    padding: 10px 13px;
+
+    border-radius: 11px;
+    background-color: #59A78E;
+
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.checkout-address-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Radio */
+
+.checkout-address-item input[type="radio"] {
+    width: 9px;
+    height: 9px;
+    margin: 2px 8px 0 0;
+    accent-color: #FFD45A;
+    cursor: pointer;
+}
+
+/* Nội dung địa chỉ */
+
+.checkout-address-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.checkout-address-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 4px;
+}
+
+.checkout-address-name strong {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.checkout-address-name > span:not(.checkout-default) {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.checkout-default {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 2px 5px;
+
+    border-radius: 4px;
+
+    background-color: #FFD45A;
+    color: #FFFFFF !important;
+
+    font-size: 9px !important;
+    font-weight: 700 !important;
+}
+
+.checkout-address-detail {
+    color: #FFFFFF;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* =========================================================
+   CHƯA CÓ ĐỊA CHỈ
+========================================================= */
+
+.checkout-no-address {
+    width: 100%;
+    margin-top: 10px;
+    padding: 18px 20px;
+
+    border: 1px solid #FFD45A;
+    border-radius: 10px;
+
+    box-sizing: border-box;
+}
+
+.checkout-no-address-title {
+    margin-bottom: 5px;
+
+    color: #59A78E;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.checkout-no-address p {
+    margin: 0 0 15px;
+
+    color: #777;
+    font-size: 10px;
+}
+
+/* =========================================================
+   FORM THÊM ĐỊA CHỈ
+========================================================= */
+
+.checkout-address-form {
+    width: 100%;
+}
+
+.checkout-form-group {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.checkout-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #59A78E;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.checkout-form-group input,
+.checkout-form-group select,
+.checkout-form-group textarea {
+    width: 100%;
+
+    padding: 8px 10px;
+
+    border: 1px solid #D9D9D9;
+    border-radius: 6px;
+
+    outline: none;
+    background-color: #FFFFFF;
+
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+
+    box-sizing: border-box;
+}
+
+.checkout-form-group input,
+.checkout-form-group select {
+    height: 32px;
+}
+
+.checkout-form-group textarea {
+    min-height: 65px;
+    resize: vertical;
+}
+
+.checkout-form-group input:focus,
+.checkout-form-group select:focus,
+.checkout-form-group textarea:focus {
+    border-color: #59A78E;
+}
+
+.checkout-form-group input::placeholder,
+.checkout-form-group textarea::placeholder {
+    color: #B5B5B5;
+}
+
+/* Lỗi validation */
+
+.checkout-error {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #E0A800;
+    font-size: 9px;
+}
+
+/* Nút lưu địa chỉ */
+
+.checkout-save-address {
+    min-width: 105px;
+    height: 29px;
+
+    padding: 0 15px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #59A78E;
+    color: #FFD45A;
+
+    font-family: 'Merriweather', serif;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.checkout-save-address:hover {
+    background-color: #4E987F;
+}
+
+/* =========================================================
+   TỔNG TIỀN
+========================================================= */
+
+.checkout-total-section {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.checkout-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.checkout-total-row span {
+    width: 150px;
+    color: #59A78E;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.checkout-total-row strong {
+    width: 100px;
+    color: #59A78E;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: right;
+}
+
+.checkout-grand-total {
+    width: 250px;
+    margin-top: 13px;
+    margin-bottom: 0;
+    margin-left: auto;
+    padding-top: 8px;
+    border-top: 1px solid #FFD45A;
+}
+
+.checkout-grand-total span,
+.checkout-grand-total strong {
+    font-weight: 700;
+}
+
+/* =========================================================
+   PHẦN PHƯƠNG THỨC THANH TOÁN - GIAO DIỆN TẠM
+========================================================= */
+
+.checkout-placeholder {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.checkout-placeholder-title {
+    width: 100%;
+    padding-bottom: 4px;
+
+    border-bottom: 1px solid #FFD45A;
+
+    color: #59A78E;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.checkout-placeholder-box {
+    width: 100%;
+    min-height: 70px;
+
+    margin-top: 11px;
+    padding: 15px;
+
+    border-radius: 11px;
+
+    background-color: #59A78E;
+    color: #FFFFFF;
+
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   NÚT ĐẶT HÀNG
+========================================================= */
+
+.checkout-order-button {
+    display: block;
+
+    min-width: 116px;
+    height: 30px;
+
+    margin: 25px auto 0;
+    padding: 0 18px;
+
+    border: none;
+    border-radius: 11px;
+
+    background-color: #FFD45A;
+    color: #FFFFFF;
+
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.checkout-order-button:hover {
+    background-color: #F5C83F;
+}
+
+
+
+/* =========================================================
+   CHECKOUT - SẢN PHẨM
+========================================================= */
+
+.checkout-products-section {
+    width: calc(100% - 30px);
+    margin: 25px auto;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+.checkout-product-header {
+    display: grid;
+    grid-template-columns:
+        80px
+        minmax(180px, 2.2fr)
+        minmax(90px, 1.2fr)
+        minmax(90px, 1.2fr)
+        minmax(80px, 1fr)
+        minmax(100px, 1.3fr);
+    align-items: center;
+    width: 100%;
+    min-height: 38px;
+    border-bottom: 1px solid #FFD45A;
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+
+.checkout-product-header > div {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Cột "Sản phẩm" (div thứ 2) căn trái để khớp .checkout-product-name */
+.checkout-product-header > div:nth-child(2) {
+    text-align: left;
+    padding-left: 10px;
+}
+
+
+/* Ẩn div rỗng (cột ảnh) trong header */
+.checkout-product-header > div:nth-child(1) {
+    display: none;
+}
+
+/* "Sản phẩm" trải dài che cột 1 (ảnh) + cột 2 (tên), căn trái */
+.checkout-product-header > div:nth-child(2) {
+    grid-column: 1 / 3;
+    text-align: left;
+    padding-left: 10px;
+}
+
+
+
+
+
+/* =========================================================
+   DANH SÁCH
+========================================================= */
+
+.checkout-products-list {
+    width: 100%;
+}
+
+
+/* =========================================================
+   SẢN PHẨM
+========================================================= */
+
+.checkout-product-item {
+    display: grid;
+    grid-template-columns: 70px minmax(170px, 2.2fr) minmax(85px, 1.2fr) minmax(85px, 1.2fr) minmax(75px, 1fr) minmax(95px, 1.3fr);
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    min-height: 95px;
+    border-bottom: 1px solid #FFD45A;
+    box-sizing: border-box;
+    column-gap: 0;
+}
+
+
+/* =========================================================
+   ẢNH
+========================================================= */
+
+.checkout-product-image {
+    width: 70px;
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkout-product-image img {
+    width: 70px;
+    height: 70px;
+
+    object-fit: contain;
+    display: block;
+}
+
+
+/* =========================================================
+   TÊN SẢN PHẨM
+========================================================= */
+
+.checkout-product-name {
+    width: 100%;
+    padding-left: 10px;
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: left;
+    justify-self: stretch;
+}
+
+
+/* =========================================================
+   KÍCH THƯỚC
+========================================================= */
+
+.checkout-product-size {
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MÀU SẮC
+========================================================= */
+
+.checkout-product-color {
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SỐ LƯỢNG
+========================================================= */
+
+.checkout-product-quantity {
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   GIÁ
+========================================================= */
+
+.checkout-product-price {
+    color: #59A78E;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MÃ GIẢM GIÁ
+========================================================= */
+
+.checkout-coupon-section {
+    width: 100%;
+    margin: 16px 0 10px;
+    box-sizing: border-box;
+}
+
+.checkout-coupon-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.checkout-coupon-input {
+    flex: 1;
+    height: 34px;
+    padding: 0 18px;
+
+    border: 1px solid #59A78E;
+    border-radius: 999px;
+
+    background: transparent;
+    color: #59A78E;
+
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+
+    outline: none;
+    box-sizing: border-box;
+}
+
+.checkout-coupon-input::placeholder {
+    color: #59A78E;
+    opacity: 0.75;
+}
+
+.checkout-coupon-btn {
+    height: 34px;
+    min-width: 108px;
+    padding: 0 18px;
+
+    border: 1px solid #FFD45A;
+    border-radius: 999px;
+
+    background: #FFD45A;
+    color: #FFFFFF;
+
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TỔNG TIỀN
+========================================================= */
+
+.checkout-total-section {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.checkout-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.checkout-total-row span {
+    width: 150px;
+
+    color: #59A78E;
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.checkout-total-row strong {
+    width: 100px;
+
+    color: #59A78E;
+    font-size: 14px;
+    font-weight: 400;
+
+    text-align: right;
+    white-space: nowrap;
+}
+
+.checkout-grand-total {
+    width: 250px;
+
+    margin-top: 13px;
+    margin-bottom: 0;
+    margin-left: auto;
+
+    padding-top: 8px;
+
+    border-top: 1px solid #FFD45A;
+}
+
+.checkout-grand-total span,
+.checkout-grand-total strong {
+    font-weight: 700;
+}
+
+
+.checkout-payment-section {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.checkout-payment-list {
+    width: 100%;
+    margin-top: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.checkout-payment-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 80px;
+
+    padding: 20px 22px;
+
+    border-radius: 14px;
+    background-color: #59A78E;
+
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.checkout-payment-item input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    accent-color: #FFD45A;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkout-payment-content {
+    min-width: 0;
+}
+
+.checkout-payment-name {
+    color: #FFD45A;
+    font-family: 'Merriweather', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.checkout-payment-desc {
+    color: #FFFFFF;
+    font-family: 'Merriweather', serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+.checkout-payment-item input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    flex-shrink: 0;
+
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    background-color: transparent;
+
+    position: relative;
+    cursor: pointer;
+}
+
+.checkout-payment-item input[type="radio"]:checked {
+    border-color: #FFD45A;
+}
+
+.checkout-payment-item input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #FFD45A;
+    transform: translate(-50%, -50%);
+}
+
+
+
+
+.order-success-page {
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Merriweather', serif;
+}
+
+.order-success-container {
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+}
+
+.order-success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #59A78E;
+    color: #FFFFFF;
+    font-size: 32px;
+}
+
+.order-success-title {
+    margin: 0 0 8px;
+    color: #59A78E;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.order-success-desc {
+    margin: 0 0 20px;
+    color: #777;
+    font-size: 13px;
+}
+
+.order-success-code {
+    margin-bottom: 24px;
+    padding: 10px 16px;
+
+    border-radius: 8px;
+    background: #FFF8E7;
+    color: #59A78E;
+    font-size: 14px;
+}
+
+.order-success-code strong {
+    color: #FFD45A;
+}
+
+.order-success-info {
+    margin-bottom: 24px;
+    padding: 18px 20px;
+
+    border-radius: 12px;
+    background: #59A78E;
+    color: #FFFFFF;
+    text-align: left;
+}
+
+.order-success-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.order-success-row:last-child {
+    margin-bottom: 0;
+}
+
+.order-success-row span {
+    color: #FFD45A;
+    flex-shrink: 0;
+}
+
+.order-success-row strong {
+    text-align: right;
+}
+
+.order-success-total {
+    padding-top: 10px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(255, 212, 90, 0.5);
+}
+
+.order-success-products {
+    margin-bottom: 28px;
+    text-align: left;
+}
+
+.order-success-product-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding: 10px 0;
+    border-bottom: 1px solid #EEE;
+
+    font-size: 13px;
+    color: #59A78E;
+}
+
+.order-success-product-name span {
+    color: #777;
+    font-size: 12px;
+}
+
+.order-success-product-qty {
+    color: #777;
+}
+
+.order-success-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 140px;
+    height: 38px;
+    padding: 0 20px;
+
+    border-radius: 19px;
+    background: #FFD45A;
+    color: #FFFFFF;
+
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
 }

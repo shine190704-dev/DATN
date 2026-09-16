@@ -163,32 +163,15 @@
         </div>
 
 
-        {{-- TỔNG TIỀN --}}
-        <div class="cart-summary">
-
-            <span>
-                Tổng cộng:
-            </span>
-
-            <strong id="cartTotal">
-
-                {{ number_format($total, 0, ',', '.') }}
-                VND
-
-            </strong>
-
-        </div>
-
-
         {{-- THANH TOÁN --}}
         <div class="cart-checkout">
 
-            <button
-                type="button"
+            <a
+                href="{{ route('checkout.index') }}"
                 class="cart-checkout-btn"
             >
                 THANH TOÁN
-            </button>
+            </a>
 
         </div>
 

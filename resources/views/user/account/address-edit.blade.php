@@ -26,8 +26,9 @@
                 </span>
 
                 <strong>
-                    July
+                    {{ trim(($user->Ho ?? '') . ' ' . ($user->Ten ?? '')) }}
                 </strong>
+
 
             </div>
 

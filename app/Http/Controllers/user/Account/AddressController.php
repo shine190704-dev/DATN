@@ -49,34 +49,53 @@ class AddressController extends Controller
     /**
      * Hiển thị sổ địa chỉ
      */
-    public function index()
-    {
-        // Bắt buộc đăng nhập
-        if (!session()->has('NguoiDungID')) {
-            return redirect()
-                ->route('login')
-                ->with('error', 'Vui lòng đăng nhập để xem sổ địa chỉ.');
-        }
-
-        $nguoiDungID = session('NguoiDungID');
-
-        // Lấy danh mục cho navbar
-        $danhMucs = DB::table('danhmuc')
-            ->where('TrangThai', 'HoatDong')
-            ->get();
-
-        // Chỉ lấy địa chỉ thuộc người dùng đang đăng nhập
-        $addresses = DB::table('DiaChiNguoiDung')
-            ->where('NguoiDungID', $nguoiDungID)
-            ->orderByDesc('MacDinh')
-            ->orderByDesc('DiaChiNguoiDungID')
-            ->get();
-
-        return view(
-            'user.account.addresses',
-            compact('addresses', 'danhMucs')
-        );
+    /**
+ * Hiển thị sổ địa chỉ
+ */
+public function index()
+{
+    // Bắt buộc đăng nhập
+    if (!session()->has('NguoiDungID')) {
+        return redirect()
+            ->route('login')
+            ->with('error', 'Vui lòng đăng nhập để xem sổ địa chỉ.');
     }
+
+    $nguoiDungID = session('NguoiDungID');
+
+    // Lấy thông tin người dùng đang đăng nhập
+    $user = DB::table('NguoiDung')
+        ->where('NguoiDungID', $nguoiDungID)
+        ->first();
+
+    // Nếu không tìm thấy người dùng
+    if (!$user) {
+        session()->forget('NguoiDungID');
+
+        return redirect()->route('login');
+    }
+
+    // Lấy danh mục cho navbar
+    $danhMucs = DB::table('DanhMuc')
+        ->where('TrangThai', 'HoatDong')
+        ->get();
+
+    // Chỉ lấy địa chỉ của người dùng đang đăng nhập
+    $addresses = DB::table('DiaChiNguoiDung')
+        ->where('NguoiDungID', $nguoiDungID)
+        ->orderByDesc('MacDinh')
+        ->orderByDesc('DiaChiNguoiDungID')
+        ->get();
+
+    return view(
+        'user.account.addresses',
+        compact(
+            'user',
+            'addresses',
+            'danhMucs'
+        )
+    );
+}
 
 
     /**
@@ -196,9 +215,19 @@ class AddressController extends Controller
         });
 
 
-        return redirect()
-            ->route('address.index')
-            ->with('success', 'Thêm địa chỉ thành công.');
+        if ($request->return_to === 'checkout') {
+
+    return redirect()
+        ->route('checkout.index', [
+            'BienTheID' => $request->BienTheID,
+            'SoLuong' => $request->SoLuong ?? 1,
+        ])
+        ->with('success', 'Lưu địa chỉ thành công.');
+}
+
+return redirect()
+    ->route('address.index')
+    ->with('success', 'Thêm địa chỉ thành công.');
     }
 
 

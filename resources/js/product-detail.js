@@ -194,5 +194,61 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+        // =========================================================
+    // MUA NGAY
+    // =========================================================
+
+    const buyNowButton = document.querySelector('.product-buy-now');
+
+    buyNowButton?.addEventListener('click', function () {
+
+        console.log('Đã bấm Mua ngay');
+        console.log('Biến thể:', selectedVariant);
+        console.log('Số lượng:', selectedQuantity);
+        console.log('Tồn kho:', selectedStock);
+
+        if (!selectedVariant) {
+            showCartToast('Vui lòng chọn biến thể sản phẩm.');
+            return;
+        }
+
+        if (selectedQuantity < 1) {
+            showCartToast('Số lượng sản phẩm không hợp lệ.');
+            return;
+        }
+
+        if (selectedStock < selectedQuantity) {
+            showCartToast('Số lượng sản phẩm trong kho không đủ.');
+            return;
+        }
+
+        const checkoutUrl = buyNowButton.dataset.checkoutUrl;
+
+        console.log('Checkout URL:', checkoutUrl);
+
+        if (!checkoutUrl) {
+            showCartToast('Không tìm thấy trang thanh toán.');
+            return;
+        }
+
+        const params = new URLSearchParams({
+            BienTheID: selectedVariant.BienTheID,
+            SoLuong: selectedQuantity
+        });
+
+        const finalUrl = checkoutUrl + '?' + params.toString();
+
+        console.log('Chuyển đến:', finalUrl);
+
+        window.location.href = finalUrl;
+    });
+
+
+    // =========================================================
+    // KHỞI TẠO BIẾN THỂ
+    // =========================================================
+
     updateVariant();
+
 });
+

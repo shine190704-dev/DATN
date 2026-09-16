@@ -123,7 +123,13 @@
             >
                 Thêm vào giỏ
             </button>
-            <button type="button" class="product-buy-now">Mua ngay</button>
+            <button
+                type="button"
+                class="product-buy-now"
+                data-checkout-url="{{ route('checkout.index') }}"
+            >
+                Mua ngay
+            </button>
         </div>
 
         <div class="product-detail-description">
