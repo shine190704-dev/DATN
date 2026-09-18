@@ -39,6 +39,10 @@ body {
     transform: translateY(0);
 }
 
+.cart-toast.error {
+    background: #c95c5c;
+}
+
 body {
     min-height: 100vh;
     display: flex;

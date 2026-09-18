@@ -256,7 +256,7 @@ $subtotal = $items->sum(function ($item) {
 
 
 
-    public function placeOrder(Request $request)
+   public function placeOrder(Request $request)
 {
     if (!session()->has('NguoiDungID')) {
         return redirect()->route('login');
@@ -373,41 +373,101 @@ $subtotal = $items->sum(function ($item) {
 
     $normalizedCity = Str::lower(Str::ascii(trim($diaChi->ThanhPho ?? '')));
     $shippingFee = $normalizedCity === 'thanh pho ho chi minh' ? 0 : 35000;
-    $total = $subtotal + $shippingFee;
 
-    // =========================================================
-    // LƯU DB
-    // =========================================================
+// =========================================================
+// KIỂM TRA LẠI MÃ GIẢM GIÁ (tính lại từ server, không tin client)
+// =========================================================
 
-DB::beginTransaction();
+$soTienGiam = 0;
+$maGiamGiaID = null;
 
-try {
+if ($request->filled('MaCode')) {
 
-    // Lấy đơn hàng có ID lớn nhất để tính số thứ tự tiếp theo
-    $lastOrder = DB::table('DonHang')
-        ->lockForUpdate()
-        ->orderByDesc('DonHangID')
+    $maGiamGia = DB::table('magiamgia')
+        ->where('MaCode', trim($request->MaCode))
+        ->where('TrangThai', 'HoatDong')
+        ->where('NgayHetHan', '>=', now())
         ->first();
 
-    $nextNumber = $lastOrder ? ($lastOrder->DonHangID + 1) : 1;
-    $maDonHang = 'DH' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+    if ($maGiamGia && $subtotal >= $maGiamGia->GiaTriDonHangToiThieu) {
+        $soTienGiam = round($subtotal * $maGiamGia->GiaTriGiam / 100);
+        $maGiamGiaID = $maGiamGia->MaGiamGiaID;
+    }
+}
 
-    $donHangID = DB::table('DonHang')->insertGetId([
-        'NguoiDungID' => $nguoiDungID,
-        'MaDonHang' => $maDonHang,
-        'TongTien' => $total,
-        'TenNguoiNhan' => $diaChi->TenNguoiNhan,
-        'SoDienThoaiNguoiNhan' => $diaChi->SoDienThoai,
-        'DiaChiNhanHang' => $diaChi->DiaChi . ', ' . $diaChi->ThanhPho,
-        'TrangThai' => 'ChoXacNhan',
-        'PhuongThucThanhToan' => $request->PhuongThucThanhToan,
-        'TrangThaiThanhToan' => 'ChuaThanhToan',
-        'NgayTao' => now(),
-        'NgayCapNhat' => now(),
-    ]);
+$total = $subtotal + $shippingFee - $soTienGiam;
 
+    // =========================================================
+    // LƯU DB + XỬ LÝ XUNG ĐỘT TỒN KHO
+    // =========================================================
+
+    DB::beginTransaction();
+
+    try {
+
+        // =====================================================
+        // KIỂM TRA VÀ KHÓA TỒN KHO (chống 2 người mua cùng lúc)
+        // =====================================================
 
         foreach ($items as $item) {
+
+            $bienThe = DB::table('BienThe')
+                ->where('BienTheID', $item->BienTheID)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$bienThe) {
+                throw new \Exception(
+                    'Không tìm thấy sản phẩm "' . $item->TenSanPham . '".'
+                );
+            }
+
+            if ($bienThe->SoLuong < $item->SoLuong) {
+                throw new \Exception(
+                    'Sản phẩm "' . $item->TenSanPham .
+                    '" không đủ số lượng trong kho. ' .
+                    'Tồn kho hiện tại: ' . $bienThe->SoLuong .
+                    ', số lượng cần mua: ' . $item->SoLuong . '.'
+                );
+            }
+        }
+
+        // =====================================================
+        // INSERT ĐƠN HÀNG (để MySQL tự sinh DonHangID, chống trùng mã)
+        // =====================================================
+
+        $donHangID = DB::table('DonHang')->insertGetId([
+            'NguoiDungID' => $nguoiDungID,
+            'MaDonHang' => '',
+            'TongTien' => $total,
+            'TenNguoiNhan' => $diaChi->TenNguoiNhan,
+            'SoDienThoaiNguoiNhan' => $diaChi->SoDienThoai,
+            'DiaChiNhanHang' => $diaChi->DiaChi . ', ' . $diaChi->ThanhPho,
+            'TrangThai' => 'Chờ xác nhận',
+            'PhuongThucThanhToan' => $request->PhuongThucThanhToan,
+            'MaGiamGiaID' => $maGiamGiaID,   
+            'SoTienGiam' => $soTienGiam,  
+            'TrangThaiThanhToan' => 'Chưa thanh toán',
+            'NgayTao' => now(),
+            'NgayCapNhat' => now(),
+        ]);
+
+        // =====================================================
+        // TẠO MÃ ĐƠN HÀNG
+        // =====================================================
+
+        $maDonHang = 'DH' . str_pad($donHangID, 3, '0', STR_PAD_LEFT);
+
+        DB::table('DonHang')
+            ->where('DonHangID', $donHangID)
+            ->update(['MaDonHang' => $maDonHang]);
+
+        // =====================================================
+        // TẠO CHI TIẾT ĐƠN HÀNG + TRỪ TỒN KHO
+        // =====================================================
+
+        foreach ($items as $item) {
+
             DB::table('ChiTietDonHang')->insert([
                 'DonHangID' => $donHangID,
                 'SanPhamID' => $item->SanPhamID,
@@ -419,13 +479,15 @@ try {
                 'GiaTaiThoiDiemMua' => $item->GiaBienThe,
             ]);
 
-            // Trừ tồn kho
             DB::table('BienThe')
                 ->where('BienTheID', $item->BienTheID)
                 ->decrement('SoLuong', $item->SoLuong);
         }
 
-        // Xoá giỏ hàng nếu đặt từ giỏ hàng
+        // =====================================================
+        // XOÁ GIỎ HÀNG
+        // =====================================================
+
         if ($gioHang) {
             DB::table('ChiTietGioHang')
                 ->where('GioHangID', $gioHang->GioHangID)
@@ -440,9 +502,8 @@ try {
     }
 
     return redirect()
-    ->route('checkout.success', ['maDonHang' => $maDonHang]);
+        ->route('checkout.success', ['maDonHang' => $maDonHang]);
 }
-
 
 public function success($maDonHang)
 {
@@ -469,34 +530,59 @@ public function success($maDonHang)
         ->where('TrangThai', 'HoatDong')
         ->get();
 
-    // Map trạng thái sang tiếng Việt có dấu để hiển thị
-    $trangThaiLabels = [
-        'ChoXacNhan' => 'Chờ xác nhận',
-        'DaXacNhan' => 'Đã xác nhận',
-        'DangGiao' => 'Đang giao',
-        'DaGiao' => 'Đã giao',
-        'DaHuy' => 'Đã hủy',
-    ];
-
-    $trangThaiThanhToanLabels = [
-        'ChuaThanhToan' => 'Chưa thanh toán',
-        'DaThanhToan' => 'Đã thanh toán',
-    ];
-
-    $phuongThucLabels = [
-        'cod' => 'Thanh toán khi nhận hàng',
-        'bank_transfer' => 'Chuyển khoản ngân hàng',
-    ];
-
-    return view('user.products.checkout-success', compact(
-        'donHang',
-        'chiTiet',
-        'danhMucs',
-        'trangThaiLabels',
-        'trangThaiThanhToanLabels',
-        'phuongThucLabels'
-    ));
+    return view('user.products.checkout-success', compact('donHang', 'chiTiet', 'danhMucs'));
 }
+
+
+public function applyCoupon(Request $request)
+{
+    if (!session()->has('NguoiDungID')) {
+        return response()->json(['success' => false, 'message' => 'Vui lòng đăng nhập.']);
+    }
+
+    $request->validate([
+        'MaCode' => 'required|string',
+        'Subtotal' => 'required|numeric',
+    ]);
+
+    $subtotal = (float) $request->Subtotal;
+
+    $maGiamGia = DB::table('magiamgia')
+        ->where('MaCode', trim($request->MaCode))
+        ->where('TrangThai', 'HoatDong')
+        ->where('NgayHetHan', '>=', now())
+        ->first();
+
+    if (!$maGiamGia) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn.',
+        ]);
+    }
+
+    if ($subtotal < $maGiamGia->GiaTriDonHangToiThieu) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Đơn hàng cần tối thiểu ' .
+                number_format($maGiamGia->GiaTriDonHangToiThieu, 0, ',', '.') .
+                ' VND để dùng mã này.',
+        ]);
+    }
+
+    // Tính số tiền giảm (GiaTriGiam là %)
+    $soTienGiam = round($subtotal * $maGiamGia->GiaTriGiam / 100);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Áp dụng mã giảm giá thành công!',
+        'MaGiamGiaID' => $maGiamGia->MaGiamGiaID,
+        'MaCode' => $maGiamGia->MaCode,
+        'GiaTriGiam' => $maGiamGia->GiaTriGiam,
+        'SoTienGiam' => $soTienGiam,
+    ]);
+}
+
+
 
 
 }

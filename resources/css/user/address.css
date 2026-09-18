@@ -453,11 +453,35 @@
 /* Radio */
 
 .checkout-address-item input[type="radio"] {
-    width: 9px;
-    height: 9px;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
     margin: 2px 8px 0 0;
-    accent-color: #FFD45A;
+    flex-shrink: 0;
+
+    border: 1.5px solid #FFFFFF;
+    border-radius: 50%;
+    background-color: transparent;
+
+    position: relative;
     cursor: pointer;
+}
+
+.checkout-address-item input[type="radio"]:checked {
+    border-color: #FFD45A;
+}
+
+.checkout-address-item input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #FFD45A;
+    transform: translate(-50%, -50%);
 }
 
 /* Nội dung địa chỉ */
@@ -1088,14 +1112,7 @@
     cursor: pointer;
 }
 
-.checkout-payment-item input[type="radio"] {
-    width: 16px;
-    height: 16px;
-    margin-top: 3px;
-    accent-color: #FFD45A;
-    cursor: pointer;
-    flex-shrink: 0;
-}
+
 
 .checkout-payment-content {
     min-width: 0;
@@ -1120,8 +1137,8 @@
 .checkout-payment-item input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     margin-top: 3px;
     flex-shrink: 0;
 
@@ -1289,4 +1306,16 @@
     font-weight: 700;
     font-size: 13px;
     text-decoration: none;
+}
+
+
+.checkout-coupon-btn:disabled {
+    background: #FFD45A;
+    opacity: 0.85;
+    cursor: default;
+}
+
+.checkout-coupon-input:disabled {
+    opacity: 0.7;
+    cursor: default;
 }

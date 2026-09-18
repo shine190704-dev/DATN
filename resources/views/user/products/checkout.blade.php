@@ -44,6 +44,8 @@
                 {{-- giữ nguyên hidden input cho trường hợp "mua ngay" --}}
                 <input type="hidden" name="BienTheID" value="{{ request('BienTheID') }}">
                 <input type="hidden" name="SoLuong" value="{{ request('SoLuong', 1) }}">
+                <input type="hidden" name="MaGiamGiaID" id="inputMaGiamGiaID" value="">
+                <input type="hidden" name="MaCode" id="inputMaCode" value="">
 
         @endif
 

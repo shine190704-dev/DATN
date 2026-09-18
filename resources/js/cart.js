@@ -153,7 +153,12 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
 }
 
-			const quantityElement = item.querySelector('.cart-quantity');
+				const quantityElement = item.querySelector('.cart-quantity');
+
+				if (!quantityElement) {
+					throw new Error('Không tìm thấy số lượng sản phẩm.');
+				}
+
 			const currentQuantity = Number(quantityElement.textContent.trim());
 			const nextQuantity = quantityButton.dataset.action === 'increase'
 				? currentQuantity + 1
@@ -171,8 +176,11 @@ document.addEventListener('DOMContentLoaded', function () {
 			quantityElement.textContent = nextQuantity;
 
 			const unitPrice = Number(item.dataset.unitPrice);
-			item.querySelector('[data-item-total]').textContent =
-				formatPrice(unitPrice * nextQuantity);
+			const itemTotal = item.querySelector('[data-item-total]');
+
+			if (itemTotal) {
+				itemTotal.textContent = formatPrice(unitPrice * nextQuantity);
+			}
 
 			const total = Array.from(cartPage.querySelectorAll('.cart-item'))
 				.reduce(function (sum, cartItem) {
@@ -182,7 +190,11 @@ document.addEventListener('DOMContentLoaded', function () {
 					return sum + Number(cartItem.dataset.unitPrice) * quantity;
 				}, 0);
 
-			cartPage.querySelector('#cartTotal').textContent = formatPrice(total);
+			const cartTotal = cartPage.querySelector('#cartTotal');
+
+			if (cartTotal) {
+				cartTotal.textContent = formatPrice(total);
+			}
 			updateCartBadge(data.cartCount);
 			updateCartTitle(data.cartCount);
 		} catch (error) {

@@ -11,3 +11,6 @@ Route::post('/thanh-toan/dat-hang', [CheckoutController::class, 'placeOrder'])
     
 Route::get('/thanh-toan/thanh-cong/{maDonHang}', [CheckoutController::class, 'success'])
     ->name('checkout.success');
+
+Route::post('/thanh-toan/ap-dung-ma', [CheckoutController::class, 'applyCoupon'])
+    ->name('checkout.applyCoupon');
