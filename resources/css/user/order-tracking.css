@@ -1,0 +1,293 @@
+/* =========================
+   TRANG THEO DÕI ĐƠN HÀNG
+========================= */
+
+.order-tracking-content {
+    width: 100%;
+    padding: 30px 45px 60px;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+    color: #59A78E;
+}
+
+/* Tiêu đề dạng pill + đường kẻ vàng nhạt */
+.account-title-wrap {
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #FFE9A8;
+}
+
+
+.order-tracking-content .account-page-title {
+    display: block;
+    width: 100%;
+    margin: 8px;
+    color: #59A78E;
+    font-size: 18px;         
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+
+/* =========================
+   THẺ ĐƠN HÀNG
+========================= */
+
+.order-tracking-content .tracking-order-card {
+    width: 100%;
+    max-width: none;      
+    margin: 0 0 25px;
+    padding: 25px 40px 22px;
+    background: #59A78E;
+    border-radius: 20px;
+    color: #FFFFFF;
+    box-sizing: border-box;
+}
+
+
+.order-tracking-content .order-tracking-empty {
+    width: 100%;
+    max-width: 740px;
+    margin: 0 auto;
+}
+
+
+/* =========================
+   TIMELINE NGANG
+========================= */
+
+.tracking-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.tracking-step {
+    position: relative;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.tracking-dot-row {
+    position: relative;
+    height: 22px;
+    margin-bottom: 8px;
+}
+
+/* Đường nối: từ tâm chấm này đến tâm chấm kế tiếp */
+.tracking-step:not(:last-child) .tracking-dot-row::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% + 20px);   /* 100% cột + 2 lần padding 10px */
+    height: 1px;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* Chấm chưa tới: xám (nằm trên đường nối) */
+.tracking-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #9DB3AB;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+    z-index: 1;
+}
+
+/* Chấm đã hoàn thành: vàng */
+.tracking-step.done .tracking-dot {
+    background: #FFD45A;
+    box-shadow: 0 0 0 3px rgba(255, 212, 90, 0.45);
+}
+
+.tracking-step h4 {
+    margin: 0 0 4px;
+    color: #FFD45A;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.tracking-step.pending h4 {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.tracking-step p {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #FFFFFF;
+}
+
+/* =========================
+   XEM CHI TIẾT
+========================= */
+
+.tracking-detail {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.tracking-detail summary {
+    cursor: pointer;
+    list-style: none;
+    color: #FFD45A;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: right;
+}
+
+.tracking-detail summary::-webkit-details-marker {
+    display: none;
+}
+
+.tracking-detail summary::after {
+    content: ' ▾';
+}
+
+.tracking-detail[open] summary::after {
+    content: ' ▴';
+}
+
+.tracking-detail summary:focus-visible {
+    outline: 3px solid #FFD45A;
+    outline-offset: 2px;
+}
+
+.tracking-detail-body {
+    margin-top: 12px;
+    padding: 15px 18px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    color: #59A78E;
+}
+
+
+/* Bảng sản phẩm */
+.table-scroll {
+    overflow-x: auto;
+}
+
+.tracking-items {
+    width: 100%;
+    min-width: 420px;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.tracking-items th {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #FFE9A8;
+    text-align: left;
+    color: #777;
+    font-weight: 400;
+}
+
+.tracking-items td {
+    padding: 10px 0;
+    border-bottom: 1px dashed #FFE9A8;
+    vertical-align: middle;
+}
+
+.item-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-cell img {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    object-fit: contain;
+}
+
+
+.item-variant {
+    display: block;
+    margin-top: 2px;
+    color: #777;
+    font-size: 11px;
+}
+
+
+/* Thông tin nhận hàng */
+.tracking-info {
+    margin-top: 14px;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.tracking-info p {
+    margin: 0;
+}
+
+.tracking-info span {
+    color: #777;
+}
+
+
+/* Tạm tính, phí vận chuyển, voucher, tổng tiền */
+.tracking-summary {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #FFE9A8;
+    font-size: 12px;
+}
+
+.tracking-summary p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 6px;
+}
+
+.tracking-summary span {
+    color: #777;
+}
+
+.voucher-code {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 8px;
+    border: 1px dashed #59A78E;
+    border-radius: 10px;
+    color: #59A78E;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.tracking-total {
+    margin-top: 8px !important;
+    padding-top: 8px;
+    border-top: 1px solid #FFE9A8;
+    font-size: 14px;
+}
+
+
+/* =========================
+   TRỐNG
+========================= */
+
+.order-tracking-empty {
+    max-width: 740px;
+    padding: 60px 20px;
+    text-align: center;
+    border: 1px solid #FFD45A;
+    border-radius: 15px;
+}
+
+.order-tracking-empty p {
+    margin: 0;
+    color: #59A78E;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+

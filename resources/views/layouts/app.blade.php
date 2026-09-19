@@ -21,7 +21,10 @@
         'resources/css/user/cart.css',
         'resources/css/user/product-detail.css',
         'resources/js/user/checkout.js',
+        'resources/css/user/order-tracking.css',
+        'resources/css/user/orders.css',
         'resources/js/app.js'
+        
         
     ])
     @stack('styles')
@@ -38,6 +41,7 @@
     @yield('content')
 
     @include('partials.footer')
+    @stack('scripts')
 
 </body>
 </html>

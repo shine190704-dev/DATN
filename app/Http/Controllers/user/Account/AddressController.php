@@ -21,15 +21,34 @@ class AddressController extends Controller
             return redirect()->route('login');
         }
 
+        $user = DB::table('NguoiDung')
+            ->where('NguoiDungID', session('NguoiDungID'))
+            ->first();
+
+        if (!$user) {
+            session()->forget('NguoiDungID');
+            return redirect()->route('login');
+        }
+
         return view('user.account.address-create', [
             'danhMucs' => $this->pageData(),
             'address' => null,
+            'user' => $user,
         ]);
     }
 
     public function edit($id)
     {
         if (!session()->has('NguoiDungID')) {
+            return redirect()->route('login');
+        }
+
+        $user = DB::table('NguoiDung')
+            ->where('NguoiDungID', session('NguoiDungID'))
+            ->first();
+
+        if (!$user) {
+            session()->forget('NguoiDungID');
             return redirect()->route('login');
         }
 
@@ -43,6 +62,7 @@ class AddressController extends Controller
         return view('user.account.address-create', [
             'danhMucs' => $this->pageData(),
             'address' => $address,
+            'user' => $user,
         ]);
     }
 

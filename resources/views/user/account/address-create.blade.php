@@ -5,31 +5,7 @@
 @section('content')
 
 <main class="account-page address-page">
-    <aside class="account-sidebar">
-        <div class="account-welcome">
-            <img src="{{ asset('images/ICONS/profile_icon.png') }}" alt="Tài khoản">
-            <div class="account-welcome-text">
-                <span>Xin chào bạn!</span>
-                <strong>
-                    {{ trim(($user->Ho ?? '') . ' ' . ($user->Ten ?? '')) }}
-                </strong>
-
-            </div>
-        </div>
-
-        <nav class="account-menu">
-            <a href="#" class="account-menu-item">Đơn hàng của tôi</a>
-            <a href="#" class="account-menu-item">Theo dõi đơn hàng</a>
-            <a href="{{ route('address.index') }}" class="account-menu-item active">Sổ địa chỉ</a>
-            <a href="{{ route('profile') }}" class="account-menu-item">Thông tin của tôi</a>
-            <a href="#" class="account-menu-item">Yêu cầu hoàn tiền</a>
-            <a href="#" class="account-menu-item">Đánh giá của tôi</a>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="account-menu-item">Đăng xuất</button>
-            </form>
-        </nav>
-    </aside>
+    @include('partials.account-sidebar')
 
     <section class="address-content address-form-page">
         <div class="address-header">

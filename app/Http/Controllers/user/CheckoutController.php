@@ -409,28 +409,38 @@ $total = $subtotal + $shippingFee - $soTienGiam;
         // KIỂM TRA VÀ KHÓA TỒN KHO (chống 2 người mua cùng lúc)
         // =====================================================
 
-        foreach ($items as $item) {
+       foreach ($items as $item) {
 
-            $bienThe = DB::table('BienThe')
-                ->where('BienTheID', $item->BienTheID)
-                ->lockForUpdate()
-                ->first();
+        $bienThe = DB::table('BienThe')
+            ->where('BienTheID', $item->BienTheID)
+            ->lockForUpdate()
+            ->first();
 
-            if (!$bienThe) {
-                throw new \Exception(
-                    'Không tìm thấy sản phẩm "' . $item->TenSanPham . '".'
-                );
-            }
-
-            if ($bienThe->SoLuong < $item->SoLuong) {
-                throw new \Exception(
-                    'Sản phẩm "' . $item->TenSanPham .
-                    '" không đủ số lượng trong kho. ' .
-                    'Tồn kho hiện tại: ' . $bienThe->SoLuong .
-                    ', số lượng cần mua: ' . $item->SoLuong . '.'
-                );
-            }
+        if (!$bienThe) {
+            throw new \Exception(
+                'Không tìm thấy sản phẩm "' . $item->TenSanPham . '".'
+            );
         }
+
+        if ($bienThe->SoLuong < $item->SoLuong) {
+            throw new \Exception(
+                'Sản phẩm "' . $item->TenSanPham .
+                '" không đủ số lượng trong kho. ' .
+                'Tồn kho hiện tại: ' . $bienThe->SoLuong .
+                ', số lượng cần mua: ' . $item->SoLuong . '.'
+            );
+        }
+
+     // Trừ số lượng tồn kho
+        DB::table('BienThe')
+            ->where('BienTheID', $item->BienTheID)
+            ->decrement('SoLuong', $item->SoLuong);
+
+        // Tăng số lượng tạm giữ
+        DB::table('BienThe')
+            ->where('BienTheID', $item->BienTheID)
+            ->increment('SoLuongTamGiu', $item->SoLuong);
+    }
 
         // =====================================================
         // INSERT ĐƠN HÀNG (để MySQL tự sinh DonHangID, chống trùng mã)

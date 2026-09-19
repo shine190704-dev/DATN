@@ -370,7 +370,7 @@
 
                 {{-- GIÁ --}}
                 <div class="checkout-product-price">
-                    {{ number_format($item->GiaBienThe, 0, ',', '.') }} VND
+                    {{ number_format($item->GiaBienThe * $item->SoLuong, 0, ',', '.') }} VND
                 </div>
 
             </div>
