@@ -5,7 +5,9 @@
 @section('content')
 
 <main class="account-page">
-@include('partials.account-sidebar')
+
+    {{-- SIDEBAR --}}
+    @include('partials.account-sidebar')
 
 
     {{-- =========================
@@ -104,8 +106,15 @@
                             <div class="receiver-info">
 
                                 <div class="receiver-heading">
-                                    <span class="receiver-name">{{ $address->TenNguoiNhan }}</span>
-                                    <span class="receiver-phone">{{ $address->SoDienThoai }}</span>
+
+                                    <span class="receiver-name">
+                                        {{ $address->TenNguoiNhan }}
+                                    </span>
+
+                                    <span class="receiver-phone">
+                                        {{ $address->SoDienThoai }}
+                                    </span>
+
                                 </div>
 
                                 <div class="address-detail">
@@ -114,42 +123,81 @@
 
                             </div>
 
+
+                            {{-- ĐỊA CHỈ MẶC ĐỊNH --}}
                             @if($address->MacDinh == 1)
-                                <span class="default-badge">Mặc định</span>
+
+                                <span class="default-badge">
+                                    Mặc định
+                                </span>
+
                             @endif
 
                         </div>
 
+
+                        {{-- =========================
+                             CÁC NÚT
+                        ========================== --}}
+
                         <div class="address-actions">
 
+                            {{-- ĐẶT LÀM MẶC ĐỊNH --}}
                             @if($address->MacDinh != 1)
+
                                 <form
                                     action="{{ route('address.default', $address->DiaChiNguoiDungID) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Bạn có muốn đổi địa chỉ mặc định mới thành địa chỉ này không?')"
+                                    class="set-default-form"
+                                    data-default-form
                                 >
+
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn-default">
+
+                                    <button
+                                        type="button"
+                                        class="btn-default"
+                                        data-default-button
+                                    >
                                         Đặt làm mặc định
                                     </button>
+
                                 </form>
+
                             @endif
 
-                            <a href="{{ route('address.edit', $address->DiaChiNguoiDungID) }}" class="btn-edit">
+
+                            {{-- SỬA --}}
+                            <a
+                                href="{{ route('address.edit', $address->DiaChiNguoiDungID) }}"
+                                class="btn-edit"
+                            >
                                 Sửa
                             </a>
 
+
+                            {{-- XÓA --}}
                             @if($addresses->count() > 1)
+
                                 <form
                                     action="{{ route('address.destroy', $address->DiaChiNguoiDungID) }}"
                                     method="POST"
                                     onsubmit="return confirm('Bạn có chắc muốn xóa địa chỉ này không?')"
                                 >
+
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-delete">Xóa</button>
+
+                                    <button
+                                        type="submit"
+                                        class="btn-delete"
+                                    >
+                                        Xóa
+                                    </button>
+
                                 </form>
+
                             @endif
 
                         </div>
@@ -201,5 +249,63 @@
     </section>
 
 </main>
+
+
+{{-- =====================================================
+     POPUP XÁC NHẬN ĐỔI ĐỊA CHỈ MẶC ĐỊNH
+===================================================== --}}
+
+<dialog
+    class="address-confirm-dialog"
+    id="addressConfirmDialog"
+>
+
+    <div class="address-confirm-popup">
+
+        <p>
+            Bạn có muốn đổi địa chỉ mặc định mới thành địa chỉ này không?
+        </p>
+
+        <div class="address-confirm-actions">
+
+            {{-- KHÔNG --}}
+            <button
+                type="button"
+                class="address-confirm-no"
+                id="addressConfirmNo"
+            >
+                Không
+            </button>
+
+
+            {{-- CÓ --}}
+            <button
+                type="button"
+                class="address-confirm-yes"
+                id="addressConfirmYes"
+            >
+                Có
+            </button>
+
+        </div>
+
+    </div>
+
+</dialog>
+
+
+{{-- =====================================================
+     FORM ẨN ĐỂ GỬI REQUEST
+===================================================== --}}
+
+<form
+    method="POST"
+    id="addressConfirmForm"
+    style="display: none;"
+>
+    @csrf
+    @method('PATCH')
+</form>
+
 
 @endsection

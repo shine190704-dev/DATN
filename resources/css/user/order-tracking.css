@@ -215,6 +215,32 @@
     font-size: 11px;
 }
 
+/* Cột 1: Sản phẩm */
+.tracking-items th:nth-child(1),
+.tracking-items td:nth-child(1) {
+    width: 44%;
+}
+
+/* Cột 2: Số lượng */
+.tracking-items th:nth-child(2),
+.tracking-items td:nth-child(2) {
+    width: 16%;
+    text-align: center;
+}
+
+/* Cột 3: Giá */
+.tracking-items th:nth-child(3),
+.tracking-items td:nth-child(3) {
+    width: 20%;
+    text-align: right;
+}
+
+/* Cột 4: Thành tiền */
+.tracking-items th:nth-child(4),
+.tracking-items td:nth-child(4) {
+    width: 20%;
+    text-align: right;
+}
 
 /* Thông tin nhận hàng */
 .tracking-info {
@@ -288,6 +314,18 @@
     color: #59A78E;
     font-size: 16px;
     font-weight: 700;
+}
+
+
+.tracking-order-code {
+    margin: 0 0 4px;       
+    font-size: 14px;
+}
+
+.tracking-order-products {
+    margin: 0 0 20px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 

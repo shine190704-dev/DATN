@@ -341,6 +341,22 @@
     border-radius: 8px;
 }
 
+.alert-success {
+    background-color: rgba(89, 167, 142, 0.12);
+    border: 1px solid #59A78E;
+    color: #59A78E;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.08);
+    border: 1px solid #dc3545;
+    color: #b02a37;
+    font-size: 13px;
+    font-weight: 700;
+}
+
 .empty-address {
     padding: 35px 20px;
     color: #FFFFFF;
@@ -560,4 +576,46 @@
     font-weight: 400;
 
     white-space: nowrap;
+}
+
+
+
+/* =========================
+   MỤC ĐỔI MẬT KHẨU
+========================= */
+
+.password-section {
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid #FFE9A8;
+}
+
+.password-section summary {
+    cursor: pointer;
+    list-style: none;
+    color: #59A78E;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.password-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.password-section summary::after {
+    content: ' ▾';
+}
+
+.password-section[open] summary::after {
+    content: ' ▴';
+}
+
+.password-section summary:focus-visible {
+    outline: 3px solid #FFD45A;
+    outline-offset: 2px;
+}
+
+.password-section .account-edit-form {
+    margin-top: 18px;
 }

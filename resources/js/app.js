@@ -5,3 +5,4 @@ import './auth';
 import './product-detail';
 import './cart';
 import './checkout';
+import './orders';

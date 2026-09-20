@@ -87,4 +87,45 @@
 
     }
 
+    // =========================
+// POPUP CHI TIẾT ĐƠN HÀNG
+// =========================
+
+document.querySelectorAll('[data-detail-id]').forEach(function (btn) {
+
+    btn.addEventListener('click', function () {
+
+        const orderId = btn.dataset.detailId;
+
+        const dialog = document.getElementById(
+            'orderDetail' + orderId
+        );
+
+        if (dialog) {
+            dialog.showModal();
+        }
+
+    });
+
+});
+
+
+document.querySelectorAll('[data-detail-close]').forEach(function (btn) {
+
+    btn.addEventListener('click', function () {
+
+        const orderId = btn.dataset.detailClose;
+
+        const dialog = document.getElementById(
+            'orderDetail' + orderId
+        );
+
+        if (dialog) {
+            dialog.close();
+        }
+
+    });
+
+});
+
 })();

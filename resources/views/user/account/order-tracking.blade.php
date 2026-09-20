@@ -62,8 +62,17 @@
             <div class="tracking-order-card">
 
                 <p class="tracking-order-code">
-                    Mã đơn <strong>#{{ $order->MaDonHang }}</strong>
+                        Mã đơn <strong>#{{ $order->MaDonHang }}</strong>
                 </p>
+
+                    @if($order->items->isNotEmpty())
+                        <p class="tracking-order-products">
+                            {{ $order->items->first()->TenSanPham }}
+                         @if($order->items->count() > 1)
+                                và {{ $order->items->count() - 1 }} sản phẩm khác
+                            @endif
+                        </p>
+                    @endif
 
                 {{-- TIMELINE --}}
                 <div class="tracking-timeline">
@@ -90,8 +99,8 @@
                                 <thead>
                                     <tr>
                                         <th>Sản phẩm</th>
-                                        <th>SL</th>
-                                        <th>Đơn giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng tiên</th>
                                         <th>Thành tiền</th>
                                     </tr>
                                 </thead>

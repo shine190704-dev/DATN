@@ -121,6 +121,8 @@
 
                 // Đơn đã giao, chờ khách xác nhận đã nhận
                 $canReceive = in_array($order->TrangThai, [
+                    'DaGiao',
+                    'Đã giao',
                     'DangGiao',
                     'DangGiaoHang',
                     'Đang giao hàng',
@@ -265,12 +267,13 @@
 
 
                         {{-- CHI TIẾT --}}
-                        <a
-                            href="{{ route('tracking.index') }}"
-                            class="order-detail-btn"
-                        >
-                            Chi tiết
-                        </a>
+                    <button
+                        type="button"
+                        class="order-detail-btn"
+                        data-detail-id="{{ $order->DonHangID }}"
+                    >
+                        Chi tiết
+                    </button>
 
 
                         {{-- HỦY ĐƠN
@@ -337,6 +340,240 @@
             </div>
 
         @endforelse
+
+        {{-- =========================================================
+     POPUP CHI TIẾT ĐƠN HÀNG
+========================================================= --}}
+
+@foreach($orders as $order)
+
+    @php
+        $subtotal = $order->items->sum(
+            fn ($item) => $item->GiaTaiThoiDiemMua * $item->SoLuong
+        );
+
+        $giamGia = (float) ($order->SoTienGiam ?? 0);
+
+        $phiVanChuyen = max(
+            0,
+            $order->TongTien - $subtotal + $giamGia
+        );
+
+        $paymentLabels = [
+        'ChuaThanhToan' => 'Chưa thanh toán',
+        'DaThanhToan'   => 'Đã thanh toán',
+    ];
+
+    @endphp
+
+    <dialog
+        class="order-detail-dialog"
+        id="orderDetail{{ $order->DonHangID }}"
+    >
+
+        <div class="order-detail-popup">
+
+            {{-- HEADER --}}
+            <div class="order-detail-header">
+
+                <div>
+                    <h2>
+                        Đơn hàng
+                        <span>#{{ $order->MaDonHang }}</span>
+                    </h2>
+
+                    <p>
+                        Đặt ngày
+                        <strong>
+                            {{ \Carbon\Carbon::parse($order->NgayTao)->format('d/m/Y') }}
+                        </strong>
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="order-detail-close"
+                    data-detail-close="{{ $order->DonHangID }}"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            {{-- SẢN PHẨM --}}
+            <div class="order-detail-products">
+
+                @foreach($order->items as $item)
+
+                    <div class="order-detail-product">
+
+                        {{-- ẢNH --}}
+                        <div class="order-detail-product-image">
+
+                            @if($item->HinhAnh)
+
+                                <img
+                                    src="{{ asset('images/' . $item->HinhAnh) }}"
+                                    alt="{{ $item->TenSanPham }}"
+                                >
+
+                            @endif
+
+                        </div>
+
+
+                        {{-- THÔNG TIN --}}
+                        <div class="order-detail-product-info">
+
+                            <strong>
+                                {{ $item->TenSanPham }}
+                            </strong>
+
+                            <span>
+                                Số lượng: {{ $item->SoLuong }}
+
+                                @if($item->KichThuoc)
+                                    · Kích thước: {{ $item->KichThuoc }}
+                                @endif
+
+                                @if($item->MauSac)
+                                    · Màu: {{ $item->MauSac }}
+                                @endif
+                            </span>
+
+                        </div>
+
+
+                        {{-- GIÁ --}}
+                        <div class="order-detail-product-price">
+
+                            {{ number_format(
+                                $item->GiaTaiThoiDiemMua * $item->SoLuong,
+                                0,
+                                ',',
+                                '.'
+                            ) }} VND
+
+                        </div>
+
+                    
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+
+            {{-- TỔNG TIỀN --}}
+            <div class="order-detail-summary">
+
+                <div>
+                    <span>Tạm tính:</span>
+
+                    <strong>
+                        {{ number_format(
+                            $subtotal,
+                            0,
+                            ',',
+                            '.'
+                        ) }} VND
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Phí vận chuyển:</span>
+
+                    <strong>
+                        @if($phiVanChuyen > 0)
+
+                            {{ number_format(
+                                $phiVanChuyen,
+                                0,
+                                ',',
+                                '.'
+                            ) }} VND
+
+                        @else
+
+                            Miễn phí
+
+                        @endif
+                    </strong>
+                </div>
+
+
+                @if($giamGia > 0)
+
+                    <div>
+                        <span>Mã giảm giá:</span>
+
+                        <strong class="order-detail-discount">
+                            -{{ number_format(
+                                $giamGia,
+                                0,
+                                ',',
+                                '.'
+                            ) }} VND
+                        </strong>
+                    </div>
+
+                @endif
+
+
+                <div class="order-detail-total">
+
+                    <span>TỔNG TIỀN:</span>
+
+                    <strong>
+                        {{ number_format(
+                            $order->TongTien,
+                            0,
+                            ',',
+                            '.'
+                        ) }} VND
+                    </strong>
+
+                </div>
+
+            </div>
+
+            {{-- THÔNG TIN NHẬN HÀNG --}}
+                    <div class="order-detail-info">
+
+                        <p>
+                            <span>Người nhận:</span>
+                            <strong>{{ $order->TenNguoiNhan }}</strong>
+                        </p>
+
+                        <p>
+                            <span>Số điện thoại:</span>
+                            <strong>{{ $order->SoDienThoaiNguoiNhan }}</strong>
+                        </p>
+
+                        <p>
+                            <span>Địa chỉ:</span>
+                            <strong>{{ $order->DiaChiNhanHang }}</strong>
+                        </p>
+
+                        <p>
+                            <span>Thanh toán:</span>
+                            <strong>
+                                {{ strtoupper($order->PhuongThucThanhToan) }}
+                                ({{ $paymentLabels[$order->TrangThaiThanhToan] ?? $order->TrangThaiThanhToan }})
+                            </strong>
+                        </p>
+
+                    </div>
+
+
+        </div>
+
+    </dialog>
+
+@endforeach
 
     </section>
 

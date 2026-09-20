@@ -227,8 +227,11 @@
 ========================= */
 
 .order-list-content .order-empty {
-    max-width: 900px;
+    width: 100%;
+    max-width: 1100px;      /* bằng .order-card */
+    margin: 0 auto;         /* căn giữa */
     padding: 60px 20px;
+    box-sizing: border-box;
     text-align: center;
     border: 1px solid #FFD45A;
     border-radius: 15px;
@@ -242,40 +245,6 @@
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 900px) {
-    .order-list-content {
-        padding: 24px 20px 50px;
-    }
-}
-
-@media (max-width: 640px) {
-    .order-card-header {
-        flex-wrap: wrap;
-        gap: 6px 12px;
-    }
-
-    .order-product {
-        grid-template-columns: 56px 1fr;
-    }
-
-    .order-product-image img {
-        width: 56px;
-        height: 56px;
-    }
-
-    .order-product-price {
-        grid-column: 2;
-    }
-
-    .order-card-footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
 
 
 /* =========================
@@ -283,8 +252,10 @@
 ========================= */
 
 .order-list-content .order-alert {
-    max-width: 900px;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    box-sizing: border-box;
     padding: 10px 18px;
     border-radius: 12px;
     font-size: 12px;
@@ -382,6 +353,7 @@
 
 /* Nút Hủy đơn + Đã nhận hàng - viền vàng */
 .order-cancel-btn,
+.order-review-btn,
 .order-receive-btn {
     display: inline-block;
     padding: 5px 18px;
@@ -401,6 +373,7 @@
 
 /* Hover */
 .order-cancel-btn:hover,
+.order-review-btn:hover,
 .order-receive-btn:hover {
     background: rgba(255, 212, 90, 0.2);
 }
@@ -408,7 +381,216 @@
 
 /* Focus */
 .order-cancel-btn:focus-visible,
+.order-review-btn:focus-visible,
 .order-receive-btn:focus-visible {
     outline: 3px solid #FFD45A;
     outline-offset: 2px;
 }
+
+
+
+
+
+/* =========================
+   POPUP CHI TIẾT ĐƠN HÀNG
+========================= */
+
+.order-detail-dialog {
+    width: 90%;
+    max-width: 620px;
+    max-height: 85vh;
+    padding: 0;
+    border: none;
+    border-radius: 22px;
+    background: transparent;
+    overflow: hidden;
+}
+
+.order-detail-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.order-detail-popup {
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 28px 38px 30px;      /* lề trên = lề dưới, trái = phải */
+    box-sizing: border-box;
+    background: #59A78E;
+    color: #FFFFFF;
+    font-family: 'Merriweather', serif;
+}
+
+
+/* HEADER */
+
+.order-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.order-detail-header h2 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.order-detail-header h2 span {
+    color: #FFD45A;
+}
+
+.order-detail-header p {
+    margin: 4px 0 0;
+    font-size: 15px;
+}
+
+.order-detail-header p strong {
+    color: #FFD45A;
+}
+
+
+/* NÚT X */
+
+.order-detail-close {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid #FFD45A;
+    border-radius: 50%;
+    color: #FFD45A;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.order-detail-close:hover {
+    background: rgba(255, 212, 90, 0.2);
+}
+
+.order-detail-close:focus-visible {
+    outline: 3px solid #FFD45A;
+    outline-offset: 2px;
+}
+
+
+/* SẢN PHẨM */
+
+.order-detail-products {
+    margin-bottom: 14px;
+}
+
+.order-detail-product {
+    display: grid;
+    grid-template-columns: 84px 1fr auto;   /* ảnh | tên | giá */
+    align-items: center;
+    gap: 18px;
+    padding: 8px 0;
+}
+
+.order-detail-product-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 70px;
+}
+
+.order-detail-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.order-detail-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.order-detail-product-info strong {
+    color: #FFD45A;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.order-detail-product-info span {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.order-detail-product-price {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-align: right;
+}
+
+
+/* TỔNG TIỀN */
+
+.order-detail-summary {
+    padding-top: 14px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.45);
+}
+
+.order-detail-summary > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 10px;
+    font-size: 15px;
+}
+
+.order-detail-summary strong {
+    font-weight: 700;
+}
+
+.order-detail-discount {
+    color: #FFFFFF;
+}
+
+.order-detail-total {
+    margin: 14px 0 0 !important;
+    color: #FFD45A;
+    font-size: 16px !important;
+    font-weight: 600;
+}
+
+
+/* THÔNG TIN NHẬN HÀNG */
+
+.order-detail-info {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.45);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.order-detail-info p {
+    display: grid;
+    grid-template-columns: 110px 1fr;   /* nhãn | nội dung, thẳng cột */
+    gap: 10px;
+    margin: 0 0 4px;
+}
+
+.order-detail-info span {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.order-detail-info strong {
+    font-weight: 700;
+    overflow-wrap: anywhere;            /* địa chỉ dài tự xuống dòng */
+}
+

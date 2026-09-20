@@ -23,6 +23,8 @@
         'resources/js/user/checkout.js',
         'resources/css/user/order-tracking.css',
         'resources/css/user/orders.css',
+        'resources/js/address.js',
+        'resources/js/password.js',
         'resources/js/app.js'
         
         
