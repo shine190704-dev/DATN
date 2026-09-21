@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('yeucauhoantien', function (Blueprint $table) {
             $table->increments('YeuCauHoanTienID');
-            $table->string('LyDo', 100);
+            $table->string('LyDo', 100)->nullable();
             $table->text('MoTa');
             $table->string('AnhMinhChung', 225)->nullable();
             $table->string('VideoMinhChung', 225)->nullable();

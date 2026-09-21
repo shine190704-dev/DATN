@@ -57,7 +57,7 @@
 
 
         <a
-            href="#"
+            href="{{ route('refund.index') }}"
             class="account-menu-item {{ request()->routeIs('refund.*') ? 'active' : '' }}"
         >
             Yêu cầu hoàn tiền
@@ -65,8 +65,8 @@
 
 
         <a
-            href="#"
-            class="account-menu-item {{ request()->routeIs('review.*') ? 'active' : '' }}"
+            href="{{ route('reviews.index') }}"
+            class="account-menu-item {{ request()->routeIs('reviews.*') ? 'active' : '' }}"
         >
             Đánh giá của tôi
         </a>

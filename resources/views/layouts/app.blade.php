@@ -20,12 +20,18 @@
         'resources/css/user/address.css',
         'resources/css/user/cart.css',
         'resources/css/user/product-detail.css',
-        'resources/js/user/checkout.js',
         'resources/css/user/order-tracking.css',
         'resources/css/user/orders.css',
+        'resources/css/user/refund.css',
+        'resources/css/user/reviews.css',
+        
+        'resources/js/reviews.js',
+        'resources/js/checkout.js',
         'resources/js/address.js',
         'resources/js/password.js',
+        'resources/js/refund.js',
         'resources/js/app.js'
+        
         
         
     ])

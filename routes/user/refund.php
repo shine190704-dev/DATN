@@ -11,3 +11,6 @@ Route::post('/yeu-cau-hoan-tien', [RefundController::class, 'store'])
 
 Route::get('/yeu-cau-hoan-tien/{id}', [RefundController::class, 'show'])
     ->name('refund.show');
+
+Route::delete('/yeu-cau-hoan-tien/{id}', [RefundController::class, 'cancel'])
+    ->name('refund.cancel');

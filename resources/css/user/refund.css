@@ -1,0 +1,450 @@
+/* =========================
+   TRANG YÊU CẦU HOÀN TIỀN
+========================= */
+
+.refund-content {
+    width: 100%;
+    padding: 30px 45px 60px;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+    color: #59A78E;
+}
+
+
+/* Tiêu đề + nút Tạo yêu cầu */
+.refund-content .refund-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 25px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #FFE9A8;
+}
+
+.refund-content .refund-head h1 {
+    margin: 0;
+    color: #59A78E;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.refund-create-btn {
+    padding: 8px 22px;
+    background: #FFD45A;
+    border: 0;
+    border-radius: 30px;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.refund-create-btn:hover {
+    background: #FFE07F;
+}
+
+.refund-create-btn:focus-visible,
+.refund-btn-solid:focus-visible,
+.refund-btn-outline:focus-visible,
+.refund-add:focus-visible,
+.refund-thumb button:focus-visible {
+    outline: 3px solid #FFFFFF;
+    outline-offset: 2px;
+}
+
+
+/* Thông báo */
+.refund-content .refund-alert {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    padding: 10px 18px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.refund-alert-success {
+    background: #E6F4EE;
+    border: 1px solid #59A78E;
+    color: #3F8A72;
+}
+
+.refund-alert-warning {
+    background: #FFF4D6;
+    border: 1px solid #FFD45A;
+    color: #8A6A00;
+}
+
+
+/* =========================
+   THẺ YÊU CẦU
+========================= */
+
+.refund-content .refund-card {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 22px;
+    background: #59A78E;
+    border-radius: 18px;
+    color: #FFFFFF;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.refund-card-main {
+    padding: 16px 22px 14px;
+}
+
+.refund-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.refund-card-code {
+    margin: 0;
+    font-size: 12px;
+}
+
+.refund-card-code strong {
+    color: #FFD45A;
+}
+
+.refund-card-code span {
+    margin-left: 10px;
+}
+
+.refund-status {
+    padding: 4px 14px;
+    background: #FFD45A;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.refund-card-reason {
+    margin: 6px 0 3px;
+    color: #FFD45A;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.refund-card-desc {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.refund-card-note {
+    padding: 12px 22px 14px;
+    border-top: 1px solid #FFD45A;
+}
+
+.refund-card-note p {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.refund-card-note small {
+    font-size: 10px;
+}
+
+
+/* Trống */
+.refund-content .refund-empty {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid #FFD45A;
+    border-radius: 15px;
+}
+
+.refund-empty p {
+    margin: 0;
+    color: #59A78E;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   POPUP TẠO YÊU CẦU
+========================= */
+
+.refund-dialog {
+    width: 92%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 26px 30px 24px;
+    background: #59A78E;
+    border: 0;
+    border-radius: 16px;
+    color: #FFFFFF;
+    font-family: 'Merriweather', serif;
+    box-sizing: border-box;
+}
+
+.refund-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.refund-dialog h2 {
+    margin: 0 0 18px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.refund-field {
+    margin-bottom: 16px;
+}
+
+.refund-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #FFD45A;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.refund-field select,
+.refund-field textarea {
+    width: 100%;
+    padding: 9px 14px;
+    background: #FFFFFF;
+    border: 0;
+    border-radius: 14px;
+    color: #2F7A62;
+    font-family: inherit;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.refund-field select {
+    height: 38px;
+    border-radius: 30px;
+}
+
+.refund-field textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.refund-field select:focus-visible,
+.refund-field textarea:focus-visible {
+    outline: 3px solid #FFD45A;
+    outline-offset: 2px;
+}
+
+
+/* Ảnh minh chứng */
+.refund-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.refund-add,
+.refund-thumb {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+}
+
+.refund-add {
+    padding: 0;
+    background: #FFFFFF;
+    border: 0;
+    color: #59A78E;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.refund-thumb {
+    position: relative;
+    background: #FFFFFF;
+}
+
+.refund-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.refund-thumb button {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background: #FFD45A;
+    border: 0;
+    border-radius: 50%;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+
+/* Lỗi + gợi ý */
+.refund-error {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 3px 10px;
+    background: #B3261E;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.refund-hint {
+    display: block;
+    margin-top: 7px;
+    font-size: 11px;
+}
+
+.refund-none {
+    margin: 0 0 6px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* Nút trong popup */
+.refund-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.refund-btn-solid,
+.refund-btn-outline {
+    padding: 7px 26px;
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.refund-btn-solid {
+    background: #FFD45A;
+    border: 1.5px solid #FFD45A;
+    color: #FFFFFF;
+}
+
+.refund-btn-outline {
+    background: transparent;
+    border: 1.5px solid #FFD45A;
+    color: #FFD45A;
+}
+
+.refund-btn-outline:hover {
+    background: rgba(255, 212, 90, 0.2);
+}
+
+
+
+
+
+/* Khi không có dòng lý do, mô tả cách hàng mã một chút */
+.refund-card-top + .refund-card-desc {
+    margin-top: 8px;
+}
+
+/* Ảnh minh chứng dưới mô tả */
+.refund-card-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.refund-card-images a {
+    display: block;
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    background: #FFFFFF;
+    overflow: hidden;
+}
+
+.refund-card-images img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.refund-card-images a:focus-visible {
+    outline: 3px solid #FFD45A;
+    outline-offset: 2px;
+}
+
+
+/* Phần ghi chú: chữ bên trái, nút Hủy bên phải */
+.refund-card-note {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.refund-cancel-btn {
+    padding: 5px 18px;
+    background: transparent;
+    border: 1.5px solid #FFD45A;
+    border-radius: 20px;
+    color: #FFD45A;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.refund-cancel-btn:hover {
+    background: rgba(255, 212, 90, 0.2);
+}
+
+.refund-cancel-btn:focus-visible {
+    outline: 3px solid #FFFFFF;
+    outline-offset: 2px;
+}
+
+/* Hộp xác nhận hủy yêu cầu */
+.refund-confirm {
+    max-width: 380px;
+    text-align: center;
+}
+
+.refund-confirm p {
+    margin: 0 0 4px;
+    color: #FFD45A;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.6;
+}
