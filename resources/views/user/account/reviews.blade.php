@@ -43,11 +43,7 @@
                 class="reviews-tab active"
                 data-review-tab="pending"
             >
-                Chưa đánh giá
-
-                <span class="review-count">
-                    {{ $pendingCount }}
-                </span>
+                Chưa đánh giá ({{ $pendingCount }})
             </button>
 
 
@@ -56,11 +52,7 @@
                 class="reviews-tab"
                 data-review-tab="reviewed"
             >
-                Đã đánh giá
-
-                <span class="review-count">
-                    {{ $reviewedCount }}
-                </span>
+             Đã đánh giá ({{ $reviewedCount }})
             </button>
 
         </div>
@@ -240,10 +232,8 @@
 
                             @if(!empty($item->HinhAnh))
 
-                                <img
-                                    src="{{ asset('storage/' . $item->HinhAnh) }}"
-                                    alt="{{ $item->TenSanPham }}"
-                                >
+                                <img src="{{ asset('images/' . $item->HinhAnh) }}" 
+                                alt="{{ $item->TenSanPham }}">
 
                             @else
 

@@ -40,6 +40,27 @@ class HomeController extends Controller
                 'HinhAnh'
             )
 
+            // =========================================
+            // LẤY ĐIỂM ĐÁNH GIÁ TRUNG BÌNH
+            // =========================================
+            ->selectSub(
+                function ($query) {
+                    $query->from('DanhGia')
+                        ->selectRaw(
+                            'COALESCE(AVG(DiemDanhGia), 0)'
+                        )
+                        ->whereColumn(
+                            'DanhGia.SanPhamID',
+                            'SanPham.SanPhamID'
+                        )
+                        ->where(
+                            'DanhGia.TrangThai',
+                            'HienThi'
+                        );
+                },
+                'DiemTrungBinh'
+            )
+
             ->get();
 
 
@@ -82,11 +103,39 @@ class HomeController extends Controller
                 'HinhAnh'
             )
 
+            // =========================================
+            // LẤY ĐIỂM ĐÁNH GIÁ TRUNG BÌNH
+            // =========================================
+            ->selectSub(
+                function ($query) {
+                    $query->from('DanhGia')
+                        ->selectRaw(
+                            'COALESCE(AVG(DiemDanhGia), 0)'
+                        )
+                        ->whereColumn(
+                            'DanhGia.SanPhamID',
+                            'SanPham.SanPhamID'
+                        )
+                        ->where(
+                            'DanhGia.TrangThai',
+                            'HienThi'
+                        );
+                },
+                'DiemTrungBinh'
+            )
+
             ->get();
 
+
+        // =========================================
+        // SẢN PHẨM YÊU THÍCH
+        // =========================================
         $favoriteProductIds = session()->has('NguoiDungID')
             ? DB::table('danhsachyeuthich')
-                ->where('NguoiDungID', session('NguoiDungID'))
+                ->where(
+                    'NguoiDungID',
+                    session('NguoiDungID')
+                )
                 ->pluck('SanPhamID')
             : collect();
 

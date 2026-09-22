@@ -28,7 +28,8 @@ class CategoryController extends Controller
     $query = DB::table('SanPham')
         ->where('SanPham.TrangThai', 'HoatDong')
         ->select('SanPham.*')
-        ->selectSub($this->subQueryHinhAnh(), 'HinhAnh');
+        ->selectSub($this->subQueryHinhAnh(), 'HinhAnh')
+        ->selectSub($this->subQueryDiemTrungBinh(), 'DiemTrungBinh');
 
     $products = $this->applySort($query)->get();
     $favoriteProductIds = $this->getFavoriteProductIds();
@@ -63,6 +64,11 @@ public function newProducts()
         ->selectSub(
             $this->subQueryHinhAnh(),
             'HinhAnh'
+        )
+
+        ->selectSub(
+            $this->subQueryDiemTrungBinh(),
+            'DiemTrungBinh'
         )
 
         ;
@@ -106,6 +112,10 @@ public function newProducts()
         ->selectSub(
             $this->subQueryHinhAnh(),
             'HinhAnh'
+        )
+        ->selectSub(
+            $this->subQueryDiemTrungBinh(),
+            'DiemTrungBinh'
         );
 
     // ================================
@@ -240,6 +250,20 @@ private function getFavoriteProductIds()
         };
     }
 
+    private function subQueryDiemTrungBinh()
+    {
+        return function ($query) {
+
+            $query->from('DanhGia')
+                ->selectRaw('COALESCE(AVG(DiemDanhGia), 0)')
+                ->whereColumn(
+                    'DanhGia.SanPhamID',
+                    'SanPham.SanPhamID'
+                )
+                ->where('DanhGia.TrangThai', 'HienThi');
+        };
+    }
+
 
 
 
@@ -286,6 +310,11 @@ private function getFavoriteProductIds()
             ->selectSub(
                 $this->subQueryHinhAnh(),
                 'HinhAnh'
+            )
+
+            ->selectSub(
+                $this->subQueryDiemTrungBinh(),
+                'DiemTrungBinh'
             )
 
             ->get();

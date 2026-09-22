@@ -240,31 +240,105 @@
     line-height: 1.4;
 }
 
-@media (max-width: 800px) {
-    .product-detail-page {
-        grid-template-columns: 1fr;
-        padding: 24px 22px 50px;
-    }
 
-    .product-detail-info {
-        padding: 0;
-    }
 
-    .product-main-image,
-    .product-main-image img {
-        height: 280px;
-    }
 
-    .product-thumbnails {
-        gap: 10px;
-    }
+/* =========================================================
+   ĐÁNH GIÁ SẢN PHẨM
+========================================================= */
 
-    .product-thumbnail {
-        width: 75px;
-        height: 60px;
-    }
+.product-detail-reviews {
+    margin-top: 40px;
+    width: 100%;
+}
 
-    .product-detail-name {
-        font-size: 20px;
-    }
+.product-detail-reviews-heading {
+    margin-bottom: 20px;
+}
+
+.product-detail-reviews-heading h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #58aa93;
+}
+
+
+/* =========================================================
+   TỪNG ĐÁNH GIÁ
+========================================================= */
+
+.product-review-item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   SAO
+========================================================= */
+
+.product-review-stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    line-height: 1;
+    margin-bottom: 7px;
+}
+
+.product-review-stars span {
+    font-size: 24px;
+    color: gainsboro;
+    line-height: 1;
+}
+
+.product-review-stars span.active {
+    color: #ffd04f;
+}
+
+
+/* =========================================================
+   TÊN + NGÀY
+========================================================= */
+
+.product-review-meta {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #58aa93;
+}
+
+.product-review-meta span {
+    color: #58aa93;
+}
+
+
+/* =========================================================
+   BÌNH LUẬN
+========================================================= */
+
+.product-review-comment {
+    margin: 0;
+    padding: 0;
+
+    font-size: 15px;
+    line-height: 1.5;
+    color: #58aa93;
+}
+
+
+/* =========================================================
+   CHƯA CÓ ĐÁNH GIÁ
+========================================================= */
+
+.product-review-empty {
+    margin-top: 10px;
+    color: #58aa93;
+    font-size: 15px;
 }

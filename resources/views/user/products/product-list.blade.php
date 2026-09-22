@@ -49,7 +49,7 @@
                         alt="Đánh giá"
                     >
 
-                    <span>4.8</span>
+                    <span>{{ number_format($product->DiemTrungBinh ?? 0, 1) }}</span>
 
                 </div>
 

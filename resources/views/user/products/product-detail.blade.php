@@ -137,6 +137,77 @@
             <p>{{ $product->MoTa ?: 'Được làm từ chất liệu vải mềm mại cùng lớp bông êm ái, mang đến cảm giác dễ chịu và thoải mái mỗi khi ôm.' }}</p>
         </div>
 
+        {{-- =========================================
+        ĐÁNH GIÁ SẢN PHẨM
+        ========================================= --}}
+<div class="product-detail-reviews">
+
+    <div class="product-detail-reviews-heading">
+        <h2>
+            Đánh giá
+            ({{ number_format($rating->DiemTrungBinh ?? 0, 1) }})
+        </h2>
+    </div>
+
+    @php
+        $reviews = DB::table('DanhGia as dg')
+            ->join('NguoiDung as nd', 'nd.NguoiDungID', '=', 'dg.NguoiDungID')
+            ->where('dg.SanPhamID', $product->SanPhamID)
+            ->where('dg.TrangThai', 'HienThi')
+            ->select(
+                'dg.DiemDanhGia',
+                'dg.BinhLuan',
+                'dg.NgayTao',
+                'nd.Ho',
+                'nd.Ten'
+            )
+            ->orderByDesc('dg.DanhGiaID')
+            ->get();
+    @endphp
+
+    @forelse($reviews as $review)
+
+        <div class="product-review-item">
+
+            {{-- SỐ SAO --}}
+            <div class="product-review-stars">
+                @for($i = 1; $i <= 5; $i++)
+                    <span class="{{ $i <= $review->DiemDanhGia ? 'active' : '' }}">
+                        ★
+                    </span>
+                @endfor
+            </div>
+
+            {{-- NGƯỜI ĐÁNH GIÁ + NGÀY --}}
+            <div class="product-review-meta">
+                <span>
+                    {{ $review->Ho }} {{ $review->Ten }}
+                </span>
+
+                <span>
+                    {{ \Carbon\Carbon::parse($review->NgayTao)->format('d/m/Y') }}
+                </span>
+            </div>
+
+            {{-- BÌNH LUẬN --}}
+            @if($review->BinhLuan)
+                <p class="product-review-comment">
+                    {{ $review->BinhLuan }}
+                </p>
+            @endif
+
+        </div>
+
+    @empty
+
+        <div class="product-review-empty">
+            Chưa có đánh giá cho sản phẩm này.
+        </div>
+
+    @endforelse
+
+</div>
+
     </section>
 
 </main>

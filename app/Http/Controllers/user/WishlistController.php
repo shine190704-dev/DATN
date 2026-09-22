@@ -53,6 +53,10 @@ class WishlistController extends Controller
                 $this->subQueryHinhAnh(),
                 'HinhAnh'
             )
+            ->selectSub(
+                $this->subQueryDiemTrungBinh(),
+                'DiemTrungBinh'
+            )
             ->orderByDesc('danhsachyeuthich.NgayTao')
             ->get();
 
@@ -167,6 +171,20 @@ class WishlistController extends Controller
                 ->orderByDesc('AnhDaiDien')
                 ->orderBy('HinhAnhSanPhamID')
                 ->limit(1);
+        };
+    }
+
+    private function subQueryDiemTrungBinh()
+    {
+        return function ($query) {
+
+            $query->from('DanhGia')
+                ->selectRaw('COALESCE(AVG(DiemDanhGia), 0)')
+                ->whereColumn(
+                    'DanhGia.SanPhamID',
+                    'SanPham.SanPhamID'
+                )
+                ->where('DanhGia.TrangThai', 'HienThi');
         };
     }
 }

@@ -23,8 +23,8 @@ class OrderController extends Controller
 
          // Đã xác nhận
             'DaXacNhan' => [
-        'DaXacNhan',
-        'Đã xác nhận',
+            'DaXacNhan',
+            'Đã xác nhận',
          ],
 
             // Đang giao
@@ -83,6 +83,39 @@ class OrderController extends Controller
         // LẤY ĐƠN HÀNG
         // =====================================================
 
+        $orderStatusCounts = DB::table('DonHang')
+            ->where('NguoiDungID', $nguoiDungID)
+            ->select(
+                'TrangThai',
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('TrangThai')
+            ->pluck('total', 'TrangThai');
+
+        $orderCounts = [
+            'TatCa' => $orderStatusCounts->sum(),
+            'ChoXacNhan' => $this->countStatuses(
+                $orderStatusCounts,
+                self::TABS['ChoXacNhan']
+            ),
+            'DaXacNhan' => $this->countStatuses(
+                $orderStatusCounts,
+                self::TABS['DaXacNhan']
+            ),
+            'DangGiao' => $this->countStatuses(
+                $orderStatusCounts,
+                self::TABS['DangGiao']
+            ),
+            'DaGiao' => $this->countStatuses(
+                $orderStatusCounts,
+                self::TABS['DaGiao']
+            ),
+            'DaHuy' => $this->countStatuses(
+                $orderStatusCounts,
+                self::TABS['DaHuy']
+            ),
+        ];
+
         $orders = DB::table('DonHang')
             ->where('NguoiDungID', $nguoiDungID)
 
@@ -112,6 +145,7 @@ class OrderController extends Controller
 
             ->select(
                 'DonHangID',
+                'SanPhamID',
                 'TenSanPham',
                 'MauSac',
                 'KichThuoc',
@@ -124,17 +158,33 @@ class OrderController extends Controller
 
             ->groupBy('DonHangID');
 
+        $reviewedItems = DB::table('DanhGia')
+            ->where('NguoiDungID', $nguoiDungID)
+            ->whereIn('DonHangID', $orders->pluck('DonHangID'))
+            ->get(['DonHangID', 'SanPhamID'])
+            ->mapWithKeys(function ($review) {
+                return [
+                    $review->DonHangID . ':' . $review->SanPhamID => true,
+                ];
+            });
+
 
         // =====================================================
         // GẮN SẢN PHẨM VÀO TỪNG ĐƠN
         // =====================================================
 
-        $orders->transform(function ($order) use ($items) {
+        $orders->transform(function ($order) use ($items, $reviewedItems) {
 
             $order->items = $items->get(
                 $order->DonHangID,
                 collect()
-            );
+            )->map(function ($item) use ($order, $reviewedItems) {
+                $item->daDanhGia = $reviewedItems->has(
+                    $order->DonHangID . ':' . $item->SanPhamID
+                );
+
+                return $item;
+            });
 
             return $order;
         });
@@ -149,9 +199,18 @@ class OrderController extends Controller
             compact(
                 'user',
                 'danhMucs',
-                'orders'
+                'orders',
+                'orderCounts'
             )
         );
+    }
+
+    private function countStatuses($counts, array $statuses)
+    {
+        return collect($statuses)
+            ->sum(function ($status) use ($counts) {
+                return (int) ($counts[$status] ?? 0);
+            });
     }
 
 

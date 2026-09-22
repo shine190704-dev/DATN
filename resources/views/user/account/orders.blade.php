@@ -65,47 +65,43 @@
         <div class="order-filter">
 
             {{-- TẤT CẢ --}}
+            {{-- TẤT CẢ --}}
             <a href="{{ route('order.index') }}"
-               class="{{ request('status') ? '' : 'active' }}">
-                Tất cả
+            class="{{ request('status') ? '' : 'active' }}">
+                Tất cả ({{ $orderCounts['TatCa'] ?? 0 }})
             </a>
-
 
             {{-- ĐƠN MỚI --}}
             <a href="{{ route('order.index', ['status' => 'ChoXacNhan']) }}"
-               class="{{ request('status') === 'ChoXacNhan' ? 'active' : '' }}">
-                Đơn mới
+            class="{{ request('status') === 'ChoXacNhan' ? 'active' : '' }}">
+             Đơn mới ({{ $orderCounts['ChoXacNhan'] ?? 0 }})
             </a>
-
 
             {{-- ĐÃ XÁC NHẬN --}}
             <a href="{{ route('order.index', ['status' => 'DaXacNhan']) }}"
-               class="{{ request('status') === 'DaXacNhan' ? 'active' : '' }}">
-                Đã xác nhận
+            class="{{ request('status') === 'DaXacNhan' ? 'active' : '' }}">
+                Đã xác nhận ({{ $orderCounts['DaXacNhan'] ?? 0 }})
             </a>
 
-
-              {{-- ĐANG GIAO --}}
+            {{-- ĐANG GIAO --}}
             <a href="{{ route('order.index', ['status' => 'DangGiao']) }}"
-                class="{{ request('status') === 'DangGiao' ? 'active' : '' }}">
-                Đang giao
+            class="{{ request('status') === 'DangGiao' ? 'active' : '' }}">
+             Đang giao ({{ $orderCounts['DangGiao'] ?? 0 }})
             </a>
-
 
             {{-- ĐÃ NHẬN --}}
             <a href="{{ route('order.index', ['status' => 'DaGiao']) }}"
-               class="{{ request('status') === 'DaGiao' ? 'active' : '' }}">
-                Đã nhận
+             class="{{ request('status') === 'DaGiao' ? 'active' : '' }}">
+                Đã nhận ({{ $orderCounts['DaGiao'] ?? 0 }})
             </a>
-
 
             {{-- ĐÃ HỦY --}}
             <a href="{{ route('order.index', ['status' => 'DaHuy']) }}"
-               class="{{ request('status') === 'DaHuy' ? 'active' : '' }}">
-                Đã hủy
+            class="{{ request('status') === 'DaHuy' ? 'active' : '' }}">
+             Đã hủy ({{ $orderCounts['DaHuy'] ?? 0 }})
             </a>
 
-        </div>
+         </div>
 
 
         {{-- DANH SÁCH ĐƠN --}}
@@ -129,8 +125,11 @@
                 ]);
                 
 
-                // Đơn khách đã xác nhận nhận hàng
-                $canReview = $order->TrangThai === 'HoanThanh';
+                // Chỉ hiện nút nếu đơn đã nhận và còn sản phẩm chưa đánh giá
+                $canReview = $order->TrangThai === 'HoanThanh'
+                    && $order->items->contains(
+                        fn ($item) => !$item->daDanhGia
+                    );
             @endphp
 
 
@@ -314,11 +313,17 @@
                         @if($canReview)
 
                             <a
-                                href="{{ Route::has('review.index') ? route('review.index') : '#' }}"
+                                href="{{ route('reviews.index') }}"
                                 class="order-review-btn"
                             >
                                 Đánh giá
                             </a>
+
+                        @elseif($order->TrangThai === 'HoanThanh' && $order->items->isNotEmpty())
+
+                            <span class="order-reviewed-btn">
+                                Đã đánh giá
+                            </span>
 
                         @endif
 
@@ -441,6 +446,14 @@
                                     · Màu: {{ $item->MauSac }}
                                 @endif
                             </span>
+
+                            @if($order->TrangThai === 'HoanThanh' && $item->daDanhGia)
+
+                                <span class="order-product-reviewed">
+                                    Đã đánh giá
+                                </span>
+
+                            @endif
 
                         </div>
 

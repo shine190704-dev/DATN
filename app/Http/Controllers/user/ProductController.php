@@ -11,52 +11,94 @@ class ProductController extends Controller
     // =========================
     // TÌM KIẾM SẢN PHẨM
     // =========================
-    public function search(Request $request)
-    {
-        $keyword = trim((string) $request->query('keyword', ''));
+    // =========================
+// TÌM KIẾM SẢN PHẨM
+// =========================
+public function search(Request $request)
+{
+    $keyword = trim((string) $request->query('keyword', ''));
 
-        $products = DB::table('SanPham')
-            ->leftJoin('HinhAnhSanPham', function ($join) {
-                $join->on(
-                    'SanPham.SanPhamID',
-                    '=',
-                    'HinhAnhSanPham.SanPhamID'
-                )->where('HinhAnhSanPham.AnhDaiDien', 1);
-            })
-            ->where('SanPham.TrangThai', 'HoatDong')
-            ->when($keyword !== '', function ($query) use ($keyword) {
-                $query->where(function ($productQuery) use ($keyword) {
-                    $productQuery
-                        ->where(
-                            'SanPham.TenSanPham',
-                            'like',
-                            '%' . $keyword . '%'
-                        )
-                        ->orWhere('SanPham.SanPhamID', $keyword);
-                });
-            })
-            ->orderByDesc('SanPham.DaBan')
-            ->select(
-                'SanPham.*',
-                'HinhAnhSanPham.DuongDanAnh as HinhAnh'
+    $products = DB::table('SanPham')
+        ->leftJoin('HinhAnhSanPham', function ($join) {
+            $join->on(
+                'SanPham.SanPhamID',
+                '=',
+                'HinhAnhSanPham.SanPhamID'
+            )->where('HinhAnhSanPham.AnhDaiDien', 1);
+        })
+
+        // LẤY ĐIỂM ĐÁNH GIÁ
+        ->leftJoin('DanhGia as dg', function ($join) {
+            $join->on(
+                'SanPham.SanPhamID',
+                '=',
+                'dg.SanPhamID'
+            )->where(
+                'dg.TrangThai',
+                'HienThi'
+            );
+        })
+
+        ->where('SanPham.TrangThai', 'HoatDong')
+
+        ->when($keyword !== '', function ($query) use ($keyword) {
+            $query->where(function ($productQuery) use ($keyword) {
+                $productQuery
+                    ->where(
+                        'SanPham.TenSanPham',
+                        'like',
+                        '%' . $keyword . '%'
+                    )
+                    ->orWhere(
+                        'SanPham.SanPhamID',
+                        $keyword
+                    );
+            });
+        })
+
+        ->select(
+            'SanPham.*',
+            'HinhAnhSanPham.DuongDanAnh as HinhAnh',
+
+            // Điểm trung bình
+            DB::raw(
+                'COALESCE(AVG(dg.DiemDanhGia), 0) as DiemTrungBinh'
+            ),
+
+            // Số lượt đánh giá
+            DB::raw(
+                'COUNT(dg.DanhGiaID) as SoLuotDanhGia'
             )
-            ->get();
+        )
 
-        $favoriteProductIds = session()->has('NguoiDungID')
-            ? DB::table('danhsachyeuthich')
-                ->where('NguoiDungID', session('NguoiDungID'))
-                ->pluck('SanPhamID')
-            : collect();
+        ->groupBy(
+            'SanPham.SanPhamID',
+            'HinhAnhSanPham.DuongDanAnh'
+        )
 
-        return view(
-            'user.products.product-search',
-            compact(
-                'keyword',
-                'products',
-                'favoriteProductIds'
+        ->orderByDesc('SanPham.DaBan')
+        ->get();
+
+
+    $favoriteProductIds = session()->has('NguoiDungID')
+        ? DB::table('danhsachyeuthich')
+            ->where(
+                'NguoiDungID',
+                session('NguoiDungID')
             )
-        );
-    }
+            ->pluck('SanPhamID')
+        : collect();
+
+
+    return view(
+        'user.products.product-search',
+        compact(
+            'keyword',
+            'products',
+            'favoriteProductIds'
+        )
+    );
+}
 
 
     // =========================
@@ -95,6 +137,36 @@ class ProductController extends Controller
             ->orderBy('BienTheID')
             ->get();
 
+
+
+            // =========================================
+        // LẤY ĐIỂM ĐÁNH GIÁ SẢN PHẨM
+        // =========================================
+        $rating = DB::table('DanhGia')
+            ->where('SanPhamID', $id)
+            ->where('TrangThai', 'HienThi')
+            ->select(
+                DB::raw('COALESCE(AVG(DiemDanhGia), 0) as DiemTrungBinh'),
+                DB::raw('COUNT(DanhGiaID) as SoLuotDanhGia')
+        )
+            ->first();
+
+        $reviews = DB::table('DanhGia as dg')
+            ->join('NguoiDung as nd', 'nd.NguoiDungID', '=', 'dg.NguoiDungID')
+            ->where('dg.SanPhamID', $id)
+            ->where('dg.TrangThai', 'HienThi')
+            ->select(
+                'dg.DanhGiaID',
+                'dg.DiemDanhGia',
+                'dg.BinhLuan',
+                'dg.NgayTao',
+                'nd.Ho',
+                'nd.Ten'
+            )
+            ->orderByDesc('dg.DanhGiaID')
+            ->get();
+
+            
 
         // =========================
         // LẤY DANH MỤC CHO NAVBAR
@@ -137,7 +209,9 @@ class ProductController extends Controller
                 'images',
                 'variants',
                 'danhMucs',
-                'isFavorite'
+                'isFavorite',
+                'rating',
+                'reviews'
             )
         );
     }
