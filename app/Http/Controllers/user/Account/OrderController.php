@@ -161,23 +161,70 @@ class OrderController extends Controller
     // =========================================================
 
     public function cancel(
-        OrderStatusService $service,
-        $id
-    ) {
-        // Chưa đăng nhập
-        if (!session()->has('NguoiDungID')) {
-            return redirect()->route('login');
+    OrderStatusService $service,
+    $id
+) {
+    // Chưa đăng nhập
+    if (!session()->has('NguoiDungID')) {
+        return redirect()->route('login');
+    }
+
+    $nguoiDungID = (int) session('NguoiDungID');
+
+    DB::beginTransaction();
+
+    try {
+
+        // =====================================================
+        // LẤY ĐƠN HÀNG CỦA KHÁCH VÀ KHÓA ĐƠN
+        // =====================================================
+
+        $order = DB::table('DonHang')
+            ->where('DonHangID', (int) $id)
+            ->where('NguoiDungID', $nguoiDungID)
+            ->lockForUpdate()
+            ->first();
+
+        if (!$order) {
+            DB::rollBack();
+
+            return redirect()
+                ->route('order.index')
+                ->with(
+                    'error',
+                    'Không tìm thấy đơn hàng.'
+                );
         }
 
-        $nguoiDungID = (int) session('NguoiDungID');
+        // Chỉ cho hủy khi đơn chưa được xác nhận
+        if (!in_array($order->TrangThai, [
+            'MoiTao',
+            'ChoXacNhan',
+            'Chờ xác nhận',
+        ])) {
+
+            DB::rollBack();
+
+            return redirect()
+                ->route('order.index')
+                ->with(
+                    'error',
+                    'Không thể hủy đơn hàng này vì đơn đã được xác nhận.'
+                );
+        }
 
 
         // =====================================================
-        // CHUYỂN:
-        // MoiTao -> DaHuy
-        //
-        // OrderStatusService sẽ kiểm tra trạng thái thực tế
-        // để tránh trường hợp Admin vừa xác nhận đơn.
+        // LẤY CHI TIẾT ĐƠN HÀNG
+        // =====================================================
+
+        $items = DB::table('ChiTietDonHang')
+            ->where('DonHangID', $order->DonHangID)
+            ->get();
+
+
+        // =====================================================
+        // CHUYỂN TRẠNG THÁI ĐƠN
         // =====================================================
 
         $ok = $service->change(
@@ -189,19 +236,61 @@ class OrderController extends Controller
         );
 
 
+        if (!$ok) {
+
+            DB::rollBack();
+
+            return redirect()
+                ->route('order.index')
+                ->with(
+                    'error',
+                    'Không thể hủy đơn hàng này vì đơn đã được xác nhận hoặc không tồn tại.'
+                );
+        }
+
+
         // =====================================================
-        // THÔNG BÁO
+        // TRẢ LẠI SỐ LƯỢNG TẠM GIỮ
+        //
+        // SoLuong KHÔNG ĐỔI
+        // SoLuongTamGiu GIẢM
         // =====================================================
+
+        foreach ($items as $item) {
+
+            DB::table('BienThe')
+                ->where('SanPhamID', $item->SanPhamID)
+                ->where('MauSac', $item->MauSac)
+                ->where('KichThuoc', $item->KichThuoc)
+                ->decrement(
+                    'SoLuongTamGiu',
+                    $item->SoLuong
+                );
+        }
+
+
+        DB::commit();
+
 
         return redirect()
             ->route('order.index')
             ->with(
-                $ok ? 'success' : 'error',
-                $ok
-                    ? 'Đã hủy đơn hàng.'
-                    : 'Không thể hủy đơn hàng này vì đơn đã được xác nhận hoặc không tồn tại.'
+                'success',
+                'Đã hủy đơn hàng.'
+            );
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return redirect()
+            ->route('order.index')
+            ->with(
+                'error',
+                'Có lỗi xảy ra khi hủy đơn hàng: ' . $e->getMessage()
             );
     }
+}
 
 
     // =========================================================

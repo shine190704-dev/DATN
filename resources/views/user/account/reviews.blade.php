@@ -32,14 +32,6 @@
             </div>
         @endif
 
-        @if($errors->any())
-            <div class="refund-alert refund-alert-warning">
-                @foreach($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
-
 
         {{-- =================================================
              TABS
@@ -124,7 +116,7 @@
                             @if(!empty($item->HinhAnh))
 
                                 <img
-                                    src="{{ asset('storage/' . $item->HinhAnh) }}"
+                                    src="{{ asset('images/' . $item->HinhAnh) }}"
                                     alt="{{ $item->TenSanPham }}"
                                 >
 
@@ -179,7 +171,7 @@
 
                             data-product-color="{{ $item->MauSac }}"
 
-                            data-product-image="{{ !empty($item->HinhAnh) ? asset('storage/' . $item->HinhAnh) : '' }}"
+                            data-product-image="{{ !empty($item->HinhAnh) ? asset('images/' . $item->HinhAnh) : '' }}"
                         >
                             Đánh giá
                         </button>
@@ -335,13 +327,16 @@
 {{-- =========================================================
      POPUP ĐÁNH GIÁ
 ========================================================= --}}
-
 <dialog
     class="review-dialog"
     id="reviewDialog"
+    data-validation-error="{{ $errors->any() ? '1' : '0' }}"
+    data-old-product-id="{{ old('SanPhamID') }}"
+    data-old-order-id="{{ old('DonHangID') }}"
 >
 
     <form
+        id="reviewForm"
         method="POST"
         action="{{ route('reviews.store') }}"
     >
@@ -376,7 +371,6 @@
         <div class="review-dialog-product">
 
             <div class="review-dialog-image">
-
                 <img
                     id="reviewProductImage"
                     src=""
@@ -475,23 +469,34 @@
             </label>
 
 
-            <textarea
-                id="reviewComment"
-                name="BinhLuan"
-                maxlength="500"
-                placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm..."
-            ></textarea>
+                <textarea
+                    id="reviewComment"
+                    name="BinhLuan"
+                    maxlength="500"
+                    placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm..."
+                >{{ old('BinhLuan') }}</textarea>
 
+                <div class="review-character-count">
 
-            <div class="review-character-count">
-
-                <span id="reviewCharCount">
+                    <span id="reviewCharCount">
                     0
-                </span>
+                    </span>
 
-                / 500
+                    / 500
 
-            </div>
+                </div>
+
+                <div
+                    class="review-form-error"
+                    id="reviewFormError"
+                    role="alert"
+                    aria-live="polite"
+                    @if(!$errors->any()) hidden @endif
+                >
+                    @foreach($errors->all() as $message)
+                        <div>{{ $message }}</div>
+                    @endforeach
+                </div>
 
         </div>
 

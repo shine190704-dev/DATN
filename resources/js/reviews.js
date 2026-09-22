@@ -67,11 +67,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const colorEl =
         document.getElementById('reviewProductColor');
 
-    // ĐÃ ĐỔI TỪ reviewVariantId
-    // SANG reviewProductId
+
+    // ID sản phẩm
     const productIdEl =
         document.getElementById('reviewProductId');
 
+    // ID đơn hàng
     const orderIdEl =
         document.getElementById('reviewOrderId');
 
@@ -117,7 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (colorEl) {
-                colorEl.textContent = productColor || '-';
+                colorEl.textContent =
+                    productColor || '-';
             }
 
 
@@ -173,6 +175,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     });
+
+
+
+    /* =========================================================
+       TỰ ĐỘNG MỞ LẠI POPUP KHI VALIDATE LỖI
+    ========================================================= */
+
+    const validationError =
+        dialog.getAttribute('data-validation-error');
+
+    const oldProductId =
+        dialog.getAttribute('data-old-product-id');
+
+    const oldOrderId =
+        dialog.getAttribute('data-old-order-id');
+
+
+    if (
+        validationError === '1' &&
+        oldProductId &&
+        oldOrderId
+    ) {
+
+        const errorButton = document.querySelector(
+            '[data-review-open][data-product-id="' +
+            oldProductId +
+            '"][data-order-id="' +
+            oldOrderId +
+            '"]'
+        );
+
+
+        if (errorButton) {
+            errorButton.click();
+        }
+
+    }
 
 
 
@@ -289,8 +328,55 @@ document.addEventListener('DOMContentLoaded', function () {
     const charCount =
         document.getElementById('reviewCharCount');
 
+    const reviewForm =
+        document.getElementById('reviewForm');
+
+    const formError =
+        document.getElementById('reviewFormError');
+
+
+    function showFormError(message) {
+
+        if (!formError) {
+            return;
+        }
+
+        formError.textContent = message;
+        formError.hidden = false;
+
+    }
+
+
+    function clearFormError() {
+
+        if (!formError) {
+            return;
+        }
+
+        formError.textContent = '';
+        formError.hidden = true;
+
+    }
+
+
+    if (reviewForm) {
+
+        reviewForm.addEventListener('submit', function (event) {
+
+            if (comment && !comment.value.trim()) {
+                event.preventDefault();
+                showFormError('Vui lòng nhập bình luận.');
+                comment.focus();
+            }
+
+        });
+
+    }
+
 
     if (comment && charCount) {
+
+        charCount.textContent = comment.value.length;
 
         comment.addEventListener(
             'input',
@@ -298,6 +384,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 charCount.textContent =
                     comment.value.length;
+
+                if (comment.value.trim()) {
+                    clearFormError();
+                }
 
             }
         );

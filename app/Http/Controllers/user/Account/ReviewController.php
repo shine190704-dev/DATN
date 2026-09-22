@@ -269,7 +269,7 @@ class ReviewController extends Controller
                 ],
 
                 'BinhLuan' => [
-                    'nullable',
+                    'required',
                     'string',
                     'max:500',
                 ],
@@ -298,6 +298,9 @@ class ReviewController extends Controller
 
                 'DiemDanhGia.max' =>
                     'Vui lòng chọn từ 1 đến 5 sao.',
+
+                'BinhLuan.required' =>
+                    'Vui lòng nhập bình luận.',
 
                 'BinhLuan.max' =>
                     'Bình luận tối đa 500 ký tự.',

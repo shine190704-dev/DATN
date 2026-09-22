@@ -256,25 +256,40 @@ $subtotal = $items->sum(function ($item) {
 
 
 
-   public function placeOrder(Request $request)
+  public function placeOrder(Request $request)
 {
+    // =========================================================
+    // KIỂM TRA ĐĂNG NHẬP
+    // =========================================================
+
     if (!session()->has('NguoiDungID')) {
         return redirect()->route('login');
     }
 
-    $nguoiDungID = session('NguoiDungID');
+    $nguoiDungID = (int) session('NguoiDungID');
+
 
     // =========================================================
     // VALIDATE
     // =========================================================
 
-    $request->validate([
-        'DiaChiNguoiDungID' => 'required|exists:DiaChiNguoiDung,DiaChiNguoiDungID',
-        'PhuongThucThanhToan' => 'required|in:cod,bank_transfer',
-    ], [
-        'DiaChiNguoiDungID.required' => 'Vui lòng chọn địa chỉ giao hàng.',
-        'PhuongThucThanhToan.required' => 'Vui lòng chọn phương thức thanh toán.',
-    ]);
+    $request->validate(
+        [
+            'DiaChiNguoiDungID' => 'required|exists:DiaChiNguoiDung,DiaChiNguoiDungID',
+            'PhuongThucThanhToan' => 'required|in:cod,bank_transfer',
+        ],
+        [
+            'DiaChiNguoiDungID.required' => 'Vui lòng chọn địa chỉ giao hàng.',
+            'DiaChiNguoiDungID.exists' => 'Địa chỉ giao hàng không hợp lệ.',
+            'PhuongThucThanhToan.required' => 'Vui lòng chọn phương thức thanh toán.',
+            'PhuongThucThanhToan.in' => 'Phương thức thanh toán không hợp lệ.',
+        ]
+    );
+
+
+    // =========================================================
+    // KIỂM TRA ĐỊA CHỈ CÓ THUỘC VỀ NGƯỜI DÙNG KHÔNG
+    // =========================================================
 
     $diaChi = DB::table('DiaChiNguoiDung')
         ->where('DiaChiNguoiDungID', $request->DiaChiNguoiDungID)
@@ -282,28 +297,68 @@ $subtotal = $items->sum(function ($item) {
         ->first();
 
     if (!$diaChi) {
-        return back()->withErrors(['DiaChiNguoiDungID' => 'Địa chỉ không hợp lệ.']);
+        return back()
+            ->withInput()
+            ->withErrors([
+                'DiaChiNguoiDungID' => 'Địa chỉ không hợp lệ.'
+            ]);
     }
 
+
     // =========================================================
-    // LẤY LẠI DANH SÁCH SẢN PHẨM (giống logic index)
+    // LẤY SẢN PHẨM
     // =========================================================
 
     $items = collect();
+
+    // Trường hợp Mua ngay
     $bienTheID = $request->input('BienTheID');
-    $soLuongMuaNgay = (int) $request->input('SoLuong', 1);
+
+    // Số lượng mua ngay
+    $soLuongMuaNgay = max(
+        1,
+        (int) $request->input('SoLuong', 1)
+    );
+
+    // Giỏ hàng
     $gioHang = null;
+
+
+    // =========================================================
+    // TRƯỜNG HỢP MUA NGAY
+    // =========================================================
 
     if ($bienTheID) {
 
         $bienThe = DB::table('BienThe')
-            ->join('SanPham', 'BienThe.SanPhamID', '=', 'SanPham.SanPhamID')
-            ->leftJoin('HinhAnhSanPham', function ($join) {
-                $join->on('SanPham.SanPhamID', '=', 'HinhAnhSanPham.SanPhamID')
-                     ->where('HinhAnhSanPham.AnhDaiDien', 1);
-            })
-            ->where('BienThe.BienTheID', $bienTheID)
-            ->where('SanPham.TrangThai', 'HoatDong')
+            ->join(
+                'SanPham',
+                'BienThe.SanPhamID',
+                '=',
+                'SanPham.SanPhamID'
+            )
+            ->leftJoin(
+                'HinhAnhSanPham',
+                function ($join) {
+                    $join->on(
+                        'SanPham.SanPhamID',
+                        '=',
+                        'HinhAnhSanPham.SanPhamID'
+                    )
+                    ->where(
+                        'HinhAnhSanPham.AnhDaiDien',
+                        1
+                    );
+                }
+            )
+            ->where(
+                'BienThe.BienTheID',
+                $bienTheID
+            )
+            ->where(
+                'SanPham.TrangThai',
+                'HoatDong'
+            )
             ->select(
                 'BienThe.BienTheID',
                 'BienThe.SanPhamID',
@@ -311,41 +366,84 @@ $subtotal = $items->sum(function ($item) {
                 'BienThe.KichThuoc',
                 'BienThe.GiaBienThe',
                 'BienThe.SoLuong as TonKho',
+                'BienThe.SoLuongTamGiu',
                 'SanPham.TenSanPham',
                 'HinhAnhSanPham.DuongDanAnh'
             )
             ->first();
 
+
         if ($bienThe) {
-            $items->push((object) [
-                'BienTheID' => $bienThe->BienTheID,
-                'SanPhamID' => $bienThe->SanPhamID,
-                'TenSanPham' => $bienThe->TenSanPham,
-                'MauSac' => $bienThe->MauSac,
-                'KichThuoc' => $bienThe->KichThuoc,
-                'GiaBienThe' => $bienThe->GiaBienThe,
-                'SoLuong' => $soLuongMuaNgay,
-                'TonKho' => $bienThe->TonKho,
-                'HinhAnh' => $bienThe->DuongDanAnh,
-            ]);
+
+            $items->push(
+                (object) [
+                    'BienTheID' => $bienThe->BienTheID,
+                    'SanPhamID' => $bienThe->SanPhamID,
+                    'TenSanPham' => $bienThe->TenSanPham,
+                    'MauSac' => $bienThe->MauSac,
+                    'KichThuoc' => $bienThe->KichThuoc,
+                    'GiaBienThe' => $bienThe->GiaBienThe,
+                    'SoLuong' => $soLuongMuaNgay,
+                    'TonKho' => $bienThe->TonKho,
+                    'SoLuongTamGiu' => $bienThe->SoLuongTamGiu,
+                    'HinhAnh' => $bienThe->DuongDanAnh,
+                ]
+            );
         }
+
+
+    // =========================================================
+    // TRƯỜNG HỢP ĐẶT TỪ GIỎ HÀNG
+    // =========================================================
 
     } else {
 
         $gioHang = DB::table('GioHang')
-            ->where('NguoiDungID', $nguoiDungID)
+            ->where(
+                'NguoiDungID',
+                $nguoiDungID
+            )
             ->first();
 
+
         if ($gioHang) {
+
             $items = DB::table('ChiTietGioHang')
-                ->join('BienThe', 'ChiTietGioHang.BienTheID', '=', 'BienThe.BienTheID')
-                ->join('SanPham', 'BienThe.SanPhamID', '=', 'SanPham.SanPhamID')
-                ->leftJoin('HinhAnhSanPham', function ($join) {
-                    $join->on('SanPham.SanPhamID', '=', 'HinhAnhSanPham.SanPhamID')
-                         ->where('HinhAnhSanPham.AnhDaiDien', 1);
-                })
-                ->where('ChiTietGioHang.GioHangID', $gioHang->GioHangID)
-                ->where('SanPham.TrangThai', 'HoatDong')
+                ->join(
+                    'BienThe',
+                    'ChiTietGioHang.BienTheID',
+                    '=',
+                    'BienThe.BienTheID'
+                )
+                ->join(
+                    'SanPham',
+                    'BienThe.SanPhamID',
+                    '=',
+                    'SanPham.SanPhamID'
+                )
+                ->leftJoin(
+                    'HinhAnhSanPham',
+                    function ($join) {
+
+                        $join->on(
+                            'SanPham.SanPhamID',
+                            '=',
+                            'HinhAnhSanPham.SanPhamID'
+                        )
+                        ->where(
+                            'HinhAnhSanPham.AnhDaiDien',
+                            1
+                        );
+                    }
+                )
+                ->where(
+                    'ChiTietGioHang.GioHangID',
+                    $gioHang->GioHangID
+                )
+                ->where(
+                    'SanPham.TrangThai',
+                    'HoatDong'
+                )
                 ->select(
                     'ChiTietGioHang.BienTheID',
                     'BienThe.SanPhamID',
@@ -354,6 +452,7 @@ $subtotal = $items->sum(function ($item) {
                     'BienThe.KichThuoc',
                     'BienThe.GiaBienThe',
                     'BienThe.SoLuong as TonKho',
+                    'BienThe.SoLuongTamGiu',
                     'ChiTietGioHang.SoLuong',
                     'HinhAnhSanPham.DuongDanAnh as HinhAnh'
                 )
@@ -361,158 +460,365 @@ $subtotal = $items->sum(function ($item) {
         }
     }
 
+
+    // =========================================================
+    // KIỂM TRA GIỎ HÀNG
+    // =========================================================
+
     if ($items->isEmpty()) {
-        return back()->withErrors(['items' => 'Giỏ hàng trống, không thể đặt hàng.']);
+
+        return back()
+            ->withInput()
+            ->withErrors([
+                'items' => 'Giỏ hàng trống, không thể đặt hàng.'
+            ]);
     }
 
+
     // =========================================================
-    // TÍNH TIỀN
+    // TÍNH TẠM TÍNH
     // =========================================================
 
-    $subtotal = $items->sum(fn($item) => $item->GiaBienThe * $item->SoLuong);
+    $subtotal = $items->sum(
+        function ($item) {
+            return $item->GiaBienThe * $item->SoLuong;
+        }
+    );
 
-    $normalizedCity = Str::lower(Str::ascii(trim($diaChi->ThanhPho ?? '')));
-    $shippingFee = $normalizedCity === 'thanh pho ho chi minh' ? 0 : 35000;
 
-// =========================================================
-// KIỂM TRA LẠI MÃ GIẢM GIÁ (tính lại từ server, không tin client)
-// =========================================================
+    // =========================================================
+    // TÍNH PHÍ VẬN CHUYỂN
+    // =========================================================
 
-$soTienGiam = 0;
-$maGiamGiaID = null;
+    $normalizedCity = Str::lower(
+        Str::ascii(
+            trim($diaChi->ThanhPho ?? '')
+        )
+    );
 
-if ($request->filled('MaCode')) {
 
-    $maGiamGia = DB::table('magiamgia')
-        ->where('MaCode', trim($request->MaCode))
-        ->where('TrangThai', 'HoatDong')
-        ->where('NgayHetHan', '>=', now())
-        ->first();
+    $shippingFee =
+        $normalizedCity === 'thanh pho ho chi minh'
+            ? 0
+            : 35000;
 
-    if ($maGiamGia && $subtotal >= $maGiamGia->GiaTriDonHangToiThieu) {
-        $soTienGiam = round($subtotal * $maGiamGia->GiaTriGiam / 100);
-        $maGiamGiaID = $maGiamGia->MaGiamGiaID;
+
+    // =========================================================
+    // KIỂM TRA MÃ GIẢM GIÁ
+    // =========================================================
+
+    $soTienGiam = 0;
+    $maGiamGiaID = null;
+
+
+    if ($request->filled('MaCode')) {
+
+        $maGiamGia = DB::table('magiamgia')
+            ->where(
+                'MaCode',
+                trim($request->MaCode)
+            )
+            ->where(
+                'TrangThai',
+                'HoatDong'
+            )
+            ->where(
+                'NgayHetHan',
+                '>=',
+                now()
+            )
+            ->first();
+
+
+        if (
+            $maGiamGia &&
+            $subtotal >= $maGiamGia->GiaTriDonHangToiThieu
+        ) {
+
+            $soTienGiam = round(
+                $subtotal *
+                $maGiamGia->GiaTriGiam /
+                100
+            );
+
+            $maGiamGiaID =
+                $maGiamGia->MaGiamGiaID;
+        }
     }
-}
 
-$total = $subtotal + $shippingFee - $soTienGiam;
 
     // =========================================================
-    // LƯU DB + XỬ LÝ XUNG ĐỘT TỒN KHO
+    // TỔNG TIỀN
+    // =========================================================
+
+    $total =
+        $subtotal +
+        $shippingFee -
+        $soTienGiam;
+
+
+    // =========================================================
+    // BẮT ĐẦU TRANSACTION
     // =========================================================
 
     DB::beginTransaction();
 
+
     try {
 
         // =====================================================
-        // KIỂM TRA VÀ KHÓA TỒN KHO (chống 2 người mua cùng lúc)
+        // KIỂM TRA TỒN KHO + KHÓA BIẾN THỂ
+        //
+        // SoLuong:
+        //     Tồn kho thực tế
+        //
+        // SoLuongTamGiu:
+        //     Số lượng đang được các đơn chưa xác nhận giữ
+        //
+        // Số lượng có thể mua:
+        //
+        // SoLuong - SoLuongTamGiu
         // =====================================================
 
-       foreach ($items as $item) {
+        foreach ($items as $item) {
 
-        $bienThe = DB::table('BienThe')
-            ->where('BienTheID', $item->BienTheID)
-            ->lockForUpdate()
-            ->first();
+            $bienThe = DB::table('BienThe')
+                ->where(
+                    'BienTheID',
+                    $item->BienTheID
+                )
+                ->lockForUpdate()
+                ->first();
 
-        if (!$bienThe) {
-            throw new \Exception(
-                'Không tìm thấy sản phẩm "' . $item->TenSanPham . '".'
-            );
+
+            if (!$bienThe) {
+
+                throw new \Exception(
+                    'Không tìm thấy sản phẩm "' .
+                    $item->TenSanPham .
+                    '".'
+                );
+            }
+
+
+            // Số lượng thực tế có thể bán
+            $soLuongCoTheBan =
+                (int) $bienThe->SoLuong -
+                (int) $bienThe->SoLuongTamGiu;
+
+
+            // =================================================
+            // KHÔNG ĐỦ HÀNG
+            // =================================================
+
+            if ($soLuongCoTheBan < $item->SoLuong) {
+
+                throw new \Exception(
+                    'Sản phẩm "' .
+                    $item->TenSanPham .
+                    '" không đủ số lượng để đặt. ' .
+                    'Số lượng có thể mua hiện tại: ' .
+                    $soLuongCoTheBan .
+                    ', số lượng cần mua: ' .
+                    $item->SoLuong .
+                    '.'
+                );
+            }
+
+
+            // =================================================
+            // CHỈ TĂNG SỐ LƯỢNG TẠM GIỮ
+            //
+            // KHÔNG TRỪ SoLuong
+            // =================================================
+
+            DB::table('BienThe')
+                ->where(
+                    'BienTheID',
+                    $item->BienTheID
+                )
+                ->increment(
+                    'SoLuongTamGiu',
+                    $item->SoLuong
+                );
         }
 
-        if ($bienThe->SoLuong < $item->SoLuong) {
-            throw new \Exception(
-                'Sản phẩm "' . $item->TenSanPham .
-                '" không đủ số lượng trong kho. ' .
-                'Tồn kho hiện tại: ' . $bienThe->SoLuong .
-                ', số lượng cần mua: ' . $item->SoLuong . '.'
+
+        // =====================================================
+        // TẠO ĐƠN HÀNG
+        // =====================================================
+
+        $donHangID = DB::table('DonHang')
+            ->insertGetId(
+                [
+                    'NguoiDungID' =>
+                        $nguoiDungID,
+
+                    'MaDonHang' =>
+                        '',
+
+                    'TongTien' =>
+                        $total,
+
+                    'TenNguoiNhan' =>
+                        $diaChi->TenNguoiNhan,
+
+                    'SoDienThoaiNguoiNhan' =>
+                        $diaChi->SoDienThoai,
+
+                    'DiaChiNhanHang' =>
+                        $diaChi->DiaChi .
+                        ', ' .
+                        $diaChi->ThanhPho,
+
+                    // Đơn mới → chờ xác nhận
+                    'TrangThai' =>
+                        'Chờ xác nhận',
+
+                    'PhuongThucThanhToan' =>
+                        $request->PhuongThucThanhToan,
+
+                    'MaGiamGiaID' =>
+                        $maGiamGiaID,
+
+                    'SoTienGiam' =>
+                        $soTienGiam,
+
+                    'TrangThaiThanhToan' =>
+                        'Chưa thanh toán',
+
+                    'NgayTao' =>
+                        now(),
+
+                    'NgayCapNhat' =>
+                        now(),
+                ]
             );
-        }
 
-     // Trừ số lượng tồn kho
-        DB::table('BienThe')
-            ->where('BienTheID', $item->BienTheID)
-            ->decrement('SoLuong', $item->SoLuong);
-
-        // Tăng số lượng tạm giữ
-        DB::table('BienThe')
-            ->where('BienTheID', $item->BienTheID)
-            ->increment('SoLuongTamGiu', $item->SoLuong);
-    }
-
-        // =====================================================
-        // INSERT ĐƠN HÀNG (để MySQL tự sinh DonHangID, chống trùng mã)
-        // =====================================================
-
-        $donHangID = DB::table('DonHang')->insertGetId([
-            'NguoiDungID' => $nguoiDungID,
-            'MaDonHang' => '',
-            'TongTien' => $total,
-            'TenNguoiNhan' => $diaChi->TenNguoiNhan,
-            'SoDienThoaiNguoiNhan' => $diaChi->SoDienThoai,
-            'DiaChiNhanHang' => $diaChi->DiaChi . ', ' . $diaChi->ThanhPho,
-            'TrangThai' => 'Chờ xác nhận',
-            'PhuongThucThanhToan' => $request->PhuongThucThanhToan,
-            'MaGiamGiaID' => $maGiamGiaID,   
-            'SoTienGiam' => $soTienGiam,  
-            'TrangThaiThanhToan' => 'Chưa thanh toán',
-            'NgayTao' => now(),
-            'NgayCapNhat' => now(),
-        ]);
 
         // =====================================================
         // TẠO MÃ ĐƠN HÀNG
         // =====================================================
 
-        $maDonHang = 'DH' . str_pad($donHangID, 3, '0', STR_PAD_LEFT);
+        $maDonHang =
+            'DH' .
+            str_pad(
+                $donHangID,
+                3,
+                '0',
+                STR_PAD_LEFT
+            );
+
 
         DB::table('DonHang')
-            ->where('DonHangID', $donHangID)
-            ->update(['MaDonHang' => $maDonHang]);
+            ->where(
+                'DonHangID',
+                $donHangID
+            )
+            ->update(
+                [
+                    'MaDonHang' =>
+                        $maDonHang
+                ]
+            );
+
 
         // =====================================================
-        // TẠO CHI TIẾT ĐƠN HÀNG + TRỪ TỒN KHO
+        // TẠO CHI TIẾT ĐƠN HÀNG
+        //
+        // LƯU Ý:
+        // Không trừ SoLuong ở đây.
+        // Vì SoLuongTamGiu đã được tăng ở phía trên.
         // =====================================================
 
         foreach ($items as $item) {
 
-            DB::table('ChiTietDonHang')->insert([
-                'DonHangID' => $donHangID,
-                'SanPhamID' => $item->SanPhamID,
-                'TenSanPham' => $item->TenSanPham,
-                'MauSac' => $item->MauSac,
-                'KichThuoc' => $item->KichThuoc,
-                'HinhAnh' => $item->HinhAnh,
-                'SoLuong' => $item->SoLuong,
-                'GiaTaiThoiDiemMua' => $item->GiaBienThe,
-            ]);
+            DB::table('ChiTietDonHang')
+                ->insert(
+                    [
+                        'DonHangID' =>
+                            $donHangID,
 
-            DB::table('BienThe')
-                ->where('BienTheID', $item->BienTheID)
-                ->decrement('SoLuong', $item->SoLuong);
+                        'SanPhamID' =>
+                            $item->SanPhamID,
+
+                        'TenSanPham' =>
+                            $item->TenSanPham,
+
+                        'MauSac' =>
+                            $item->MauSac,
+
+                        'KichThuoc' =>
+                            $item->KichThuoc,
+
+                        'HinhAnh' =>
+                            $item->HinhAnh,
+
+                        'SoLuong' =>
+                            $item->SoLuong,
+
+                        'GiaTaiThoiDiemMua' =>
+                            $item->GiaBienThe,
+                    ]
+                );
         }
 
+
         // =====================================================
-        // XOÁ GIỎ HÀNG
+        // XÓA SẢN PHẨM KHỎI GIỎ HÀNG
         // =====================================================
 
         if ($gioHang) {
+
             DB::table('ChiTietGioHang')
-                ->where('GioHangID', $gioHang->GioHangID)
+                ->where(
+                    'GioHangID',
+                    $gioHang->GioHangID
+                )
                 ->delete();
         }
 
+
+        // =====================================================
+        // HOÀN TẤT TRANSACTION
+        // =====================================================
+
         DB::commit();
 
+
     } catch (\Exception $e) {
+
+        // Nếu có lỗi:
+        // hoàn tác cả việc tăng SoLuongTamGiu
+        // và tạo đơn hàng.
+
         DB::rollBack();
-        return back()->withErrors(['order' => 'Đặt hàng thất bại: ' . $e->getMessage()]);
+
+
+        return back()
+            ->withInput()
+            ->withErrors(
+                [
+                    'order' =>
+                        'Đặt hàng thất bại: ' .
+                        $e->getMessage()
+                ]
+            );
     }
 
+
+    // =========================================================
+    // CHUYỂN SANG TRANG ĐẶT HÀNG THÀNH CÔNG
+    // =========================================================
+
     return redirect()
-        ->route('checkout.success', ['maDonHang' => $maDonHang]);
+        ->route(
+            'checkout.success',
+            [
+                'maDonHang' =>
+                    $maDonHang
+            ]
+        );
 }
 
 public function success($maDonHang)
