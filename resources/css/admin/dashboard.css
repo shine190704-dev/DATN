@@ -1,0 +1,384 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #333333;
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.admin-dashboard {
+    min-height: 100vh;
+    display: flex;
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.admin-sidebar {
+    width: 256px;
+    min-height: 100vh;
+
+    background: #2F6F5B;
+
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    color: #ffffff;
+
+    font-family: "Merriweather", Georgia, serif;
+
+    /* Cả sidebar trượt cùng nhau (logo, menu, tài khoản, đăng xuất) */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Ẩn thanh trượt (vẫn cuộn được bằng chuột/cảm ứng) */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.admin-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Không để các khối bị ép nhỏ lại, thiếu chỗ thì cuộn */
+.admin-sidebar > * {
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   LOGO (giữ nguyên như ban đầu)
+========================================================= */
+
+.admin-sidebar-logo {
+    padding: 10px 20px 0;
+    text-align: center;
+}
+
+.admin-sidebar-logo img {
+    display: block;
+    width: 100%;
+    max-width: 130px;
+    height: auto;
+    margin: 0 auto;
+    padding: 8px 0;
+    background: #2F6F5B;
+    border-radius: 14px;
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+.admin-sidebar-menu {
+    padding: 0 14px 14px;
+}
+
+
+/* NHÓM MENU */
+
+.admin-menu-section {
+    margin-bottom: 10px;
+}
+
+
+/* TIÊU ĐỀ NHÓM */
+
+.admin-menu-title {
+    color: #E8F4EF;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin: 16px 8px 8px;
+    text-transform: uppercase;
+    opacity: 0.68;
+}
+
+/* Nhóm đầu tiên (TỔNG QUAN) sát logo hơn */
+.admin-menu-section:first-child .admin-menu-title {
+    margin-top: 22px;
+}
+
+
+/* MENU ITEM */
+
+.admin-menu-item {
+    width: 100%;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    color: #ffffff;
+    background: transparent;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.2;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+
+    cursor: pointer;
+}
+
+
+/* ICON */
+
+.admin-menu-icon {
+    width: 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: inherit;
+
+}
+
+.admin-menu-icon svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* HOVER */
+
+.admin-menu-item:hover {
+    background: #FFD554;
+    color: #2F6F5B;
+}
+
+
+/* ACTIVE */
+
+.admin-menu-item.active {
+    background: #FFD554;
+    color: #2F6F5B;
+    font-weight: 700;
+}
+
+
+/* ACTIVE + HOVER */
+
+.admin-menu-item.active:hover {
+    background: #FFD554;
+    color: #2F6F5B;
+}
+
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+.admin-sidebar-account {
+    margin-top: auto;
+
+    min-height: 64px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.55);
+
+    padding: 10px 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+/* ACCOUNT ICON */
+
+.admin-account-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #ffffff;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    flex-shrink: 0;
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.admin-account-icon:hover {
+    color: #FFD554;
+    border-color: #FFD554;
+}
+
+.admin-account-icon:focus-visible {
+    outline: 2px solid #FFD554;
+    outline-offset: 3px;
+}
+
+.admin-account-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* ACCOUNT INFO */
+
+.admin-account-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.admin-account-info strong {
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.admin-account-info span {
+    color: #ffffff;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    max-width: 160px;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.admin-sidebar-logout {
+    padding: 4px 14px 12px;
+}
+
+
+.admin-sidebar-logout form {
+    width: 100%;
+}
+
+.admin-sidebar-logout .admin-menu-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+.admin-logout-button {
+    width: 100%;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.75);
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 400;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.admin-logout-button:hover {
+    background: #FFD554;
+    color: #2F6F5B;
+
+    border-color: #FFD554;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.admin-main {
+    margin-left: 256px;
+
+    width: calc(100% - 256px);
+
+    min-height: 100vh;
+
+    padding: 30px 35px;
+
+    background: #ffffff;
+}
+
+

@@ -1,0 +1,289 @@
+/* =========================================================
+   ADMIN LOGIN
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap");
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.admin-login-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+}
+
+
+/* =========================================================
+   LOGIN BOX
+   ========================================================= */
+
+.admin-login-box {
+    width: min(430px, 100%);
+    min-height: 400px;
+    padding: 26px 72px;
+
+    background: #59A78E;
+
+    border: 0;
+    border-radius: 20px;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.22);
+}
+
+.admin-login-box:has(.admin-form-group:only-of-type) {
+    width: min(500px, 100%);
+    min-height: 260px;
+    padding: 24px 72px;
+}
+
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.admin-login-logo {
+    margin-bottom: 6px;
+
+    text-align: center;
+}
+
+.admin-login-logo img {
+    display: block;
+    width: 100px;
+    max-width: 45%;
+    height: auto;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.admin-login-box h1 {
+    margin: 0;
+
+    text-align: center;
+
+    color: #FFD554;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.admin-login-subtitle {
+    margin: 8px 0 22px;
+
+    text-align: center;
+
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.admin-login-form {
+    width: 100%;
+}
+
+.admin-form-group {
+    margin-bottom: 15px;
+}
+
+.admin-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #FFD554;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-form-group input {
+    width: 100%;
+    height: 36px;
+
+    padding: 0 15px;
+
+    border: 2px solid transparent;
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    outline: none;
+
+    color: #333333;
+
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.admin-form-group input:focus {
+    border-color: #FFD554;
+
+    box-shadow: 0 0 0 3px rgba(255, 213, 84, 0.28);
+}
+
+.admin-form-group input::placeholder {
+    color: #aaa;
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.admin-login-button {
+    width: 100%;
+    height: 36px;
+
+    margin-top: 4px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #FFD554;
+    color: #ffffff;
+
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.admin-login-button:hover {
+    background: #F5C53A;
+}
+
+.admin-login-button:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.admin-error-message {
+    margin-bottom: 18px;
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: #FFF1C2;
+    color: #8A4B00;
+
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+.admin-success-message {
+    margin-bottom: 18px;
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: #ffffff;
+    color: #2F6F5B;
+
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BACK TO HOME
+   ========================================================= */
+
+.admin-login-back {
+    margin-top: 18px;
+
+    text-align: center;
+}
+
+.admin-login-back a {
+    color: #ffffff;
+
+    font-size: 13px;
+
+    text-decoration: none;
+}
+
+.admin-login-back a:hover {
+    text-decoration: underline;
+}
+
+.admin-forgot-password {
+    margin-top: 14px;
+    text-align: center;
+}
+
+.admin-forgot-password a {
+    color: #FFD554;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.admin-forgot-password a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+.admin-login-logo {
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.admin-login-logo img {
+    display: block;
+    margin: 0 auto;
+    max-width: 150px;
+    height: auto;
+    filter: brightness(0) invert(1);
+}
