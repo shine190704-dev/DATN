@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-
+use App\Http\Controllers\Admin\AdminOverviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +51,7 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])
 
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->name('admin.dashboard');
+
+
+Route::get('/admin/overview', [AdminOverviewController::class, 'index'])
+    ->name('admin.overview');

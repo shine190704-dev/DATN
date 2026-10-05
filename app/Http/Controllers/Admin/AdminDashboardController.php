@@ -37,6 +37,6 @@ class AdminDashboardController extends Controller
                 ]);
         }
 
-        return view('admin.dashboard');
+        return redirect()->route('admin.overview');
     }
 }

@@ -1,0 +1,554 @@
+/* =========================================================
+   OVERVIEW
+    (sidebar + reset nằm ở dashboard.css, file này chỉ có phần
+    nội dung của trang tổng quan)
+========================================================= */
+
+.admin-overview {
+    font-family: "Merriweather", Georgia, serif;
+    background: #ffffff;
+    color: #333333;
+    min-height: 100vh;
+    display: flex;
+}
+
+
+/* =========================================================
+   MAIN
+    (margin-left và width đã có trong dashboard.css)
+========================================================= */
+
+.admin-overview .admin-main {
+    padding: 22px 18px 25px;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   PAGE TITLE
+========================================================= */
+
+.admin-overview .admin-page-title {
+    margin: 0 0 17px 22px;
+}
+
+.admin-overview .admin-page-title h1 {
+    color: #59A78E;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.admin-overview .admin-filter {
+    width: 60%;
+    height: 73px;
+
+    margin: 0 auto 21px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #59A78E;
+    border-radius: 7px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    gap: 34px;
+}
+
+.admin-overview .admin-filter-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.admin-overview .admin-filter-group label {
+    color: #FFD554;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-overview .admin-filter-group input {
+    width: 164px;
+    height: 34px;
+
+    padding: 0 10px;
+
+    border: 1px solid #9BCBBA;
+    border-radius: 6px;
+
+    outline: none;
+
+    color: #59A78E;
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.admin-overview .admin-filter-button {
+    height: 34px;
+
+    padding: 0 14px;
+
+    border: none;
+    border-radius: 15px;
+
+    background: #FFD554;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.admin-overview .admin-filter-button:hover {
+    background: #F5C842;
+}
+
+
+/* =========================================================
+   VIEWING DATE
+========================================================= */
+
+.admin-overview .admin-viewing-date {
+    margin: 0 0 30px 18px;
+
+    color: #59A78E;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.admin-overview .admin-statistics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin: 0 18px 35px;
+}
+
+.admin-overview .admin-stat-card {
+    height: 90px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    background: #59A78E;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-overview .admin-stat-card-link {
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.admin-overview .admin-stat-card-link:hover {
+    background: #4f9b82;
+}
+
+.admin-overview .admin-stat-card-link:focus-visible {
+    outline: 2px solid #FFD554;
+    outline-offset: 3px;
+}
+
+.admin-overview .admin-stat-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFD554;
+}
+
+.admin-overview .admin-stat-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.admin-overview .admin-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.admin-overview .admin-stat-content strong {
+    color: #FFD554;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.admin-overview .admin-stat-content span {
+    color: #ffffff;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MIDDLE SECTION
+========================================================= */
+
+.admin-overview .admin-middle-section {
+    min-height: 220px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 0.72fr;
+
+    gap: 35px;
+
+    margin: 0 18px 25px;
+}
+
+
+/* =========================================================
+   ORDER STATUS
+========================================================= */
+
+.admin-overview .admin-order-status h2 {
+    margin-bottom: 14px;
+
+    color: #59A78E;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-overview .admin-order-chart-wrapper {
+    display: flex;
+
+    align-items: center;
+
+    gap: 35px;
+
+    padding-left: 22px;
+}
+
+
+/* =========================================================
+   DONUT CHART
+========================================================= */
+
+.admin-overview .admin-donut-chart {
+    width: 123px;
+    height: 123px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            #59A78E 0deg 151.2deg,
+            #FFD554 151.2deg 223.2deg,
+            #FFAAAA 223.2deg 277.2deg,
+            #C73636 277.2deg 306deg,
+            #ffffff 306deg 360deg
+        );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-overview .admin-donut-center {
+    width: 78px;
+    height: 78px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   CHART LEGEND
+========================================================= */
+
+.admin-overview .admin-chart-legend {
+    display: flex;
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.admin-overview .admin-legend-item {
+    display: grid;
+
+    grid-template-columns: 13px 105px 35px;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+.admin-overview .admin-legend-dot {
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+}
+
+.admin-overview .admin-legend-dot.completed {
+    background: #59A78E;
+}
+
+.admin-overview .admin-legend-dot.shipping {
+    background: #FFD554;
+}
+
+.admin-overview .admin-legend-dot.pending {
+    background: #FFAAAA;
+}
+
+.admin-overview .admin-legend-dot.cancelled {
+    background: #C73636;
+}
+
+.admin-overview .admin-legend-dot.other {
+    background: #CBD5E1;
+}
+
+.admin-overview .admin-legend-name {
+    color: #59A78E;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-overview .admin-legend-percent {
+    color: #59A78E;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   STOCK WARNING
+========================================================= */
+
+.admin-overview .admin-stock-warning {
+    align-self: start;
+}
+
+.admin-overview .admin-stock-warning > h2 {
+    margin-bottom: 7px;
+
+    color: #59A78E;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-overview .admin-low-stock-card {
+    min-height: 150px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    background: #59A78E;
+}
+
+
+.admin-shell .admin-low-stock-empty {
+    color: #fbd050 !important;
+    text-align: center;
+    margin: 20px auto;
+}
+
+.admin-overview .admin-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.admin-overview .admin-card-title-row h3 {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-overview .admin-card-title-row a {
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.admin-overview .admin-card-title-row a:hover {
+    color: #FFD554;
+}
+
+.admin-overview .admin-low-stock-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 13px;
+}
+
+.admin-overview .admin-low-stock-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-overview .admin-low-stock-item div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.admin-overview .admin-low-stock-item div strong {
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-overview .admin-low-stock-item div span {
+    color: #FFD554;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.admin-overview .admin-low-stock-item > strong {
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-overview .admin-low-stock-empty {
+    padding: 12px 0 4px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   PRODUCT RANKING
+========================================================= */
+
+.admin-overview .admin-product-ranking {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 70px;
+
+    margin: 0 78px;
+}
+
+.admin-overview .admin-ranking-card {
+    min-height: 109px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    background: #59A78E;
+}
+
+.admin-overview .admin-ranking-card h2 {
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-ranking-item {
+    padding: 8px 0;
+}
+
+.admin-ranking-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-overview .admin-ranking-item {
+    min-height: 29px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+}
+
+.admin-overview .admin-ranking-number {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-overview .admin-ranking-info {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 1px;
+}
+
+.admin-overview .admin-ranking-info strong {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-overview .admin-ranking-info span {
+    color: #FFD554;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-overview .admin-ranking-price {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}

@@ -2,14 +2,16 @@
    RESET
 ========================================================= */
 
-* {
+body,
+.admin-shell,
+.admin-shell * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 
-body {
+.admin-shell {
     font-family: Arial, sans-serif;
     background: #ffffff;
     color: #333333;
@@ -20,7 +22,7 @@ body {
    DASHBOARD
 ========================================================= */
 
-.admin-dashboard {
+.admin-shell {
     min-height: 100vh;
     display: flex;
     background: #ffffff;
@@ -31,7 +33,7 @@ body {
    SIDEBAR
 ========================================================= */
 
-.admin-sidebar {
+.admin-shell .admin-sidebar {
     width: 256px;
     min-height: 100vh;
 
@@ -58,12 +60,12 @@ body {
     -ms-overflow-style: none;
 }
 
-.admin-sidebar::-webkit-scrollbar {
+.admin-shell .admin-sidebar::-webkit-scrollbar {
     display: none;
 }
 
 /* Không để các khối bị ép nhỏ lại, thiếu chỗ thì cuộn */
-.admin-sidebar > * {
+.admin-shell .admin-sidebar > * {
     flex-shrink: 0;
 }
 
@@ -72,12 +74,12 @@ body {
    LOGO (giữ nguyên như ban đầu)
 ========================================================= */
 
-.admin-sidebar-logo {
+.admin-shell .admin-sidebar-logo {
     padding: 10px 20px 0;
     text-align: center;
 }
 
-.admin-sidebar-logo img {
+.admin-shell .admin-sidebar-logo img {
     display: block;
     width: 100%;
     max-width: 130px;
@@ -93,21 +95,21 @@ body {
    MENU
 ========================================================= */
 
-.admin-sidebar-menu {
+.admin-shell .admin-sidebar-menu {
     padding: 0 14px 14px;
 }
 
 
 /* NHÓM MENU */
 
-.admin-menu-section {
+.admin-shell .admin-menu-section {
     margin-bottom: 10px;
 }
 
 
 /* TIÊU ĐỀ NHÓM */
 
-.admin-menu-title {
+.admin-shell .admin-menu-title {
     color: #E8F4EF;
     font-size: 14px;
     font-weight: 700;
@@ -118,14 +120,14 @@ body {
 }
 
 /* Nhóm đầu tiên (TỔNG QUAN) sát logo hơn */
-.admin-menu-section:first-child .admin-menu-title {
+.admin-shell .admin-menu-section:first-child .admin-menu-title {
     margin-top: 22px;
 }
 
 
 /* MENU ITEM */
 
-.admin-menu-item {
+.admin-shell .admin-menu-item {
     width: 100%;
     height: 42px;
 
@@ -157,7 +159,7 @@ body {
 
 /* ICON */
 
-.admin-menu-icon {
+.admin-shell .admin-menu-icon {
     width: 20px;
 
     display: inline-flex;
@@ -170,7 +172,7 @@ body {
 
 }
 
-.admin-menu-icon svg {
+.admin-shell .admin-menu-icon svg {
     display: block;
     width: 18px;
     height: 18px;
@@ -184,7 +186,7 @@ body {
 
 /* HOVER */
 
-.admin-menu-item:hover {
+.admin-shell .admin-menu-item:hover {
     background: #FFD554;
     color: #2F6F5B;
 }
@@ -192,7 +194,7 @@ body {
 
 /* ACTIVE */
 
-.admin-menu-item.active {
+.admin-shell .admin-menu-item.active {
     background: #FFD554;
     color: #2F6F5B;
     font-weight: 700;
@@ -201,7 +203,7 @@ body {
 
 /* ACTIVE + HOVER */
 
-.admin-menu-item.active:hover {
+.admin-shell .admin-menu-item.active:hover {
     background: #FFD554;
     color: #2F6F5B;
 }
@@ -211,7 +213,7 @@ body {
    ACCOUNT
 ========================================================= */
 
-.admin-sidebar-account {
+.admin-shell .admin-sidebar-account {
     margin-top: auto;
 
     min-height: 64px;
@@ -229,7 +231,7 @@ body {
 
 /* ACCOUNT ICON */
 
-.admin-account-icon {
+.admin-shell .admin-account-icon {
     width: 34px;
     height: 34px;
 
@@ -248,17 +250,17 @@ body {
     transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-.admin-account-icon:hover {
+.admin-shell .admin-account-icon:hover {
     color: #FFD554;
     border-color: #FFD554;
 }
 
-.admin-account-icon:focus-visible {
+.admin-shell .admin-account-icon:focus-visible {
     outline: 2px solid #FFD554;
     outline-offset: 3px;
 }
 
-.admin-account-icon svg {
+.admin-shell .admin-account-icon svg {
     width: 22px;
     height: 22px;
     fill: none;
@@ -271,7 +273,7 @@ body {
 
 /* ACCOUNT INFO */
 
-.admin-account-info {
+.admin-shell .admin-account-info {
     min-width: 0;
 
     display: flex;
@@ -281,7 +283,7 @@ body {
 }
 
 
-.admin-account-info strong {
+.admin-shell .admin-account-info strong {
     color: #ffffff;
 
     font-size: 14px;
@@ -292,7 +294,7 @@ body {
 }
 
 
-.admin-account-info span {
+.admin-shell .admin-account-info span {
     color: #ffffff;
 
     font-size: 12px;
@@ -311,22 +313,22 @@ body {
    LOGOUT
 ========================================================= */
 
-.admin-sidebar-logout {
+.admin-shell .admin-sidebar-logout {
     padding: 4px 14px 12px;
 }
 
 
-.admin-sidebar-logout form {
+.admin-shell .admin-sidebar-logout form {
     width: 100%;
 }
 
-.admin-sidebar-logout .admin-menu-icon svg {
+.admin-shell .admin-sidebar-logout .admin-menu-icon svg {
     width: 18px;
     height: 18px;
 }
 
 
-.admin-logout-button {
+.admin-shell .admin-logout-button {
     width: 100%;
     height: 36px;
 
@@ -357,7 +359,7 @@ body {
 }
 
 
-.admin-logout-button:hover {
+.admin-shell .admin-logout-button:hover {
     background: #FFD554;
     color: #2F6F5B;
 
@@ -369,7 +371,7 @@ body {
    MAIN
 ========================================================= */
 
-.admin-main {
+.admin-shell .admin-main {
     margin-left: 256px;
 
     width: calc(100% - 256px);

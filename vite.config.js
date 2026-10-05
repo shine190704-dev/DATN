@@ -11,6 +11,9 @@ export default defineConfig({
                 'resources/css/user/profile.css',
                 'resources/css/user/address.css',
                 'resources/css/user/product-detail.css',
+                'resources/css/admin/auth.css',
+                'resources/css/admin/dashboard.css',
+                'resources/css/admin/overview.css',
                 'resources/js/app.js'
             ],
             refresh: true,

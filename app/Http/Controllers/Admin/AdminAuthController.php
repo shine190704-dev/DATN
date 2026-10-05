@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
 
 class AdminAuthController extends Controller
 {
@@ -96,7 +98,7 @@ class AdminAuthController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.dashboard')
+            ->route('admin.overview')
             ->with('success', 'Đăng nhập quản trị thành công.');
     }
 
