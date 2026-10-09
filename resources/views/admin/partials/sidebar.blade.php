@@ -114,9 +114,9 @@
                     </a>
 
 
-                    <a
-                        href="#"
-                        class="admin-menu-item"
+                   <a
+                        href="{{ route('admin.category.index') }}"
+                        class="admin-menu-item {{ request()->routeIs('admin.category.*') ? 'active' : '' }}"
                     >
 
                         <span class="admin-menu-icon">
@@ -136,12 +136,34 @@
                     >
 
                         <span class="admin-menu-icon">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M4 8.5 12 4l8 4.5v7L12 20l-8-4.5z"/>
-                                <path d="M12 20v-8.5"/>
-                                <path d="M4 8.5 12 13l8-4.5"/>
-                                <path d="M8 6.2 16 10.7"/>
-                            </svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 3.5 2 1.4 2.4-.3.8 2.3 2.2 1.2-.7 2.4 1.1 2.1-1.8 1.8.2 2.4-2.4.5-1.4 2-2.4-1-2.3 1-1.5-2-2.4-.5.2-2.4-1.8-1.8 1.1-2.1-.7-2.4 2.2-1.2.8-2.3 2.4.3L12 3.5Z"/><circle cx="12" cy="12" r="2.4"/></svg>
+                        </span>
+
+                        <span>
+                            Thương hiệu
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                {{-- KHO HÀNG --}}
+
+                <div class="admin-menu-section">
+
+                    <div class="admin-menu-title">
+                        KHO HÀNG
+                    </div>
+
+
+                    <a
+                        href="#"
+                        class="admin-menu-item"
+                    >
+
+                        <span class="admin-menu-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 3 9 4.5v9L12 21l-9-4.5v-9L12 3Z"/><path d="m3 7.5 9 5 9-5M12 12.5V21"/></svg>
                         </span>
 
                         <span>
@@ -149,6 +171,7 @@
                         </span>
 
                     </a>
+
 
                     <a
                         href="#"
@@ -165,8 +188,6 @@
 
                     </a>
 
-
-                    
 
                 </div>
 

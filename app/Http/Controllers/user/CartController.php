@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\user;
 
+
+use App\Models\BienThe;
+use App\Models\DanhMuc;
+use App\Models\ChiTietGioHang;
+use App\Models\GioHang;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,12 +29,12 @@ public function index()
     $nguoiDungID = session('NguoiDungID');
 
     // Lấy danh mục cho navbar
-    $danhMucs = DB::table('danhmuc')
+    $danhMucs = DanhMuc::query()
         ->where('TrangThai', 'HoatDong')
         ->get();
 
     // Tìm giỏ hàng
-    $gioHang = DB::table('GioHang')
+    $gioHang = GioHang::query()->from('GioHang')
         ->where('NguoiDungID', $nguoiDungID)
         ->first();
 
@@ -46,7 +51,7 @@ public function index()
     }
 
     // Lấy sản phẩm trong giỏ
-    $items = DB::table('ChiTietGioHang')
+    $items = ChiTietGioHang::query()->from('ChiTietGioHang')
         ->join(
             'BienThe',
             'ChiTietGioHang.BienTheID',
@@ -150,7 +155,7 @@ public function index()
         |--------------------------------------------------------------------------
         */
 
-        $bienThe = DB::table('BienThe')
+        $bienThe = BienThe::query()->from('BienThe')
             ->join(
                 'SanPham',
                 'BienThe.SanPhamID',
@@ -199,7 +204,7 @@ public function index()
         |--------------------------------------------------------------------------
         */
 
-        $gioHang = DB::table('GioHang')
+        $gioHang = GioHang::query()->from('GioHang')
             ->where(
                 'NguoiDungID',
                 $nguoiDungID
@@ -208,7 +213,7 @@ public function index()
 
         if (!$gioHang) {
 
-            $gioHangID = DB::table('GioHang')
+            $gioHangID = GioHang::query()->from('GioHang')
                 ->insertGetId([
                     'NguoiDungID' => $nguoiDungID,
                     'NgayTao' => now(),
@@ -228,7 +233,7 @@ public function index()
         |--------------------------------------------------------------------------
         */
 
-        $item = DB::table('ChiTietGioHang')
+        $item = ChiTietGioHang::query()->from('ChiTietGioHang')
             ->where(
                 'GioHangID',
                 $gioHangID
@@ -258,7 +263,7 @@ public function index()
                 ], 422);
             }
 
-            DB::table('ChiTietGioHang')
+            ChiTietGioHang::query()->from('ChiTietGioHang')
                 ->where(
                     'ChiTietGioHangID',
                     $item->ChiTietGioHangID
@@ -275,7 +280,7 @@ public function index()
             |--------------------------------------------------------------------------
             */
 
-            DB::table('ChiTietGioHang')
+            ChiTietGioHang::query()->from('ChiTietGioHang')
                 ->insert([
                     'GioHangID' => $gioHangID,
                     'BienTheID' => $bienTheID,
@@ -293,7 +298,7 @@ public function index()
 
     private function getCartCount($nguoiDungID)
     {
-        return (int) DB::table('ChiTietGioHang')
+        return (int) ChiTietGioHang::query()->from('ChiTietGioHang')
             ->join(
                 'GioHang',
                 'ChiTietGioHang.GioHangID',
@@ -326,7 +331,7 @@ public function index()
 
         $nguoiDungID = session('NguoiDungID');
 
-        $item = DB::table('ChiTietGioHang')
+        $item = ChiTietGioHang::query()->from('ChiTietGioHang')
             ->join(
                 'GioHang',
                 'ChiTietGioHang.GioHangID',
@@ -367,7 +372,7 @@ public function index()
             ], 422);
         }
 
-        DB::table('ChiTietGioHang')
+        ChiTietGioHang::query()->from('ChiTietGioHang')
             ->where(
                 'ChiTietGioHangID',
                 $request->ChiTietGioHangID
@@ -404,7 +409,7 @@ public function index()
 
         $nguoiDungID = session('NguoiDungID');
 
-        $item = DB::table('ChiTietGioHang')
+        $item = ChiTietGioHang::query()->from('ChiTietGioHang')
             ->join(
                 'GioHang',
                 'ChiTietGioHang.GioHangID',
@@ -428,7 +433,7 @@ public function index()
             ], 404);
         }
 
-        DB::table('ChiTietGioHang')
+        ChiTietGioHang::query()->from('ChiTietGioHang')
             ->where(
                 'ChiTietGioHangID',
                 $request->ChiTietGioHangID

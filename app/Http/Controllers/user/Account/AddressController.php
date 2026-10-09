@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\DanhMuc;
+use App\Models\DiaChiNguoiDung;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +14,7 @@ class AddressController extends Controller
 {
     private function pageData()
     {
-        return DB::table('danhmuc')
+        return DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
     }
@@ -21,7 +25,7 @@ class AddressController extends Controller
             return redirect()->route('login');
         }
 
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', session('NguoiDungID'))
             ->first();
 
@@ -43,7 +47,7 @@ class AddressController extends Controller
             return redirect()->route('login');
         }
 
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', session('NguoiDungID'))
             ->first();
 
@@ -52,7 +56,7 @@ class AddressController extends Controller
             return redirect()->route('login');
         }
 
-        $address = DB::table('DiaChiNguoiDung')
+        $address = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('DiaChiNguoiDungID', $id)
             ->where('NguoiDungID', session('NguoiDungID'))
             ->first();
@@ -84,7 +88,7 @@ public function index()
     $nguoiDungID = session('NguoiDungID');
 
     // Lấy thông tin người dùng đang đăng nhập
-    $user = DB::table('NguoiDung')
+    $user = NguoiDung::query()->from('NguoiDung')
         ->where('NguoiDungID', $nguoiDungID)
         ->first();
 
@@ -96,12 +100,12 @@ public function index()
     }
 
     // Lấy danh mục cho navbar
-    $danhMucs = DB::table('DanhMuc')
+    $danhMucs = DanhMuc::query()
         ->where('TrangThai', 'HoatDong')
         ->get();
 
     // Chỉ lấy địa chỉ của người dùng đang đăng nhập
-    $addresses = DB::table('DiaChiNguoiDung')
+    $addresses = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
         ->where('NguoiDungID', $nguoiDungID)
         ->orderByDesc('MacDinh')
         ->orderByDesc('DiaChiNguoiDungID')
@@ -175,7 +179,7 @@ public function index()
 
 
         // Giới hạn tối đa 5 địa chỉ
-        $addressCount = DB::table('DiaChiNguoiDung')
+        $addressCount = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->count();
 
@@ -212,7 +216,7 @@ public function index()
 
             // Nếu người dùng chọn địa chỉ mới làm mặc định
             if ($isDefault === 1) {
-                DB::table('DiaChiNguoiDung')
+                DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                     ->where('NguoiDungID', $nguoiDungID)
                     ->update([
                         'MacDinh' => 0,
@@ -222,7 +226,7 @@ public function index()
 
 
             // Thêm địa chỉ mới
-            DB::table('DiaChiNguoiDung')->insert([
+            DiaChiNguoiDung::query()->from('DiaChiNguoiDung')->insert([
                 'NguoiDungID' => $nguoiDungID,
                 'TenNguoiNhan' => $validated['TenNguoiNhan'],
                 'SoDienThoai' => $validated['SoDienThoai'],
@@ -275,7 +279,7 @@ return redirect()
         |
         */
 
-        $address = DB::table('DiaChiNguoiDung')
+        $address = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('DiaChiNguoiDungID', $id)
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
@@ -340,7 +344,7 @@ return redirect()
             if (!empty($validated['MacDinh'])) {
 
                 // Gỡ mặc định của tất cả địa chỉ khác
-                DB::table('DiaChiNguoiDung')
+                DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                     ->where('NguoiDungID', $nguoiDungID)
                     ->where('DiaChiNguoiDungID', '!=', $id)
                     ->update([
@@ -349,7 +353,7 @@ return redirect()
                     ]);
 
                 // Đặt địa chỉ hiện tại làm mặc định
-                DB::table('DiaChiNguoiDung')
+                DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                     ->where('DiaChiNguoiDungID', $id)
                     ->where('NguoiDungID', $nguoiDungID)
                     ->update([
@@ -374,7 +378,7 @@ return redirect()
              */
             $isStillDefault = $address->MacDinh == 1 ? 1 : 0;
 
-            DB::table('DiaChiNguoiDung')
+            DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                 ->where('DiaChiNguoiDungID', $id)
                 ->where('NguoiDungID', $nguoiDungID)
                 ->update([
@@ -418,7 +422,7 @@ return redirect()
         |
         */
 
-        $address = DB::table('DiaChiNguoiDung')
+        $address = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('DiaChiNguoiDungID', $id)
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
@@ -441,7 +445,7 @@ return redirect()
         DB::transaction(function () use ($nguoiDungID, $id) {
 
             // Gỡ địa chỉ mặc định cũ
-            DB::table('DiaChiNguoiDung')
+            DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                 ->where('NguoiDungID', $nguoiDungID)
                 ->update([
                     'MacDinh' => 0,
@@ -450,7 +454,7 @@ return redirect()
 
 
             // Đặt địa chỉ mới làm mặc định
-            DB::table('DiaChiNguoiDung')
+            DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                 ->where('DiaChiNguoiDungID', $id)
                 ->where('NguoiDungID', $nguoiDungID)
                 ->update([
@@ -490,7 +494,7 @@ return redirect()
         |
         */
 
-        $address = DB::table('DiaChiNguoiDung')
+        $address = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('DiaChiNguoiDungID', $id)
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
@@ -501,7 +505,7 @@ return redirect()
 
 
         // Không cho xóa địa chỉ cuối cùng
-        $addressCount = DB::table('DiaChiNguoiDung')
+        $addressCount = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->count();
 
@@ -518,7 +522,7 @@ return redirect()
         ) {
 
             // Xóa địa chỉ
-            DB::table('DiaChiNguoiDung')
+            DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                 ->where('DiaChiNguoiDungID', $id)
                 ->where('NguoiDungID', $nguoiDungID)
                 ->delete();
@@ -530,13 +534,13 @@ return redirect()
              */
             if ($address->MacDinh == 1) {
 
-                $newDefault = DB::table('DiaChiNguoiDung')
+                $newDefault = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                     ->where('NguoiDungID', $nguoiDungID)
                     ->orderByDesc('DiaChiNguoiDungID')
                     ->first();
 
                 if ($newDefault) {
-                    DB::table('DiaChiNguoiDung')
+                    DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
                         ->where('DiaChiNguoiDungID', $newDefault->DiaChiNguoiDungID)
                         ->where('NguoiDungID', $nguoiDungID)
                         ->update([

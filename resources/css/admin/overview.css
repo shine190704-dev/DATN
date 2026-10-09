@@ -133,6 +133,20 @@
     font-weight: 600;
 }
 
+.admin-overview .admin-filter-error {
+    width: fit-content;
+    max-width: calc(100% - 36px);
+    margin: -8px auto 18px;
+    padding: 10px 16px;
+    border: 1px solid #E7A4A4;
+    border-radius: 8px;
+    background: #FFF1F1;
+    color: #C73636;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+}
+
 
 /* =========================================================
    STATISTICS
@@ -551,4 +565,17 @@
     font-weight: 600;
 
     white-space: nowrap;
+}
+
+
+.admin-filter-error {
+    width: 100%;
+    margin: 10px 0 18px;
+
+    text-align: center;
+
+    color: #C73636;
+
+    font-size: 14px;
+    font-weight: 700;
 }

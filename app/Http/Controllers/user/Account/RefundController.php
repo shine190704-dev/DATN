@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\DanhMuc;
+use App\Models\ChiTietDonHang;
+use App\Models\DonHang;
+use App\Models\LichSuDonHang;
+use App\Models\NguoiDung;
+use App\Models\YeuCauHoanTien;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,7 +43,7 @@ class RefundController extends Controller
         // LẤY DANH SÁCH YÊU CẦU HOÀN TIỀN
         // ========================================
 
-        $requests = DB::table('YeuCauHoanTien as yc')
+        $requests = YeuCauHoanTien::query()->from('YeuCauHoanTien as yc')
             ->join(
                 'DonHang as dh',
                 'dh.DonHangID',
@@ -116,14 +123,14 @@ class RefundController extends Controller
         // DỮ LIỆU CHO SIDEBAR / NAVBAR
         // ========================================
 
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where(
                 'NguoiDungID',
                 $userId
             )
             ->first();
 
-        $danhMucs = DB::table('DanhMuc')->get();
+        $danhMucs = DanhMuc::query()->get();
 
 
         // ========================================
@@ -296,7 +303,7 @@ class RefundController extends Controller
                 // Tránh gửi yêu cầu trùng
                 // ========================================
 
-                DB::table('DonHang')
+                DonHang::query()->from('DonHang')
                     ->where(
                         'DonHangID',
                         $order->DonHangID
@@ -310,7 +317,7 @@ class RefundController extends Controller
                 // ========================================
 
                 if (
-                    DB::table('YeuCauHoanTien')
+                    YeuCauHoanTien::query()->from('YeuCauHoanTien')
                         ->where(
                             'DonHangID',
                             $order->DonHangID
@@ -327,7 +334,7 @@ class RefundController extends Controller
                 // TẠO YÊU CẦU HOÀN TIỀN
                 // ========================================
 
-                DB::table('YeuCauHoanTien')->insert([
+                YeuCauHoanTien::query()->from('YeuCauHoanTien')->insert([
 
                     // Form hiện tại không nhập lý do, nên lưu giá trị mặc định
                     'LyDo' => 'Khác',
@@ -421,7 +428,7 @@ public function cancel($id)
     $userId = (int) session('NguoiDungID');
 
     // Chỉ yêu cầu của chính khách và còn đang chờ xử lý
-    $refund = DB::table('YeuCauHoanTien')
+    $refund = YeuCauHoanTien::query()->from('YeuCauHoanTien')
         ->where('YeuCauHoanTienID', (int) $id)
         ->where('NguoiDungID', $userId)
         ->whereIn('TrangThai', ['ChoXuLy', 'Chờ xử lý'])
@@ -433,7 +440,7 @@ public function cancel($id)
     }
 
     // Xóa có điều kiện: nếu shop vừa duyệt xong thì không xóa nhầm
-    $deleted = DB::table('YeuCauHoanTien')
+    $deleted = YeuCauHoanTien::query()->from('YeuCauHoanTien')
         ->where('YeuCauHoanTienID', $refund->YeuCauHoanTienID)
         ->whereIn('TrangThai', ['ChoXuLy', 'Chờ xử lý'])
         ->delete();
@@ -469,7 +476,7 @@ public function cancel($id)
         $userId = (int) session('NguoiDungID');
 
 
-        $refund = DB::table('YeuCauHoanTien as yc')
+        $refund = YeuCauHoanTien::query()->from('YeuCauHoanTien as yc')
             ->join(
                 'DonHang as dh',
                 'dh.DonHangID',
@@ -498,7 +505,7 @@ public function cancel($id)
         }
 
 
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where(
                 'NguoiDungID',
                 $userId
@@ -506,7 +513,7 @@ public function cancel($id)
             ->first();
 
 
-        $danhMucs = DB::table('DanhMuc')->get();
+        $danhMucs = DanhMuc::query()->get();
 
 
         return view(
@@ -531,7 +538,7 @@ public function cancel($id)
      */
     private function eligibleOrders(int $userId)
     {
-        $orders = DB::table('DonHang as dh')
+        $orders = DonHang::query()->from('DonHang as dh')
             ->where(
                 'dh.NguoiDungID',
                 $userId
@@ -589,9 +596,7 @@ public function cancel($id)
             Schema::hasTable('LichSuDonHang')
         ) {
 
-            $deliveredAt = DB::table(
-                'LichSuDonHang'
-            )
+            $deliveredAt = LichSuDonHang::query()->from('LichSuDonHang')
                 ->whereIn(
                     'DonHangID',
                     $ids
@@ -617,9 +622,7 @@ public function cancel($id)
         // LẤY TÊN SẢN PHẨM TRONG ĐƠN
         // ========================================
 
-        $names = DB::table(
-            'ChiTietDonHang'
-        )
+        $names = ChiTietDonHang::query()->from('ChiTietDonHang')
             ->whereIn(
                 'DonHangID',
                 $ids

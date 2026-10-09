@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\DanhMuc;
+use App\Models\ChiTietDonHang;
+use App\Models\DonHang;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -18,20 +23,20 @@ class OrderTrackingController extends Controller
         // =========================
         // THÔNG TIN NGƯỜI DÙNG
         // =========================
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
 
         // =========================
         // DANH MỤC CHO NAVBAR
         // =========================
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->get();
 
         // =========================
         // LẤY ĐƠN HÀNG
         // =========================
-        $orders = DB::table('DonHang')
+        $orders = DonHang::query()->from('DonHang')
             ->where('NguoiDungID', $nguoiDungID)
             ->whereNotIn('TrangThai', [
                 'DaHuy',
@@ -43,7 +48,7 @@ class OrderTrackingController extends Controller
         // =========================
         // LẤY SẢN PHẨM TRONG ĐƠN
         // =========================
-        $items = DB::table('ChiTietDonHang')
+        $items = ChiTietDonHang::query()->from('ChiTietDonHang')
             ->whereIn('DonHangID', $orders->pluck('DonHangID'))
             ->select(
                 'DonHangID',

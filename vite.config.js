@@ -14,6 +14,8 @@ export default defineConfig({
                 'resources/css/admin/auth.css',
                 'resources/css/admin/dashboard.css',
                 'resources/css/admin/overview.css',
+                'resources/css/admin/category.css',
+                'resources/js/admin/category.js',
                 'resources/js/app.js'
             ],
             refresh: true,

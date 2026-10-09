@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\user;
 
+
+use App\Models\DanhMuc;
+use App\Models\DanhSachYeuThich;
+use App\Models\SanPham;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,12 +28,12 @@ class WishlistController extends Controller
         $nguoiDungID = session('NguoiDungID');
 
         // Lấy danh mục để hiển thị Navbar
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
         // Lấy các sản phẩm đã yêu thích
-        $products = DB::table('danhsachyeuthich')
+        $products = DanhSachYeuThich::query()->from('danhsachyeuthich')
             ->join(
                 'SanPham',
                 'danhsachyeuthich.SanPhamID',
@@ -96,7 +100,7 @@ class WishlistController extends Controller
         $sanPhamID = $request->SanPhamID;
 
         // Kiểm tra sản phẩm có tồn tại và đang hoạt động không
-        $sanPham = DB::table('SanPham')
+        $sanPham = SanPham::query()->from('SanPham')
             ->where('SanPhamID', $sanPhamID)
             ->where('TrangThai', 'HoatDong')
             ->first();
@@ -109,7 +113,7 @@ class WishlistController extends Controller
         }
 
         // Kiểm tra sản phẩm đã được yêu thích chưa
-        $wishlist = DB::table('danhsachyeuthich')
+        $wishlist = DanhSachYeuThich::query()->from('danhsachyeuthich')
             ->where('NguoiDungID', $nguoiDungID)
             ->where('SanPhamID', $sanPhamID)
             ->first();
@@ -120,7 +124,7 @@ class WishlistController extends Controller
 
         if ($wishlist) {
 
-            DB::table('danhsachyeuthich')
+            DanhSachYeuThich::query()->from('danhsachyeuthich')
                 ->where(
                     'DanhSachYeuThichID',
                     $wishlist->DanhSachYeuThichID
@@ -139,7 +143,7 @@ class WishlistController extends Controller
         // CHƯA CÓ → THÊM YÊU THÍCH
         // =====================================================
 
-        DB::table('danhsachyeuthich')->insert([
+        DanhSachYeuThich::query()->from('danhsachyeuthich')->insert([
             'NgayTao' => now(),
             'NgayCapNhat' => now(),
             'NguoiDungID' => $nguoiDungID,

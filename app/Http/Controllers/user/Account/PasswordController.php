@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\DanhMuc;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +29,7 @@ class PasswordController extends Controller
         $nguoiDungID = session('NguoiDungID');
 
         // Lấy thông tin người dùng
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
 
@@ -35,7 +38,7 @@ class PasswordController extends Controller
         }
 
         // Lấy danh mục cho navbar
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->get();
 
         return view(
@@ -96,7 +99,7 @@ class PasswordController extends Controller
 
 
         // LẤY USER
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
 
@@ -138,7 +141,7 @@ class PasswordController extends Controller
         // CẬP NHẬT MẬT KHẨU MỚI
         // =========================
 
-        DB::table('NguoiDung')
+        NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->update([
                 $column => Hash::make(

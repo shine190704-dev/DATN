@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\BienThe;
+use App\Models\DanhMuc;
+use App\Models\ChiTietDonHang;
+use App\Models\DanhGia;
+use App\Models\DonHang;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use App\Services\OrderStatusService;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +73,7 @@ class OrderController extends Controller
         // THÔNG TIN NGƯỜI DÙNG
         // =====================================================
 
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
 
@@ -75,7 +82,7 @@ class OrderController extends Controller
         // DANH MỤC CHO NAVBAR
         // =====================================================
 
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->get();
 
 
@@ -83,7 +90,7 @@ class OrderController extends Controller
         // LẤY ĐƠN HÀNG
         // =====================================================
 
-        $orderStatusCounts = DB::table('DonHang')
+        $orderStatusCounts = DonHang::query()->from('DonHang')
             ->where('NguoiDungID', $nguoiDungID)
             ->select(
                 'TrangThai',
@@ -116,7 +123,7 @@ class OrderController extends Controller
             ),
         ];
 
-        $orders = DB::table('DonHang')
+        $orders = DonHang::query()->from('DonHang')
             ->where('NguoiDungID', $nguoiDungID)
 
             ->when(
@@ -137,7 +144,7 @@ class OrderController extends Controller
         // LẤY SẢN PHẨM TRONG ĐƠN
         // =====================================================
 
-        $items = DB::table('ChiTietDonHang')
+        $items = ChiTietDonHang::query()->from('ChiTietDonHang')
             ->whereIn(
                 'DonHangID',
                 $orders->pluck('DonHangID')
@@ -158,7 +165,7 @@ class OrderController extends Controller
 
             ->groupBy('DonHangID');
 
-        $reviewedItems = DB::table('DanhGia')
+        $reviewedItems = DanhGia::query()->from('DanhGia')
             ->where('NguoiDungID', $nguoiDungID)
             ->whereIn('DonHangID', $orders->pluck('DonHangID'))
             ->get(['DonHangID', 'SanPhamID'])
@@ -238,7 +245,7 @@ class OrderController extends Controller
         // LẤY ĐƠN HÀNG CỦA KHÁCH VÀ KHÓA ĐƠN
         // =====================================================
 
-        $order = DB::table('DonHang')
+        $order = DonHang::query()->from('DonHang')
             ->where('DonHangID', (int) $id)
             ->where('NguoiDungID', $nguoiDungID)
             ->lockForUpdate()
@@ -277,7 +284,7 @@ class OrderController extends Controller
         // LẤY CHI TIẾT ĐƠN HÀNG
         // =====================================================
 
-        $items = DB::table('ChiTietDonHang')
+        $items = ChiTietDonHang::query()->from('ChiTietDonHang')
             ->where('DonHangID', $order->DonHangID)
             ->get();
 
@@ -317,7 +324,7 @@ class OrderController extends Controller
 
         foreach ($items as $item) {
 
-            DB::table('BienThe')
+            BienThe::query()->from('BienThe')
                 ->where('SanPhamID', $item->SanPhamID)
                 ->where('MauSac', $item->MauSac)
                 ->where('KichThuoc', $item->KichThuoc)

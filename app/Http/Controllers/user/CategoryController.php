@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\user;
 
+
+use App\Models\DanhMuc;
+use App\Models\DanhSachYeuThich;
+use App\Models\SanPham;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +16,7 @@ class CategoryController extends Controller
     // =========================================
     private function getDanhMucs()
     {
-        return DB::table('danhmuc')
+        return DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
     }
@@ -25,7 +29,7 @@ class CategoryController extends Controller
 {
     $danhMucs = $this->getDanhMucs();
 
-    $query = DB::table('SanPham')
+    $query = SanPham::query()->from('SanPham')
         ->where('SanPham.TrangThai', 'HoatDong')
         ->select('SanPham.*')
         ->selectSub($this->subQueryHinhAnh(), 'HinhAnh')
@@ -48,7 +52,7 @@ public function newProducts()
 {
     $danhMucs = $this->getDanhMucs();
 
-    $query = DB::table('SanPham')
+    $query = SanPham::query()->from('SanPham')
         ->where('SanPham.TrangThai', 'HoatDong')
 
         // Chỉ lấy sản phẩm được tạo trong 30 ngày gần nhất
@@ -95,7 +99,7 @@ public function newProducts()
     $danhMucs = $this->getDanhMucs();
 
     // Lấy danh mục đang được chọn
-    $danhMuc = DB::table('danhmuc')
+    $danhMuc = DanhMuc::query()
         ->where('DanhMucID', $id)
         ->where('TrangThai', 'HoatDong')
         ->first();
@@ -105,7 +109,7 @@ public function newProducts()
     }
 
     // Lấy sản phẩm thuộc danh mục
-    $query = DB::table('SanPham')
+    $query = SanPham::query()->from('SanPham')
         ->where('SanPham.DanhMucID', $id)
         ->where('SanPham.TrangThai', 'HoatDong')
         ->select('SanPham.*')
@@ -175,7 +179,7 @@ public function newProducts()
 private function getFavoriteProductIds()
 {
     return session()->has('NguoiDungID')
-        ? DB::table('danhsachyeuthich')
+        ? DanhSachYeuThich::query()->from('danhsachyeuthich')
             ->where('NguoiDungID', session('NguoiDungID'))
             ->pluck('SanPhamID')
         : collect();
@@ -277,7 +281,7 @@ private function getFavoriteProductIds()
 
     if ($keyword !== '') {
 
-        $products = DB::table('SanPham')
+        $products = SanPham::query()->from('SanPham')
             ->where('SanPham.TrangThai', 'HoatDong')
 
             ->where(function ($query) use ($keyword) {

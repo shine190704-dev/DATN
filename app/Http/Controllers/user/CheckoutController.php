@@ -1,6 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\user;
+
+use App\Models\BienThe;
+use App\Models\DanhMuc;
+use App\Models\ChiTietDonHang;
+use App\Models\ChiTietGioHang;
+use App\Models\DiaChiNguoiDung;
+use App\Models\DonHang;
+use App\Models\GioHang;
+use App\Models\MaGiamGia;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,7 +28,7 @@ class CheckoutController extends Controller
         $nguoiDungID = session('NguoiDungID');
 
         // Lấy thông tin người dùng
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->first();
 
@@ -29,14 +39,14 @@ class CheckoutController extends Controller
         }
 
         // Lấy địa chỉ của người dùng
-        $addresses = DB::table('DiaChiNguoiDung')
+        $addresses = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
             ->where('NguoiDungID', $nguoiDungID)
             ->orderByDesc('MacDinh')
             ->orderByDesc('DiaChiNguoiDungID')
             ->get();
 
         // Danh mục cho navbar
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -95,7 +105,7 @@ $soLuongMuaNgay = (int) $request->input('SoLuong', 1);
 
 if ($bienTheID) {
 
-    $bienThe = DB::table('BienThe')
+    $bienThe = BienThe::query()->from('BienThe')
         ->join(
             'SanPham',
             'BienThe.SanPhamID',
@@ -160,7 +170,7 @@ if ($bienTheID) {
 
 else {
 
-    $gioHang = DB::table('GioHang')
+    $gioHang = GioHang::query()->from('GioHang')
         ->where(
             'NguoiDungID',
             $nguoiDungID
@@ -170,7 +180,7 @@ else {
 
     if ($gioHang) {
 
-        $items = DB::table('ChiTietGioHang')
+        $items = ChiTietGioHang::query()->from('ChiTietGioHang')
             ->join(
                 'BienThe',
                 'ChiTietGioHang.BienTheID',
@@ -291,7 +301,7 @@ $subtotal = $items->sum(function ($item) {
     // KIỂM TRA ĐỊA CHỈ CÓ THUỘC VỀ NGƯỜI DÙNG KHÔNG
     // =========================================================
 
-    $diaChi = DB::table('DiaChiNguoiDung')
+    $diaChi = DiaChiNguoiDung::query()->from('DiaChiNguoiDung')
         ->where('DiaChiNguoiDungID', $request->DiaChiNguoiDungID)
         ->where('NguoiDungID', $nguoiDungID)
         ->first();
@@ -330,7 +340,7 @@ $subtotal = $items->sum(function ($item) {
 
     if ($bienTheID) {
 
-        $bienThe = DB::table('BienThe')
+        $bienThe = BienThe::query()->from('BienThe')
             ->join(
                 'SanPham',
                 'BienThe.SanPhamID',
@@ -398,7 +408,7 @@ $subtotal = $items->sum(function ($item) {
 
     } else {
 
-        $gioHang = DB::table('GioHang')
+        $gioHang = GioHang::query()->from('GioHang')
             ->where(
                 'NguoiDungID',
                 $nguoiDungID
@@ -408,7 +418,7 @@ $subtotal = $items->sum(function ($item) {
 
         if ($gioHang) {
 
-            $items = DB::table('ChiTietGioHang')
+            $items = ChiTietGioHang::query()->from('ChiTietGioHang')
                 ->join(
                     'BienThe',
                     'ChiTietGioHang.BienTheID',
@@ -513,7 +523,7 @@ $subtotal = $items->sum(function ($item) {
 
     if ($request->filled('MaCode')) {
 
-        $maGiamGia = DB::table('magiamgia')
+        $maGiamGia = MaGiamGia::query()->from('magiamgia')
             ->where(
                 'MaCode',
                 trim($request->MaCode)
@@ -582,7 +592,7 @@ $subtotal = $items->sum(function ($item) {
 
         foreach ($items as $item) {
 
-            $bienThe = DB::table('BienThe')
+            $bienThe = BienThe::query()->from('BienThe')
                 ->where(
                     'BienTheID',
                     $item->BienTheID
@@ -632,7 +642,7 @@ $subtotal = $items->sum(function ($item) {
             // KHÔNG TRỪ SoLuong
             // =================================================
 
-            DB::table('BienThe')
+            BienThe::query()->from('BienThe')
                 ->where(
                     'BienTheID',
                     $item->BienTheID
@@ -648,7 +658,7 @@ $subtotal = $items->sum(function ($item) {
         // TẠO ĐƠN HÀNG
         // =====================================================
 
-        $donHangID = DB::table('DonHang')
+        $donHangID = DonHang::query()->from('DonHang')
             ->insertGetId(
                 [
                     'NguoiDungID' =>
@@ -710,7 +720,7 @@ $subtotal = $items->sum(function ($item) {
             );
 
 
-        DB::table('DonHang')
+        DonHang::query()->from('DonHang')
             ->where(
                 'DonHangID',
                 $donHangID
@@ -733,7 +743,7 @@ $subtotal = $items->sum(function ($item) {
 
         foreach ($items as $item) {
 
-            DB::table('ChiTietDonHang')
+            ChiTietDonHang::query()->from('ChiTietDonHang')
                 ->insert(
                     [
                         'DonHangID' =>
@@ -770,7 +780,7 @@ $subtotal = $items->sum(function ($item) {
 
         if ($gioHang) {
 
-            DB::table('ChiTietGioHang')
+            ChiTietGioHang::query()->from('ChiTietGioHang')
                 ->where(
                     'GioHangID',
                     $gioHang->GioHangID
@@ -829,7 +839,7 @@ public function success($maDonHang)
 
     $nguoiDungID = session('NguoiDungID');
 
-    $donHang = DB::table('DonHang')
+    $donHang = DonHang::query()->from('DonHang')
         ->where('MaDonHang', $maDonHang)
         ->where('NguoiDungID', $nguoiDungID)
         ->first();
@@ -838,11 +848,11 @@ public function success($maDonHang)
         abort(404);
     }
 
-    $chiTiet = DB::table('ChiTietDonHang')
+    $chiTiet = ChiTietDonHang::query()->from('ChiTietDonHang')
         ->where('DonHangID', $donHang->DonHangID)
         ->get();
 
-    $danhMucs = DB::table('DanhMuc')
+    $danhMucs = DanhMuc::query()
         ->where('TrangThai', 'HoatDong')
         ->get();
 
@@ -863,7 +873,7 @@ public function applyCoupon(Request $request)
 
     $subtotal = (float) $request->Subtotal;
 
-    $maGiamGia = DB::table('magiamgia')
+    $maGiamGia = MaGiamGia::query()->from('magiamgia')
         ->where('MaCode', trim($request->MaCode))
         ->where('TrangThai', 'HoatDong')
         ->where('NgayHetHan', '>=', now())

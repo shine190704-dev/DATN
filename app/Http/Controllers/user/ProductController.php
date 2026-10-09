@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\user;
 
+
+use App\Models\BienThe;
+use App\Models\DanhMuc;
+use App\Models\DanhGia;
+use App\Models\DanhSachYeuThich;
+use App\Models\HinhAnhSanPham;
+use App\Models\SanPham;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +25,7 @@ public function search(Request $request)
 {
     $keyword = trim((string) $request->query('keyword', ''));
 
-    $products = DB::table('SanPham')
+    $products = SanPham::query()->from('SanPham')
         ->leftJoin('HinhAnhSanPham', function ($join) {
             $join->on(
                 'SanPham.SanPhamID',
@@ -81,7 +88,7 @@ public function search(Request $request)
 
 
     $favoriteProductIds = session()->has('NguoiDungID')
-        ? DB::table('danhsachyeuthich')
+        ? DanhSachYeuThich::query()->from('danhsachyeuthich')
             ->where(
                 'NguoiDungID',
                 session('NguoiDungID')
@@ -110,7 +117,7 @@ public function search(Request $request)
         // LẤY THÔNG TIN SẢN PHẨM
         // =========================
 
-        $product = DB::table('SanPham')
+        $product = SanPham::query()->from('SanPham')
             ->where('SanPhamID', $id)
             ->where('TrangThai', 'HoatDong')
             ->first();
@@ -126,13 +133,13 @@ public function search(Request $request)
         // LẤY TẤT CẢ HÌNH ẢNH
         // =========================
 
-        $images = DB::table('HinhAnhSanPham')
+        $images = HinhAnhSanPham::query()->from('HinhAnhSanPham')
             ->where('SanPhamID', $id)
             ->orderByDesc('AnhDaiDien')
             ->orderBy('HinhAnhSanPhamID')
             ->get();
 
-        $variants = DB::table('bienthe')
+        $variants = BienThe::query()->from('bienthe')
             ->where('SanPhamID', $id)
             ->orderBy('BienTheID')
             ->get();
@@ -142,7 +149,7 @@ public function search(Request $request)
             // =========================================
         // LẤY ĐIỂM ĐÁNH GIÁ SẢN PHẨM
         // =========================================
-        $rating = DB::table('DanhGia')
+        $rating = DanhGia::query()->from('DanhGia')
             ->where('SanPhamID', $id)
             ->where('TrangThai', 'HienThi')
             ->select(
@@ -151,7 +158,7 @@ public function search(Request $request)
         )
             ->first();
 
-        $reviews = DB::table('DanhGia as dg')
+        $reviews = DanhGia::query()->from('DanhGia as dg')
             ->join('NguoiDung as nd', 'nd.NguoiDungID', '=', 'dg.NguoiDungID')
             ->where('dg.SanPhamID', $id)
             ->where('dg.TrangThai', 'HienThi')
@@ -172,7 +179,7 @@ public function search(Request $request)
         // LẤY DANH MỤC CHO NAVBAR
         // =========================
 
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -185,7 +192,7 @@ public function search(Request $request)
 
         if (session()->has('NguoiDungID')) {
 
-            $isFavorite = DB::table('danhsachyeuthich')
+            $isFavorite = DanhSachYeuThich::query()->from('danhsachyeuthich')
                 ->where(
                     'NguoiDungID',
                     session('NguoiDungID')

@@ -21,22 +21,6 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])
     ->name('admin.login.submit');
 
 
-// Quên mật khẩu
-Route::get('/admin/forgot-password', [AdminAuthController::class, 'showForgotPassword'])
-    ->name('admin.password.request');
-
-Route::post('/admin/forgot-password', [AdminAuthController::class, 'sendResetLink'])
-    ->name('admin.password.email');
-
-
-// Đặt lại mật khẩu
-Route::get('/admin/reset-password/{token}', [AdminAuthController::class, 'showResetPassword'])
-    ->name('admin.password.reset');
-
-Route::post('/admin/reset-password', [AdminAuthController::class, 'resetPassword'])
-    ->name('admin.password.update');
-
-
 // Đăng xuất
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])
     ->name('admin.logout');

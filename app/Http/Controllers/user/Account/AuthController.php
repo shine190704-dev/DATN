@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\DanhMuc;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +19,7 @@ class AuthController extends Controller
     // =========================================================
     public function showLogin()
     {
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -32,7 +35,7 @@ class AuthController extends Controller
     // =========================================================
     public function showRegister()
     {
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -48,7 +51,7 @@ class AuthController extends Controller
     // =========================================================
     public function showForgotPassword()
     {
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -81,7 +84,7 @@ class AuthController extends Controller
 
 
         // Tìm tài khoản theo Email
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->first();
 
@@ -110,7 +113,7 @@ class AuthController extends Controller
 
 
         // Lưu token (đã hash) vào database
-        DB::table('NguoiDung')
+        NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDung->NguoiDungID)
             ->update([
                 'MaDatLaiMatKhau' => $tokenHash,
@@ -251,7 +254,7 @@ Mail::html(
 
         // Lấy tài khoản theo Email + còn hạn token trước,
         // vì token đã hash nên không thể where() trực tiếp bằng giá trị token gốc.
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $email)
             ->whereNotNull('MaDatLaiMatKhau')
             ->where('ThoiGianHetHanMaDatLaiMatKhau', '>=', now())
@@ -269,7 +272,7 @@ Mail::html(
 
 
         // Lấy danh mục để hiển thị Navbar
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -305,7 +308,7 @@ Mail::html(
 
 
         // Tìm tài khoản theo Email, còn hạn token
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->whereNotNull('MaDatLaiMatKhau')
             ->where('ThoiGianHetHanMaDatLaiMatKhau', '>=', now())
@@ -326,7 +329,7 @@ Mail::html(
         // CẬP NHẬT MẬT KHẨU
         // =====================================================
 
-        DB::table('NguoiDung')
+        NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDung->NguoiDungID)
             ->update([
                 'MatKhau' => Hash::make($request->password),
@@ -420,7 +423,7 @@ Mail::html(
         // KIỂM TRA EMAIL
         // =====================================================
 
-        $emailExists = DB::table('NguoiDung')
+        $emailExists = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->exists();
 
@@ -437,7 +440,7 @@ Mail::html(
         // KIỂM TRA SỐ ĐIỆN THOẠI
         // =====================================================
 
-        $phoneExists = DB::table('NguoiDung')
+        $phoneExists = NguoiDung::query()->from('NguoiDung')
             ->where('SoDienThoai', $request->phone)
             ->exists();
 
@@ -477,7 +480,7 @@ Mail::html(
         // đồng thời, đảm bảo cột Email và SoDienThoai có UNIQUE
         // constraint ở tầng database để tránh trùng do race condition.
         try {
-            DB::table('NguoiDung')->insert([
+            NguoiDung::query()->from('NguoiDung')->insert([
                 'Ho' => $ho,
 
                 'Ten' => $ten,
@@ -548,7 +551,7 @@ Mail::html(
         // TÌM TÀI KHOẢN
         // =====================================================
 
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->first();
 

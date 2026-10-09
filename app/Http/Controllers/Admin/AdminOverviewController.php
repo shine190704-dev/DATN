@@ -2,52 +2,41 @@
 
 namespace App\Http\Controllers\Admin;
 
+
+use App\Models\BienThe;
+use App\Models\ChiTietDonHang;
+use App\Models\DonHang;
+use App\Models\NguoiDung;
+use App\Models\SanPham;
+use App\Models\YeuCauHoanTien;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AdminOverviewController extends Controller
 {
+    /** Ngưỡng "sắp hết" mặc định khi sản phẩm chưa đặt LuongTonKhoThap (hàng bán chạy/chậm đặt 8-10 trong DB). */
+    private const NGUONG_SAP_HET_MAC_DINH = 5;
+
+    /** Giá trị TrangThai của sản phẩm đang bán -> chỉnh lại cho đúng dữ liệu của bạn. */
+    private const SAN_PHAM_DANG_BAN = 'HoatDong';
+
     public function index(Request $request)
     {
         /*
         |--------------------------------------------------------------------------
-        | KIỂM TRA ĐĂNG NHẬP
+        | KIỂM TRA ĐĂNG NHẬP + QUYỀN
         |--------------------------------------------------------------------------
         */
 
-        if (! $request->session()->has('AdminNguoiDungID')) {
-            return redirect()
-                ->route('admin.login')
-                ->withErrors([
-                    'email' => 'Vui lòng đăng nhập để truy cập khu vực quản trị.',
-                ]);
+        if ($redirect = $this->kiemTraTruyCap($request)) {
+            return $redirect;
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | KIỂM TRA QUYỀN
-        |--------------------------------------------------------------------------
-        */
 
         $vaiTro = $request->session()->get('AdminVaiTro');
-
-        if (! in_array($vaiTro, ['Admin', 'NhanVien'])) {
-
-            $request->session()->forget([
-                'AdminNguoiDungID',
-                'AdminHo',
-                'AdminTen',
-                'AdminEmail',
-                'AdminVaiTro',
-            ]);
-
-            return redirect()
-                ->route('admin.login')
-                ->withErrors([
-                    'email' => 'Tài khoản không có quyền truy cập khu vực quản trị.',
-                ]);
-        }
+        $laAdmin = $vaiTro === 'Admin';
 
         /*
         |--------------------------------------------------------------------------
@@ -55,26 +44,63 @@ class AdminOverviewController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $tuNgay = $request->input('tu_ngay') ?: now()->subDays(29)->toDateString();
-        $denNgay = $request->input('den_ngay') ?: now()->toDateString();
+        $macDinhTu = now()->subDays(29)->toDateString();
+        $macDinhDen = now()->toDateString();
+        $ngayCuoiNam = now()->endOfYear()->toDateString();
 
-        $request->merge([
-            'tu_ngay' => $tuNgay,
-            'den_ngay' => $denNgay,
+        $tuNgayNhap = $request->input('tu_ngay');
+        $denNgayNhap = $request->input('den_ngay');
+
+        $dateValidator = Validator::make([
+            'tu_ngay' => $tuNgayNhap,
+            'den_ngay' => $denNgayNhap,
+        ], [
+            'tu_ngay' => ['nullable', 'date_format:d/m/Y'],
+            'den_ngay' => ['nullable', 'date_format:d/m/Y'],
         ]);
 
-        $validated = $request->validate([
-            'tu_ngay' => ['required', 'date', 'before_or_equal:den_ngay'],
-            'den_ngay' => ['required', 'date', 'after_or_equal:tu_ngay'],
-        ]);
+        $dateRangeError = null;
 
-        $tuNgay = $validated['tu_ngay'];
-        $denNgay = $validated['den_ngay'];
+        if ($dateValidator->fails()) {
+            $dateRangeError = 'Khoảng thời gian không hợp lệ';
+            $tuNgay = $dateValidator->errors()->has('tu_ngay')
+                ? $macDinhTu
+                : ($tuNgayNhap
+                    ? Carbon::createFromFormat('d/m/Y', $tuNgayNhap)->format('Y-m-d')
+                    : $macDinhTu);
+            $denNgay = $dateValidator->errors()->has('den_ngay')
+                ? $macDinhDen
+                : ($denNgayNhap
+                    ? Carbon::createFromFormat('d/m/Y', $denNgayNhap)->format('Y-m-d')
+                    : $macDinhDen);
+        } else {
+            // Nếu chỉ nhập một ngày, mặc định ngày còn lại để tạo khoảng lọc.
+            $denNgay = $denNgayNhap
+                ? Carbon::createFromFormat('d/m/Y', $denNgayNhap)->format('Y-m-d')
+                : $macDinhDen;
+            $tuNgay = $tuNgayNhap
+                ? Carbon::createFromFormat('d/m/Y', $tuNgayNhap)->format('Y-m-d')
+                : Carbon::parse($denNgay)->subDays(29)->toDateString();
 
-        $ordersInPeriod = static function () use ($tuNgay, $denNgay) {
-            return DB::table('DonHang')
-                ->whereDate('NgayTao', '>=', $tuNgay)
-                ->whereDate('NgayTao', '<=', $denNgay);
+            if ($tuNgay >= $denNgay || $tuNgay > $ngayCuoiNam || $denNgay > $ngayCuoiNam) {
+                $dateRangeError = 'Khoảng thời gian không hợp lệ';
+            }
+        }
+
+        if ($dateRangeError) {
+            // Khoảng rỗng để không hiển thị thống kê sai khi bộ lọc ngày không hợp lệ.
+            $tuThoiDiem = '1970-01-01 00:00:00';
+            $denThoiDiemLoaiTru = '1970-01-01 00:00:00';
+        } else {
+            $tuThoiDiem = $tuNgay.' 00:00:00';
+            // Mốc kết thúc loại trừ để tính trọn ngày, kể cả bản ghi có phần giây lẻ.
+            $denThoiDiemLoaiTru = Carbon::parse($denNgay)->addDay()->startOfDay()->toDateTimeString();
+        }
+
+        $ordersInPeriod = static function () use ($tuThoiDiem, $denThoiDiemLoaiTru) {
+            return DonHang::query()->from('DonHang')
+                ->where('NgayTao', '>=', $tuThoiDiem)
+                ->where('NgayTao', '<', $denThoiDiemLoaiTru);
         };
 
         /*
@@ -84,20 +110,24 @@ class AdminOverviewController extends Controller
         */
 
         $trangThaiHuy = ['DaHuy', 'Đã hủy'];
+        $trangThaiHoanThanh = ['HoanThanh', 'DaGiao', 'Đã giao', 'Hoàn thành'];
+
         $thongKe = [
-            'doanhThu' => $ordersInPeriod()
-                ->whereNotIn('TrangThai', $trangThaiHuy)
-                ->sum('TongTien'),
+            // Doanh thu chỉ tính đơn đã hoàn thành; nhân viên không xem được.
+            'doanhThu' => $laAdmin
+                ? (int) $ordersInPeriod()
+                    ->whereIn('TrangThai', $trangThaiHoanThanh)
+                    ->sum('TongTien')
+                : null,
             'tongDonHang' => $ordersInPeriod()->count(),
-            'khachHangMoi' => DB::table('NguoiDung')
+            'khachHangMoi' => NguoiDung::query()->from('NguoiDung')
                 ->where('VaiTro', 'KhachHang')
-                ->whereDate('NgayTao', '>=', $tuNgay)
-                ->whereDate('NgayTao', '<=', $denNgay)
+                ->where('NgayTao', '>=', $tuThoiDiem)
+                ->where('NgayTao', '<', $denThoiDiemLoaiTru)
                 ->count(),
-            'hoanTienChoXuLy' => DB::table('YeuCauHoanTien')
+            // Việc cần xử lý: đếm tất cả, không lọc theo ngày.
+            'hoanTienChoXuLy' => YeuCauHoanTien::query()->from('YeuCauHoanTien')
                 ->whereIn('TrangThai', ['ChoXuLy', 'Chờ xử lý'])
-                ->whereDate('NgayYeuCau', '>=', $tuNgay)
-                ->whereDate('NgayYeuCau', '<=', $denNgay)
                 ->count(),
         ];
 
@@ -111,7 +141,7 @@ class AdminOverviewController extends Controller
             [
                 'ten' => 'Đã hoàn thành',
                 'class' => 'completed',
-                'trangThai' => ['HoanThanh', 'DaGiao', 'Đã giao', 'Hoàn thành'],
+                'trangThai' => $trangThaiHoanThanh,
             ],
             [
                 'ten' => 'Đang giao',
@@ -194,13 +224,20 @@ class AdminOverviewController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | SẢN PHẨM SẮP HẾT HÀNG
+        | SẢN PHẨM SẮP HẾT HÀNG / HẾT HÀNG
         |--------------------------------------------------------------------------
+        | Tồn khả dụng = SoLuong - SoLuongTamGiu.
+        | - Hết hàng : tồn khả dụng = 0
+        | - Sắp hết  : tồn khả dụng <= LuongTonKhoThap (mặc định 5)
         */
 
-        $sanPhamSapHet = DB::table('BienThe as bt')
+        $sanPhamSapHet = BienThe::query()->from('BienThe as bt')
             ->join('SanPham as sp', 'sp.SanPhamID', '=', 'bt.SanPhamID')
-            ->whereRaw('bt.SoLuong <= COALESCE(bt.SoLuongTamGiu, 0) + sp.LuongTonKhoThap')
+            ->where('sp.TrangThai', self::SAN_PHAM_DANG_BAN)
+            ->whereRaw(
+                '(bt.SoLuong - COALESCE(bt.SoLuongTamGiu, 0)) <= COALESCE(sp.LuongTonKhoThap, ?)',
+                [self::NGUONG_SAP_HET_MAC_DINH]
+            )
             ->select(
                 'sp.TenSanPham as ten',
                 'bt.MauSac',
@@ -215,6 +252,7 @@ class AdminOverviewController extends Controller
                 'ten' => $item->ten,
                 'bienThe' => trim($item->MauSac.' / '.$item->KichThuoc, ' /'),
                 'soLuong' => (int) $item->soLuong,
+                'hetHang' => (int) $item->soLuong === 0,
             ]);
 
         /*
@@ -223,11 +261,11 @@ class AdminOverviewController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $sanPhamBanChay = DB::table('ChiTietDonHang as ct')
+        $sanPhamBanChay = ChiTietDonHang::query()->from('ChiTietDonHang as ct')
             ->join('DonHang as dh', 'dh.DonHangID', '=', 'ct.DonHangID')
             ->join('SanPham as sp', 'sp.SanPhamID', '=', 'ct.SanPhamID')
-            ->whereDate('dh.NgayTao', '>=', $tuNgay)
-            ->whereDate('dh.NgayTao', '<=', $denNgay)
+            ->where('dh.NgayTao', '>=', $tuThoiDiem)
+            ->where('dh.NgayTao', '<', $denThoiDiemLoaiTru)
             ->whereNotIn('dh.TrangThai', $trangThaiHuy)
             ->select(
                 'sp.TenSanPham as ten',
@@ -242,19 +280,20 @@ class AdminOverviewController extends Controller
             ->map(fn ($item) => [
                 'ten' => $item->ten,
                 'daBan' => (int) $item->daBan,
-                'doanhThu' => (int) $item->doanhThu,
+                'doanhThu' => $laAdmin ? (int) $item->doanhThu : null,
             ]);
 
         /*
         |--------------------------------------------------------------------------
         | SẢN PHẨM BÁN CHẬM
         |--------------------------------------------------------------------------
+        | Chỉ xét sản phẩm đang bán, đã tồn tại trước kỳ thống kê và còn tồn khả dụng.
         */
 
-        $soLuongBanTheoSanPham = DB::table('ChiTietDonHang as ct')
+        $soLuongBanTheoSanPham = ChiTietDonHang::query()->from('ChiTietDonHang as ct')
             ->join('DonHang as dh', 'dh.DonHangID', '=', 'ct.DonHangID')
-            ->whereDate('dh.NgayTao', '>=', $tuNgay)
-            ->whereDate('dh.NgayTao', '<=', $denNgay)
+            ->where('dh.NgayTao', '>=', $tuThoiDiem)
+            ->where('dh.NgayTao', '<', $denThoiDiemLoaiTru)
             ->whereNotIn('dh.TrangThai', $trangThaiHuy)
             ->select(
                 'ct.SanPhamID',
@@ -263,9 +302,17 @@ class AdminOverviewController extends Controller
             )
             ->groupBy('ct.SanPhamID');
 
-        $sanPhamBanCham = DB::table('SanPham as sp')
+        $sanPhamBanCham = SanPham::query()->from('SanPham as sp')
             ->leftJoinSub($soLuongBanTheoSanPham, 'sales', function ($join) {
                 $join->on('sales.SanPhamID', '=', 'sp.SanPhamID');
+            })
+            ->where('sp.TrangThai', self::SAN_PHAM_DANG_BAN)
+            ->where('sp.NgayTao', '<', $tuThoiDiem)
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('BienThe as bt')
+                    ->whereColumn('bt.SanPhamID', 'sp.SanPhamID')
+                    ->whereRaw('bt.SoLuong > COALESCE(bt.SoLuongTamGiu, 0)');
             })
             ->select(
                 'sp.TenSanPham as ten',
@@ -279,7 +326,7 @@ class AdminOverviewController extends Controller
             ->map(fn ($item) => [
                 'ten' => $item->ten,
                 'daBan' => (int) $item->daBan,
-                'doanhThu' => (int) $item->doanhThu,
+                'doanhThu' => $laAdmin ? (int) $item->doanhThu : null,
             ]);
 
         return view('admin.overview', [
@@ -287,6 +334,14 @@ class AdminOverviewController extends Controller
             'tuNgay' => $tuNgay,
 
             'denNgay' => $denNgay,
+
+            'tuNgayForm' => $tuNgayNhap ?? Carbon::parse($tuNgay)->format('d/m/Y'),
+
+            'denNgayForm' => $denNgayNhap ?? Carbon::parse($denNgay)->format('d/m/Y'),
+
+            'dateRangeError' => $dateRangeError,
+
+            'laAdmin' => $laAdmin,
 
             'thongKe' => $thongKe,
 
@@ -301,5 +356,45 @@ class AdminOverviewController extends Controller
             'sanPhamBanCham' => $sanPhamBanCham,
 
         ]);
+    }
+
+    /**
+     * Trả về redirect nếu chưa đăng nhập / không đủ quyền / tài khoản bị khóa, ngược lại trả null.
+     */
+    private function kiemTraTruyCap(Request $request)
+    {
+        $session = $request->session();
+
+        if (! $session->has('AdminNguoiDungID')) {
+            return redirect()
+                ->route('admin.login')
+                ->withErrors([
+                    'email' => 'Vui lòng đăng nhập để truy cập khu vực quản trị.',
+                ]);
+        }
+
+        $vaiTro = $session->get('AdminVaiTro');
+
+        $trangThai = NguoiDung::query()->from('NguoiDung')
+            ->where('NguoiDungID', $session->get('AdminNguoiDungID'))
+            ->value('TrangThai');
+
+        if (! in_array($vaiTro, ['Admin', 'NhanVien'], true) || $trangThai !== 'HoatDong') {
+            $session->forget([
+                'AdminNguoiDungID',
+                'AdminHo',
+                'AdminTen',
+                'AdminEmail',
+                'AdminVaiTro',
+            ]);
+
+            return redirect()
+                ->route('admin.login')
+                ->withErrors([
+                    'email' => 'Tài khoản không có quyền truy cập khu vực quản trị.',
+                ]);
+        }
+
+        return null;
     }
 }

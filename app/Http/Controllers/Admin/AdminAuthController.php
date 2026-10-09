@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
-
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +44,7 @@ class AdminAuthController extends Controller
             ]
         );
 
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->first();
 
@@ -136,7 +135,7 @@ class AdminAuthController extends Controller
         );
 
         // Tìm tài khoản
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->first();
 
@@ -189,7 +188,7 @@ class AdminAuthController extends Controller
         $thoiGianHetHan = now()->addMinutes(15);
 
         // Lưu token vào tài khoản Admin
-        DB::table('NguoiDung')
+        NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDung->NguoiDungID)
             ->update([
                 'MaDatLaiMatKhau' => $tokenHash,
@@ -325,7 +324,7 @@ class AdminAuthController extends Controller
         $email = $request->query('email');
 
         // Tìm Admin còn token và chưa hết hạn
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $email)
             ->where('VaiTro', 'Admin')
             ->whereNotNull('MaDatLaiMatKhau')
@@ -397,7 +396,7 @@ class AdminAuthController extends Controller
         );
 
         // Tìm Admin còn token
-        $nguoiDung = DB::table('NguoiDung')
+        $nguoiDung = NguoiDung::query()->from('NguoiDung')
             ->where('Email', $request->email)
             ->where('VaiTro', 'Admin')
             ->whereNotNull('MaDatLaiMatKhau')
@@ -424,7 +423,7 @@ class AdminAuthController extends Controller
         }
 
         // Cập nhật mật khẩu
-        DB::table('NguoiDung')
+        NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', $nguoiDung->NguoiDungID)
             ->update([
                 'MatKhau' => Hash::make($request->password),

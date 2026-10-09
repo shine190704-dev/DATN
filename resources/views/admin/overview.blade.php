@@ -73,10 +73,13 @@
                 </label>
 
                 <input
-                    type="date"
+                    type="text"
                     id="tu_ngay"
                     name="tu_ngay"
-                    value="{{ $tuNgay }}"
+                    value="{{ $tuNgayForm }}"
+                    placeholder="dd/mm/yyyy"
+                    inputmode="numeric"
+                    maxlength="10"
                 >
 
             </div>
@@ -89,10 +92,13 @@
                 </label>
 
                 <input
-                    type="date"
+                    type="text"
                     id="den_ngay"
                     name="den_ngay"
-                    value="{{ $denNgay }}"
+                    value="{{ $denNgayForm }}"
+                    placeholder="dd/mm/yyyy"
+                    inputmode="numeric"
+                    maxlength="10"
                 >
 
             </div>
@@ -106,6 +112,10 @@
             </button>
 
         </form>
+
+        @if($dateRangeError)
+            <p class="admin-filter-error" role="alert">{{ $dateRangeError }}</p>
+        @endif
 
 
         {{-- =================================================

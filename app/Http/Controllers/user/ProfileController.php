@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\user;
 
+
+use App\Models\DanhMuc;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +19,7 @@ class ProfileController extends Controller
         }
 
         // Lấy thông tin người dùng đang đăng nhập
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', session('NguoiDungID'))
             ->first();
 
@@ -27,7 +30,7 @@ class ProfileController extends Controller
         }
 
         // Lấy danh mục cho navbar
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -46,7 +49,7 @@ class ProfileController extends Controller
         }
 
         // Lấy thông tin người dùng đang đăng nhập
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where('NguoiDungID', session('NguoiDungID'))
             ->first();
 
@@ -57,7 +60,7 @@ class ProfileController extends Controller
         }
 
         // Lấy danh mục cho navbar
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -77,7 +80,7 @@ class ProfileController extends Controller
     $userId = session('NguoiDungID');
 
     // Kiểm tra người dùng tồn tại
-    $user = DB::table('NguoiDung')
+    $user = NguoiDung::query()->from('NguoiDung')
         ->where('NguoiDungID', $userId)
         ->first();
 
@@ -139,7 +142,7 @@ class ProfileController extends Controller
     $ho = implode(' ', $parts);
 
     // Cập nhật
-    DB::table('NguoiDung')
+    NguoiDung::query()->from('NguoiDung')
         ->where('NguoiDungID', $userId)
         ->update([
             'Ho' => $ho,

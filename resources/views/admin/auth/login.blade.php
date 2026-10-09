@@ -112,16 +112,6 @@
 
                 </form>
 
-
-                {{-- QUÊN MẬT KHẨU --}}
-                <div class="admin-forgot-password">
-
-                    <a href="{{ route('admin.password.request') }}">
-                        Quên mật khẩu?
-                    </a>
-
-                </div>
-
             </div>
 
 

@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+
+use App\Models\DonHang;
+use App\Models\NhatKyHeThong;
 use Illuminate\Support\Facades\DB;
 
 class OrderStatusService
@@ -20,7 +23,7 @@ class OrderStatusService
             $note,
             $nguoiDungID
         ) {
-            $order = DB::table('DonHang')
+            $order = DonHang::query()->from('DonHang')
                 ->where('DonHangID', $donHangID)
                 ->lockForUpdate()
                 ->first();
@@ -56,7 +59,7 @@ class OrderStatusService
                 }
             }
 
-            DB::table('DonHang')
+            DonHang::query()->from('DonHang')
                 ->where('DonHangID', $donHangID)
                 ->update([
                     'TrangThai' => $newStatus,
@@ -64,7 +67,7 @@ class OrderStatusService
                 ]);
 
             if (DB::getSchemaBuilder()->hasTable('NhatKyHeThong')) {
-                DB::table('NhatKyHeThong')->insert([
+                NhatKyHeThong::query()->from('NhatKyHeThong')->insert([
                     'PhanHe' => 'DonHang',
                     'HanhDong' => $newStatus,
                     'DoiTuong' => 'DonHangID: ' . $donHangID,

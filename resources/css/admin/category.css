@@ -1,0 +1,406 @@
+
+/* ========================================
+   QUẢN LÝ DANH MỤC - DOLLIE
+======================================== */
+
+.category-page {
+    width: 100%;
+    min-height: 100%;
+    padding: 20px 14px 35px;
+    box-sizing: border-box;
+    background: #fff;
+    color: #59a78e;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.category-page *,
+.category-modal-overlay * {
+    box-sizing: border-box;
+}
+
+/* Tiêu đề */
+
+.category-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin: 0 6px 10px;
+}
+
+.category-heading h2 {
+    margin: 0;
+    color: #59a78e;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Nút chung */
+
+.category-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.category-btn:hover {
+    transform: translateY(-1px);
+}
+
+.category-btn-primary,
+.category-btn-edit {
+    background: #59a78e;
+    color: #fff;
+}
+
+.category-btn-primary {
+    min-height: 29px;
+    padding: 7px 18px;
+    white-space: nowrap;
+}
+
+.category-btn-primary:hover,
+.category-btn-edit:hover {
+    background: #438f77;
+}
+
+/* Thanh tìm kiếm */
+
+.category-search {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 10px);
+    height: 31px;
+    margin: 0 5px 12px;
+    overflow: hidden;
+    border: 1px solid #80c7b0;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.category-search input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0 10px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #286f5d;
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.category-search input:focus {
+    box-shadow: inset 0 0 0 1px #59a78e;
+}
+
+.category-search button {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 35px;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.category-search-icon {
+    position: relative;
+    display: block;
+    width: 11px;
+    height: 11px;
+    border: 1.5px solid #ffbf24;
+    border-radius: 50%;
+}
+
+.category-search-icon::after {
+    position: absolute;
+    right: -4px;
+    bottom: -2px;
+    width: 5px;
+    height: 1.5px;
+    background: #ffbf24;
+    content: "";
+    transform: rotate(48deg);
+    transform-origin: left center;
+}
+
+/* Ghi chú */
+
+.category-note {
+    margin: 12px 0;
+    color: #59a78e;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Bảng danh mục */
+
+.category-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #80c7b0;
+    border-radius: 8px;
+}
+
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    color: #59a78e;
+    text-align: center;
+    font-size: 13px;
+}
+
+.category-table th,
+.category-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #a6d8c8;
+}
+
+.category-table th {
+    height: 39px;
+    color: #00877f;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.category-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.category-table tbody tr:hover {
+    background: #f4faf7;
+}
+
+.category-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.category-table td {
+    overflow-wrap: anywhere;
+}
+
+.category-actions {
+    white-space: nowrap;
+}
+
+.category-actions .category-btn {
+    min-width: 49px;
+    margin: 0 2px;
+    padding: 4px 13px;
+    font-size: 11px;
+}
+
+.category-btn-edit {
+    background: #59a78e;
+    color: #fff;
+}
+
+.category-btn-delete {
+    background: #ffd65a;
+    color: #fff;
+}
+
+.category-btn-delete:hover,
+.category-btn-cancel:hover {
+    background: #f3c43f;
+}
+
+.category-empty {
+    padding: 22px 10px !important;
+    color: #777;
+}
+
+/* Thông báo */
+
+.category-alert {
+    margin: 10px 5px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.category-alert-success {
+    border: 1px solid #b4dfc9;
+    background: #effaf3;
+    color: #26744c;
+}
+
+.category-alert-error {
+    border: 1px solid #f0b8b8;
+    background: #fff3f3;
+    color: #a52b2b;
+}
+
+.category-field-error {
+    margin: 6px 0 0;
+    color: #a52b2b;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+/* ========================================
+   POPUP THÊM / SỬA / XÓA
+======================================== */
+
+.category-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgb(0 0 0 / 25%);
+}
+
+.category-modal-overlay.is-open {
+    display: flex;
+}
+
+.category-modal {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    padding: 26px 27px 35px;
+    border-radius: 9px;
+    background: #59a78e;
+    color: #fff;
+    box-shadow: 0 8px 28px rgb(0 0 0 / 15%);
+    animation: categoryModalIn 0.18s ease-out;
+}
+
+.category-modal h3 {
+    margin: 0 0 23px;
+    color: #ffdf59;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Nút đóng popup */
+
+.category-modal-close {
+    position: absolute;
+    top: 11px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.category-modal-close:hover {
+    background: rgb(255 255 255 / 15%);
+}
+
+/* Nhãn và ô nhập */
+
+.category-modal label {
+    display: block;
+    margin: 0 0 6px 3px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.category-modal input[type="text"] {
+    display: block;
+    width: 100%;
+    height: 22px;
+    padding: 3px 10px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    background: #fff;
+    color: #286f5d;
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.category-modal input[type="text"]:focus {
+    box-shadow: 0 0 0 2px #ffdf59;
+}
+
+/* Nút Hủy và Lưu */
+
+.category-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 31px;
+}
+
+.category-modal-actions .category-btn {
+    min-height: 25px;
+}
+
+.category-btn-cancel {
+    min-width: 94px;
+    background: #ffd65a;
+    color: #fff;
+}
+
+.category-btn-save {
+    flex: 1;
+    border: 1px solid #ffdf59;
+    background: transparent;
+    color: #fff;
+}
+
+.category-btn-save:hover {
+    background: rgb(255 255 255 / 12%);
+}
+
+/* Popup xác nhận xóa */
+
+.category-delete-modal p {
+    margin: 0;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.category-delete-modal strong {
+    color: #ffdf59;
+}
+
+/* Hiệu ứng */
+
+@keyframes categoryModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

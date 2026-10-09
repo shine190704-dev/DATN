@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\user\Account;
 
+
+use App\Models\DanhMuc;
+use App\Models\ChiTietDonHang;
+use App\Models\DanhGia;
+use App\Models\NguoiDung;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +32,7 @@ class ReviewController extends Controller
         // SẢN PHẨM CHƯA ĐÁNH GIÁ
         // ========================================
 
-        $pendingReviews = DB::table('ChiTietDonHang as ct')
+        $pendingReviews = ChiTietDonHang::query()->from('ChiTietDonHang as ct')
 
             ->join(
                 'DonHang as dh',
@@ -95,7 +100,7 @@ class ReviewController extends Controller
         // SẢN PHẨM ĐÃ ĐÁNH GIÁ
         // ========================================
 
-        $reviewedReviews = DB::table('DanhGia as dg')
+        $reviewedReviews = DanhGia::query()->from('DanhGia as dg')
 
             ->join(
                 'DonHang as dh',
@@ -185,7 +190,7 @@ class ReviewController extends Controller
         // USER
         // ========================================
 
-        $user = DB::table('NguoiDung')
+        $user = NguoiDung::query()->from('NguoiDung')
             ->where(
                 'NguoiDungID',
                 $userId
@@ -197,7 +202,7 @@ class ReviewController extends Controller
         // DANH MỤC
         // ========================================
 
-        $danhMucs = DB::table('DanhMuc')
+        $danhMucs = DanhMuc::query()
             ->get();
 
 
@@ -313,7 +318,7 @@ class ReviewController extends Controller
         // CỦA NGƯỜI DÙNG HAY KHÔNG
         // ========================================
 
-        $item = DB::table('ChiTietDonHang as ct')
+        $item = ChiTietDonHang::query()->from('ChiTietDonHang as ct')
 
             ->join(
                 'DonHang as dh',
@@ -366,7 +371,7 @@ class ReviewController extends Controller
         // KIỂM TRA ĐÃ ĐÁNH GIÁ CHƯA
         // ========================================
 
-        $alreadyReviewed = DB::table('DanhGia')
+        $alreadyReviewed = DanhGia::query()->from('DanhGia')
 
             ->where(
                 'NguoiDungID',
@@ -402,7 +407,7 @@ class ReviewController extends Controller
         // LƯU ĐÁNH GIÁ
         // ========================================
 
-        DB::table('DanhGia')->insert([
+        DanhGia::query()->from('DanhGia')->insert([
 
             'DiemDanhGia' =>
                 (int) $data['DiemDanhGia'],

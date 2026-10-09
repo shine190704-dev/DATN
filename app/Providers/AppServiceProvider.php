@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+
+use App\Models\ChiTietGioHang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -32,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
-            $cartCount = (int) DB::table('ChiTietGioHang')
+            $cartCount = (int) ChiTietGioHang::query()->from('ChiTietGioHang')
                 ->join(
                     'GioHang',
                     'ChiTietGioHang.GioHangID',

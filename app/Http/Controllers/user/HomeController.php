@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\user;
 
+
+use App\Models\DanhMuc;
+use App\Models\DanhSachYeuThich;
+use App\Models\SanPham;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +16,7 @@ class HomeController extends Controller
         // =========================================
         // DANH MỤC CHO NAVBAR
         // =========================================
-        $danhMucs = DB::table('danhmuc')
+        $danhMucs = DanhMuc::query()
             ->where('TrangThai', 'HoatDong')
             ->get();
 
@@ -21,7 +25,7 @@ class HomeController extends Controller
         // SẢN PHẨM NỔI BẬT
         // 8 sản phẩm bán nhiều nhất
         // =========================================
-        $sanPhamNoiBat = DB::table('SanPham')
+        $sanPhamNoiBat = SanPham::query()->from('SanPham')
             ->where('SanPham.TrangThai', 'HoatDong')
 
             // DaBan cao nhất → bán nhiều nhất
@@ -78,7 +82,7 @@ class HomeController extends Controller
         // 8 sản phẩm bán ít nhất
         // Không trùng với SẢN PHẨM NỔI BẬT
         // =========================================
-        $sanPhamDanhChoBan = DB::table('SanPham')
+        $sanPhamDanhChoBan = SanPham::query()->from('SanPham')
             ->where('SanPham.TrangThai', 'HoatDong')
 
             // Loại những sản phẩm đã nằm trong Nổi bật
@@ -131,7 +135,7 @@ class HomeController extends Controller
         // SẢN PHẨM YÊU THÍCH
         // =========================================
         $favoriteProductIds = session()->has('NguoiDungID')
-            ? DB::table('danhsachyeuthich')
+            ? DanhSachYeuThich::query()->from('danhsachyeuthich')
                 ->where(
                     'NguoiDungID',
                     session('NguoiDungID')

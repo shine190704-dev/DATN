@@ -257,24 +257,6 @@ body {
     text-decoration: underline;
 }
 
-.admin-forgot-password {
-    margin-top: 14px;
-    text-align: center;
-}
-
-.admin-forgot-password a {
-    color: #FFD554;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.admin-forgot-password a:hover {
-    text-decoration: underline;
-}
-
-
-
-
 .admin-login-logo {
     margin-bottom: 14px;
     text-align: center;
