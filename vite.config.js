@@ -15,7 +15,9 @@ export default defineConfig({
                 'resources/css/admin/dashboard.css',
                 'resources/css/admin/overview.css',
                 'resources/css/admin/category.css',
+                'resources/css/admin/promotion.css',
                 'resources/js/admin/category.js',
+                'resources/js/admin/promotion.js',
                 'resources/js/app.js'
             ],
             refresh: true,

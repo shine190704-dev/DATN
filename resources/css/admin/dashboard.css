@@ -384,3 +384,19 @@ body,
     background: #ffffff;
 }
 
+
+
+
+
+/* Khóa mục menu dành riêng cho Admin */
+.admin-menu-item.disabled {
+    color: #c3d5ce !important;
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: transparent !important;
+}
+
+.admin-menu-item.disabled .admin-menu-icon {
+    opacity: 0.6;
+}

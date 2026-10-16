@@ -244,20 +244,33 @@
                     </div>
 
 
+               @if (session('AdminVaiTro') === 'Admin')
                     <a
-                        href="#"
-                        class="admin-menu-item"
-                    >
+                     href="{{ route('admin.promotion.index') }}"
+                     class="admin-menu-item {{ request()->routeIs('admin.promotion.*') ? 'active' : '' }}"
+                 >
+                @else
+                    <a
+                     href="javascript:void(0)"
+                     class="admin-menu-item disabled"
+                     aria-disabled="true"
+                     title="Chỉ Admin được quản lý mã giảm giá"
+                 >
+                @endif
 
-                        <span class="admin-menu-icon">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m20 13-7 7-10-10V3h7l10 10Z"/><circle cx="7.5" cy="7.5" r="1"/><path d="m10 14 2-2 2 2-2 2-2-2Z"/></svg>
-                        </span>
+                    <span class="admin-menu-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <path d="m20 13-7 7-10-10V3h7l10 10Z"/>
+                         <circle cx="7.5" cy="7.5" r="1"/>
+                          <path d="m10 14 2-2 2 2-2 2-2-2Z"/>
+                     </svg>
+                    </span>
 
-                        <span>
-                            Mã giảm giá
-                        </span>
+                    <span>
+                     Mã Khuyến mãi
+                    </span>
 
-                    </a>
+                </a>
 
                 </div>
 

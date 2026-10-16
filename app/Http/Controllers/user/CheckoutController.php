@@ -522,6 +522,7 @@ $subtotal = $items->sum(function ($item) {
 
 
     if ($request->filled('MaCode')) {
+        $today = today()->toDateString();
 
         $maGiamGia = MaGiamGia::query()->from('magiamgia')
             ->where(
@@ -532,11 +533,8 @@ $subtotal = $items->sum(function ($item) {
                 'TrangThai',
                 'HoatDong'
             )
-            ->where(
-                'NgayHetHan',
-                '>=',
-                now()
-            )
+            ->whereDate('NgayBatDau', '<=', $today)
+            ->whereDate('NgayHetHan', '>=', $today)
             ->first();
 
 
@@ -872,11 +870,13 @@ public function applyCoupon(Request $request)
     ]);
 
     $subtotal = (float) $request->Subtotal;
+    $today = today()->toDateString();
 
     $maGiamGia = MaGiamGia::query()->from('magiamgia')
         ->where('MaCode', trim($request->MaCode))
         ->where('TrangThai', 'HoatDong')
-        ->where('NgayHetHan', '>=', now())
+        ->whereDate('NgayBatDau', '<=', $today)
+        ->whereDate('NgayHetHan', '>=', $today)
         ->first();
 
     if (!$maGiamGia) {
