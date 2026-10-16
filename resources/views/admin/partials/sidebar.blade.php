@@ -131,8 +131,8 @@
 
 
                     <a
-                        href="#"
-                        class="admin-menu-item"
+                        href="{{ route('admin.brand.index') }}"
+                        class="admin-menu-item {{ request()->routeIs('admin.brand.*') ? 'active' : '' }}"
                     >
 
                         <span class="admin-menu-icon">

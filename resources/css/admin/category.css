@@ -31,7 +31,7 @@
 .category-heading h2 {
     margin: 0;
     color: #59a78e;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 700;
 }
 
@@ -45,7 +45,7 @@
     border-radius: 20px;
     padding: 6px 16px;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
@@ -97,7 +97,7 @@
     background: transparent;
     color: #286f5d;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .category-search input:focus {
@@ -162,8 +162,9 @@
     background: #fff;
     color: #59a78e;
     text-align: center;
-    font-size: 13px;
+    font-size: 16px;
 }
+
 
 .category-table th,
 .category-table td {
@@ -202,7 +203,7 @@
     min-width: 49px;
     margin: 0 2px;
     padding: 4px 13px;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .category-btn-edit {
@@ -277,8 +278,8 @@
 .category-modal {
     position: relative;
     width: 100%;
-    max-width: 340px;
-    padding: 26px 27px 35px;
+    max-width: 520px;
+    padding: 32px 34px 42px;
     border-radius: 9px;
     background: #59a78e;
     color: #fff;
@@ -289,7 +290,7 @@
 .category-modal h3 {
     margin: 0 0 23px;
     color: #ffdf59;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -324,22 +325,22 @@
     display: block;
     margin: 0 0 6px 3px;
     color: #fff;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
 }
 
 .category-modal input[type="text"] {
     display: block;
     width: 100%;
-    height: 22px;
-    padding: 3px 10px;
+    height: 36px;
+    padding: 6px 12px;
     border: none;
     border-radius: 20px;
     outline: none;
     background: #fff;
     color: #286f5d;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .category-modal input[type="text"]:focus {
@@ -350,27 +351,37 @@
 
 .category-modal-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     margin-top: 31px;
 }
 
 .category-modal-actions .category-btn {
-    min-height: 25px;
+    flex: 0 1 170px;
+    min-height: 38px;
+    font-size: 14px;
 }
 
 .category-btn-cancel {
-    min-width: 94px;
     background: #ffd65a;
     color: #fff;
 }
 
 .category-btn-save {
-    flex: 1;
     border: 1px solid #ffdf59;
     background: transparent;
     color: #fff;
+}
+
+.category-delete-modal .category-btn-delete {
+    border: 1px solid #ffdf59;
+    background: transparent;
+    color: #fff;
+}
+
+.category-delete-modal .category-btn-delete:hover {
+    background: rgb(255 255 255 / 12%);
 }
 
 .category-btn-save:hover {
@@ -382,7 +393,7 @@
 .category-delete-modal p {
     margin: 0;
     color: #fff;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.7;
 }
 
@@ -404,3 +415,27 @@
     }
 }
 
+
+/* Font Merriweather cho trang quản lý danh mục */
+.category-page,
+.category-page button,
+.category-page input,
+.category-page table,
+.category-modal,
+.category-modal button,
+.category-modal input {
+    font-family: 'Merriweather', serif;
+    letter-spacing: normal;
+    word-spacing: normal;
+}
+
+/* Giữ khoảng cách chữ tiếng Việt bình thường */
+.category-heading h2,
+.category-table th,
+.category-table td,
+.category-note,
+.category-modal h3,
+.category-modal label {
+    letter-spacing: normal;
+    word-spacing: normal;
+}

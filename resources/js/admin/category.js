@@ -1,4 +1,19 @@
-const cfg = window.categoryConfig || {};
+const cfg = (() => {
+    const configNode = document.getElementById('categoryPageConfig');
+    const raw = configNode?.dataset?.config;
+
+    if (!raw) {
+        return window.categoryConfig || {};
+    }
+
+    try {
+        return JSON.parse(raw);
+    } catch (error) {
+        console.warn('Category config parse failed:', error);
+        return window.categoryConfig || {};
+    }
+})();
+
 const $ = (id) => document.getElementById(id);
 
 const categoryModal = $('categoryModal');
@@ -18,11 +33,16 @@ function buildUrl(template, id) {
 }
 
 function setOpen(modal, open) {
+    if (!modal) return;
     modal.classList.toggle('is-open', open);
     modal.setAttribute('aria-hidden', String(!open));
 }
 
 function openCategoryModal(mode, id = null, name = '') {
+    if (!categoryModal || !categoryForm || !categoryTitle || !categoryName || !categoryMethodField) {
+        return;
+    }
+
     const isEdit = mode === 'edit' && id !== null && id !== '';
 
     lastFocused = document.activeElement;
@@ -30,7 +50,6 @@ function openCategoryModal(mode, id = null, name = '') {
     categoryForm.action = isEdit ? buildUrl(cfg.updateUrl, id) : cfg.storeUrl;
     categoryTitle.textContent = isEdit ? 'SỬA DANH MỤC' : 'THÊM DANH MỤC';
 
-    // Nhớ chế độ để khi validate thất bại, popup mở lại đúng chế độ.
     categoryMethodField.innerHTML =
         `<input type="hidden" name="form_mode" value="${isEdit ? 'edit' : 'create'}">` +
         `<input type="hidden" name="form_id" value="${isEdit ? id : ''}">` +
@@ -39,7 +58,7 @@ function openCategoryModal(mode, id = null, name = '') {
     categoryName.value = name || '';
 
     setOpen(categoryModal, true);
-    setTimeout(() => categoryName.focus(), 50);
+    setTimeout(() => categoryName?.focus?.(), 50);
 }
 
 function closeCategoryModal() {
@@ -48,6 +67,10 @@ function closeCategoryModal() {
 }
 
 function openDeleteModal(id, name) {
+    if (!deleteModal || !deleteForm || !deleteCategoryName) {
+        return;
+    }
+
     lastFocused = document.activeElement;
 
     deleteCategoryName.textContent = name;
@@ -61,7 +84,60 @@ function closeDeleteModal() {
     lastFocused?.focus?.();
 }
 
-// Các nút trong Blade gọi bằng onclick nên phải đưa ra window.
+function initCategoryModalHandlers() {
+    if (!categoryModal && !deleteModal && !categoryForm && !deleteForm) {
+        return;
+    }
+
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-category-action]');
+        if (!button) return;
+
+        const { categoryAction, categoryId, categoryName: name } = button.dataset;
+        if (categoryAction === 'edit') {
+            openCategoryModal('edit', categoryId, name || '');
+        } else if (categoryAction === 'delete') {
+            openDeleteModal(categoryId, name || '');
+        }
+    });
+
+    document.querySelectorAll('.category-modal-overlay').forEach((modal) => {
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) setOpen(modal, false);
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        if (categoryModal?.classList.contains('is-open')) closeCategoryModal();
+        if (deleteModal?.classList.contains('is-open')) closeDeleteModal();
+    });
+
+    if (categoryForm) {
+        categoryForm.addEventListener('submit', () => {
+            const submitButton = categoryForm.querySelector('[type="submit"]');
+            if (submitButton) submitButton.disabled = true;
+        });
+    }
+
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', () => {
+            const submitButton = deleteForm.querySelector('[type="submit"]');
+            if (submitButton) submitButton.disabled = true;
+        });
+    }
+
+    window.addEventListener('pageshow', () => {
+        document.querySelectorAll('.category-modal [type="submit"]').forEach((button) => {
+            button.disabled = false;
+        });
+    });
+
+    if (cfg.hasValidationErrors && cfg.oldMode) {
+        openCategoryModal(cfg.oldMode, cfg.oldId || null, cfg.oldInput || '');
+    }
+}
+
 Object.assign(window, {
     openCategoryModal,
     closeCategoryModal,
@@ -69,31 +145,8 @@ Object.assign(window, {
     closeDeleteModal,
 });
 
-// Bấm ra nền để đóng
-document.querySelectorAll('.category-modal-overlay').forEach((modal) => {
-    modal.addEventListener('click', (event) => {
-        if (event.target === modal) setOpen(modal, false);
-    });
-});
-
-// Esc đóng popup đang mở
-document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    if (categoryModal.classList.contains('is-open')) closeCategoryModal();
-    if (deleteModal.classList.contains('is-open')) closeDeleteModal();
-});
-
-// Chống bấm hai lần
-[categoryForm, deleteForm].forEach((form) => {
-    form.addEventListener('submit', () => {
-        form.querySelector('[type="submit"]').disabled = true;
-    });
-});
-window.addEventListener('pageshow', () => {
-    document.querySelectorAll('.category-modal [type="submit"]').forEach((b) => (b.disabled = false));
-});
-
-// Mở lại popup khi validate thất bại
-if (cfg.hasValidationErrors && cfg.oldMode) {
-    openCategoryModal(cfg.oldMode, cfg.oldId || null, cfg.oldInput || '');
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCategoryModalHandlers, { once: true });
+} else {
+    initCategoryModalHandlers();
 }

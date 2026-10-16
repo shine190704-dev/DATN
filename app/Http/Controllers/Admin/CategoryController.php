@@ -15,15 +15,6 @@ class CategoryController extends Controller
         $keyword = trim($request->input('search', ''));
 
         $categories = DanhMuc::query()
-            ->select('danhmuc.*')
-            ->selectSub(function ($query) {
-                $query->from('sanpham')
-                    ->selectRaw('COUNT(*)')
-                    ->whereColumn(
-                        'sanpham.DanhMucID',
-                        'danhmuc.DanhMucID'
-                    );
-            }, 'products_count')
             ->when($keyword !== '', function ($query) use ($keyword) {
                 $query->where(function ($q) use ($keyword) {
                     $q->where('TenDanhMuc', 'like', "%{$keyword}%");
@@ -33,7 +24,7 @@ class CategoryController extends Controller
                     }
                 });
             })
-            ->orderBy('DanhMucID', 'desc')
+            ->orderBy('DanhMucID', 'asc')
             ->get();
 
         return view('admin.category', compact('categories', 'keyword'));
@@ -107,7 +98,7 @@ class CategoryController extends Controller
                 ->route('admin.category.index')
                 ->with(
                     'error',
-                    'Danh mục đang có sản phẩm, không thể xóa. Hãy chuyển sản phẩm sang danh mục khác hoặc ẩn danh mục.'
+                    'Danh mục đang có sản phẩm, không thể xóa.'
                 );
         }
 

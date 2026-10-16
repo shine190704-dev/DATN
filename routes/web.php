@@ -16,3 +16,4 @@ require __DIR__.'/user/review.php';
 require __DIR__.'/user/refund.php';
 require __DIR__.'/admin/auth.php';
 require __DIR__.'/admin/category.php';
+require __DIR__.'/admin/brand.php';

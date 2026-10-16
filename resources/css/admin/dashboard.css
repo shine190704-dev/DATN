@@ -130,6 +130,7 @@ body,
 .admin-shell .admin-menu-item {
     width: 100%;
     height: 42px;
+    margin-bottom: 4px;
 
     display: flex;
     align-items: center;
@@ -382,5 +383,4 @@ body,
 
     background: #ffffff;
 }
-
 

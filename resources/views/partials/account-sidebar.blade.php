@@ -40,11 +40,18 @@
         </a>
 
 
+
         <a
             href="{{ route('address.index') }}"
             class="account-menu-item {{ request()->routeIs('address.*') ? 'active' : '' }}"
         >
             Sổ địa chỉ
+        </a>
+
+
+
+         <a href="#" class="account-menu-item">
+            Mã khuyến mãi của tôi
         </a>
 
 
@@ -54,6 +61,7 @@
         >
             Thông tin của tôi
         </a>
+
 
 
         <a

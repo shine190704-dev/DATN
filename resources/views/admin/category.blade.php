@@ -61,11 +61,6 @@
         </button>
     </form>
 
-    <p class="category-note">
-        Danh mục đang có sản phẩm thì không xóa được.
-        Hãy chuyển sản phẩm sang danh mục khác hoặc chuyển danh mục sang trạng thái Ẩn.
-    </p>
-
     {{-- Bảng danh mục --}}
     <div class="category-table-wrap">
         <table class="category-table">
@@ -73,7 +68,6 @@
                 <tr>
                     <th>Mã danh mục</th>
                     <th>Tên danh mục</th>
-                    <th>Số sản phẩm</th>
                     <th>Chi tiết</th>
                 </tr>
             </thead>
@@ -85,17 +79,13 @@
 
                         <td>{{ $category->TenDanhMuc }}</td>
 
-                        <td>{{ $category->products_count }}</td>
-
                         <td class="category-actions">
                             <button
                                 type="button"
                                 class="category-btn category-btn-edit"
-                                onclick="openCategoryModal(
-                                    'edit',
-                                    {{ $category->DanhMucID }},
-                                    {{ Js::from($category->TenDanhMuc) }}
-                                )"
+                                data-category-action="edit"
+                                data-category-id="{{ $category->DanhMucID }}"
+                                data-category-name="{{ $category->TenDanhMuc }}"
                             >
                                 Sửa
                             </button>
@@ -103,10 +93,9 @@
                             <button
                                 type="button"
                                 class="category-btn category-btn-delete"
-                                onclick="openDeleteModal(
-                                    {{ $category->DanhMucID }},
-                                    {{ Js::from($category->TenDanhMuc) }}
-                                )"
+                                data-category-action="delete"
+                                data-category-id="{{ $category->DanhMucID }}"
+                                data-category-name="{{ $category->TenDanhMuc }}"
                             >
                                 Xóa
                             </button>
@@ -114,7 +103,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="category-empty">
+                        <td colspan="3" class="category-empty">
                             @if (!empty($keyword))
                                 Không tìm thấy danh mục phù hợp.
                             @else
@@ -217,7 +206,7 @@
         <h3 id="deleteModalTitle">XÁC NHẬN XÓA</h3>
 
         <p>
-            Em có chắc muốn xóa danh mục
+            Bạn có chắc muốn xóa danh mục
             <strong id="deleteCategoryName"></strong>
             không?
         </p>
@@ -247,18 +236,18 @@
 </div>
 
 
-{{-- Cấu hình cho JavaScript --}}
-<script>
-    window.categoryConfig = {
-        storeUrl: @json(route('admin.category.store')),
-        updateUrl: @json(route('admin.category.update', ['id' => '__ID__'])),
-        deleteUrl: @json(route('admin.category.destroy', ['id' => '__ID__'])),
-        hasValidationErrors: @json($errors->any()),
-        oldInput: @json(old('TenDanhMuc')),
-        oldMode: @json(old('form_mode')),
-        oldId: @json(old('form_id'))
-    };
-</script>
+{{-- Dữ liệu cho JavaScript --}}
+<div
+    id="categoryPageConfig"
+    data-config="{{ json_encode([
+        'storeUrl' => route('admin.category.store'),
+        'updateUrl' => route('admin.category.update', ['id' => '__ID__']),
+        'deleteUrl' => route('admin.category.destroy', ['id' => '__ID__']),
+        'hasValidationErrors' => $errors->any(),
+        'oldInput' => old('TenDanhMuc'),
+        'oldMode' => old('form_mode'),
+        'oldId' => old('form_id'),
+    ]) }}"
+></div>
 
 @endsection
-
