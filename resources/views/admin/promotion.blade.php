@@ -243,7 +243,7 @@
                     max="100"
                     step="0.01"
                     value="{{ old('GiaTriGiam') }}"
-                    placeholder="10"
+                    placeholder=""
                     required
                 >
                 @error('GiaTriGiam')
@@ -271,17 +271,32 @@
             <div class="promotion-form-row promotion-form-row-paired">
                 <div class="promotion-form-group">
                     <label for="promotionStart">Ngày bắt đầu</label>
-                    <input
-                        type="text"
-                        id="promotionStart"
-                        name="NgayBatDau"
-                        value="{{ old('NgayBatDau') ? substr(old('NgayBatDau'), 0, 10) : '' }}"
-                        placeholder="dd/mm/yy"
-                        inputmode="numeric"
-                        pattern="[0-9]{2}/[0-9]{2}/[0-9]{2}"
-                        title="Nhập ngày theo định dạng dd/mm/yy."
-                        required
-                    >
+                    <div class="promotion-date-input">
+                        <input
+                            type="text"
+                            id="promotionStart"
+                            name="NgayBatDau"
+                            value="{{ old('NgayBatDau') ? substr(old('NgayBatDau'), 0, 10) : '' }}"
+                            placeholder="dd/mm/yy"
+                            inputmode="numeric"
+                            pattern="[0-9]{1,2}/[0-9]{1,2}/([0-9]{2}|[0-9]{4})"
+                            title="Nhập ngày theo dạng dd/mm/yy hoặc dd/mm/yyyy."
+                            required
+                        >
+                        <input
+                            type="date"
+                            id="promotionStartPicker"
+                            class="promotion-date-picker-native"
+                            tabindex="-1"
+                            aria-hidden="true"
+                        >
+                        <button
+                            type="button"
+                            class="promotion-date-picker-button"
+                            data-date-picker="promotionStartPicker"
+                            aria-label="Chọn ngày bắt đầu"
+                        ></button>
+                    </div>
                     @error('NgayBatDau')
                         <small class="promotion-field-error">{{ $message }}</small>
                     @enderror
@@ -289,17 +304,32 @@
 
                 <div class="promotion-form-group">
                     <label for="promotionEnd">Ngày kết thúc</label>
-                    <input
-                        type="text"
-                        id="promotionEnd"
-                        name="NgayHetHan"
-                        value="{{ old('NgayHetHan') ? substr(old('NgayHetHan'), 0, 10) : '' }}"
-                        placeholder="dd/mm/yy"
-                        inputmode="numeric"
-                        pattern="[0-9]{2}/[0-9]{2}/[0-9]{2}"
-                        title="Nhập ngày theo định dạng dd/mm/yy."
-                        required
-                    >
+                    <div class="promotion-date-input">
+                        <input
+                            type="text"
+                            id="promotionEnd"
+                            name="NgayHetHan"
+                            value="{{ old('NgayHetHan') ? substr(old('NgayHetHan'), 0, 10) : '' }}"
+                            placeholder="dd/mm/yy"
+                            inputmode="numeric"
+                            pattern="[0-9]{1,2}/[0-9]{1,2}/([0-9]{2}|[0-9]{4})"
+                            title="Nhập ngày theo dạng dd/mm/yy hoặc dd/mm/yyyy."
+                            required
+                        >
+                        <input
+                            type="date"
+                            id="promotionEndPicker"
+                            class="promotion-date-picker-native"
+                            tabindex="-1"
+                            aria-hidden="true"
+                        >
+                        <button
+                            type="button"
+                            class="promotion-date-picker-button"
+                            data-date-picker="promotionEndPicker"
+                            aria-label="Chọn ngày kết thúc"
+                        ></button>
+                    </div>
                     @error('NgayHetHan')
                         <small class="promotion-field-error">{{ $message }}</small>
                     @enderror

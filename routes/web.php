@@ -14,6 +14,7 @@ require __DIR__ . '/user/wishlist.php';
 require __DIR__ . '/user/address.php';
 require __DIR__.'/user/review.php';
 require __DIR__.'/user/refund.php';
+require __DIR__ . '/user/promotion.php';
 require __DIR__.'/admin/auth.php';
 require __DIR__.'/admin/category.php';
 require __DIR__.'/admin/brand.php';

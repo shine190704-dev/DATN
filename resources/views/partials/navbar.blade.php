@@ -18,9 +18,18 @@
 
     {{-- DANH MỤC --}}
     @foreach($danhMucs as $danhMuc)
+        @php
+            $isPromotionCategory = mb_strtolower(trim($danhMuc->TenDanhMuc), 'UTF-8') === 'khuyến mãi';
+            $categoryUrl = $isPromotionCategory
+                ? route('user.promotion.index')
+                : route('category.show', $danhMuc->DanhMucID);
+            $isCategoryActive = $isPromotionCategory
+                ? request()->routeIs('user.promotion.*')
+                : request()->routeIs('category.show') && request()->route('id') == $danhMuc->DanhMucID;
+        @endphp
         <a
-            href="{{ route('category.show', $danhMuc->DanhMucID) }}"
-            class="{{ request()->routeIs('category.show') && request()->route('id') == $danhMuc->DanhMucID ? 'active' : '' }}"
+            href="{{ $categoryUrl }}"
+            class="{{ $isCategoryActive ? 'active' : '' }}"
         >
             {{ mb_strtoupper($danhMuc->TenDanhMuc, 'UTF-8') }}
         </a>
@@ -30,5 +39,4 @@
     <a href="#">
         VỀ CHÚNG TÔI
     </a>
-
 </nav>

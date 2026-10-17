@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\user;
 
 use App\Models\BienThe;
-use App\Models\DanhMuc;
+use App\Models\CapMaGiamGia;
 use App\Models\ChiTietDonHang;
 use App\Models\ChiTietGioHang;
+use App\Models\DanhMuc;
 use App\Models\DiaChiNguoiDung;
 use App\Models\DonHang;
 use App\Models\GioHang;
@@ -523,35 +524,59 @@ $subtotal = $items->sum(function ($item) {
 
     if ($request->filled('MaCode')) {
         $today = today()->toDateString();
+        $maCode = strtoupper(trim($request->input('MaCode')));
 
         $maGiamGia = MaGiamGia::query()->from('magiamgia')
-            ->where(
-                'MaCode',
-                trim($request->MaCode)
-            )
-            ->where(
-                'TrangThai',
-                'HoatDong'
-            )
+            ->where('MaCode', $maCode)
+            ->where('TrangThai', 'HoatDong')
             ->whereDate('NgayBatDau', '<=', $today)
             ->whereDate('NgayHetHan', '>=', $today)
             ->first();
 
-
-        if (
-            $maGiamGia &&
-            $subtotal >= $maGiamGia->GiaTriDonHangToiThieu
-        ) {
-
-            $soTienGiam = round(
-                $subtotal *
-                $maGiamGia->GiaTriGiam /
-                100
-            );
-
-            $maGiamGiaID =
-                $maGiamGia->MaGiamGiaID;
+        if (!$maGiamGia) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'MaCode' => 'Mã khuyến mãi không hợp lệ, chưa đến hạn hoặc đã hết hạn.',
+                ]);
         }
+
+        $maDaCap = CapMaGiamGia::query()
+            ->where('NguoiDungID', $nguoiDungID)
+            ->where('MaGiamGiaID', $maGiamGia->MaGiamGiaID)
+            ->first();
+
+        if (!$maDaCap) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'MaCode' => 'Bạn chưa nhận mã khuyến mãi này.',
+                ]);
+        }
+
+        if ((bool) $maDaCap->DaSuDung) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'MaCode' => 'Mã khuyến mãi này đã được sử dụng.',
+                ]);
+        }
+
+        if ($subtotal < $maGiamGia->GiaTriDonHangToiThieu) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'MaCode' => 'Đơn hàng chưa đạt giá trị tối thiểu để sử dụng mã này.',
+                ]);
+        }
+
+        $soTienGiam = round(
+            $subtotal *
+            $maGiamGia->GiaTriGiam /
+            100
+        );
+
+        $maGiamGiaID = $maGiamGia->MaGiamGiaID;
     }
 
 
@@ -573,6 +598,50 @@ $subtotal = $items->sum(function ($item) {
 
 
     try {
+
+        $maDaCap = null;
+
+        if ($maGiamGiaID !== null) {
+            $maGiamGia = MaGiamGia::query()->from('magiamgia')
+                ->where('MaGiamGiaID', $maGiamGiaID)
+                ->lockForUpdate()
+                ->first();
+
+            $today = today()->toDateString();
+
+            if (
+                !$maGiamGia
+                || $maGiamGia->TrangThai !== 'HoatDong'
+                || $today < substr((string) $maGiamGia->NgayBatDau, 0, 10)
+                || $today > substr((string) $maGiamGia->NgayHetHan, 0, 10)
+                || $subtotal < $maGiamGia->GiaTriDonHangToiThieu
+            ) {
+                throw new \Exception(
+                    'Mã khuyến mãi không còn hợp lệ. Vui lòng kiểm tra lại đơn hàng.'
+                );
+            }
+
+            $maDaCap = CapMaGiamGia::query()
+                ->where('NguoiDungID', $nguoiDungID)
+                ->where('MaGiamGiaID', $maGiamGiaID)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$maDaCap) {
+                throw new \Exception('Bạn chưa nhận mã khuyến mãi này.');
+            }
+
+            if ((bool) $maDaCap->DaSuDung) {
+                throw new \Exception('Mã khuyến mãi này đã được sử dụng.');
+            }
+
+            $soTienGiam = round(
+                $subtotal *
+                $maGiamGia->GiaTriGiam /
+                100
+            );
+            $total = $subtotal + $shippingFee - $soTienGiam;
+        }
 
         // =====================================================
         // KIỂM TRA TỒN KHO + KHÓA BIẾN THỂ
@@ -786,6 +855,11 @@ $subtotal = $items->sum(function ($item) {
                 ->delete();
         }
 
+        if ($maDaCap) {
+            $maDaCap->DaSuDung = 1;
+            $maDaCap->NgaySuDung = now();
+            $maDaCap->save();
+        }
 
         // =====================================================
         // HOÀN TẤT TRANSACTION
@@ -872,8 +946,10 @@ public function applyCoupon(Request $request)
     $subtotal = (float) $request->Subtotal;
     $today = today()->toDateString();
 
+    $maCode = strtoupper(trim($request->input('MaCode')));
+
     $maGiamGia = MaGiamGia::query()->from('magiamgia')
-        ->where('MaCode', trim($request->MaCode))
+        ->where('MaCode', $maCode)
         ->where('TrangThai', 'HoatDong')
         ->whereDate('NgayBatDau', '<=', $today)
         ->whereDate('NgayHetHan', '>=', $today)
@@ -883,6 +959,25 @@ public function applyCoupon(Request $request)
         return response()->json([
             'success' => false,
             'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn.',
+        ]);
+    }
+
+    $maDaCap = CapMaGiamGia::query()
+        ->where('NguoiDungID', session('NguoiDungID'))
+        ->where('MaGiamGiaID', $maGiamGia->MaGiamGiaID)
+        ->first();
+
+    if (!$maDaCap) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Bạn cần nhận mã khuyến mãi trước khi sử dụng.',
+        ]);
+    }
+
+    if ((bool) $maDaCap->DaSuDung) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Mã khuyến mãi này đã được sử dụng.',
         ]);
     }
 

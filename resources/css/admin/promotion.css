@@ -419,6 +419,57 @@
     color: #82968b;
 }
 
+#promotionModal .promotion-date-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#promotionModal .promotion-date-input > input[type="text"] {
+    padding-right: 40px;
+}
+
+#promotionModal .category-modal input.promotion-date-picker-native {
+    position: absolute;
+    right: 4px;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#promotionModal .promotion-date-picker-button {
+    position: absolute;
+    right: 5px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #286f5d;
+    cursor: pointer;
+}
+
+#promotionModal .promotion-date-picker-button::before {
+    width: 13px;
+    height: 12px;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+    background:
+        linear-gradient(currentColor, currentColor) 0 3px / 100% 1px no-repeat,
+        linear-gradient(currentColor, currentColor) 3px -2px / 1px 4px no-repeat,
+        linear-gradient(currentColor, currentColor) 8px -2px / 1px 4px no-repeat;
+    content: "";
+}
+
 #promotionModal #promotionCode {
     margin-bottom: 0;
 }
@@ -793,7 +844,7 @@
 }
 
 /* Viền vàng cho các nút, ngoại trừ Lưu và Hủy */
-#promotionModal button:not(.category-btn-save):not(.category-btn-cancel),
+#promotionModal button:not(.category-btn-save):not(.category-btn-cancel):not(.promotion-date-picker-button),
 #promotionDeleteModal button:not(.category-btn-save):not(.category-btn-cancel) {
     border: 1px solid #ffdf59;
 }

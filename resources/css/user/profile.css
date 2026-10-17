@@ -219,6 +219,10 @@
     font-size: 13px;
 }
 
+.address-header h1 {
+    font-size: 18px;
+}
+
 .btn-add-address,
 .btn-save-address {
     border: 0;

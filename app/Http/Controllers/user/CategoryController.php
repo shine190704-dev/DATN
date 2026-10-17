@@ -108,6 +108,10 @@ public function newProducts()
         abort(404);
     }
 
+    if (mb_strtolower(trim($danhMuc->TenDanhMuc), 'UTF-8') === 'khuyến mãi') {
+        return redirect()->route('user.promotion.index');
+    }
+
     // Lấy sản phẩm thuộc danh mục
     $query = SanPham::query()->from('SanPham')
         ->where('SanPham.DanhMucID', $id)

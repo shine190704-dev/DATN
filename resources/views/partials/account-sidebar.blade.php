@@ -50,10 +50,12 @@
 
 
 
-         <a href="#" class="account-menu-item">
-            Mã khuyến mãi của tôi
+         <a
+            href="{{ route('user.account.promotions') }}"
+            class="account-menu-item {{ request()->routeIs('user.account.promotions') ? 'active' : '' }}"
+        >
+         Mã khuyến mãi của tôi
         </a>
-
 
         <a
             href="{{ route('profile') }}"

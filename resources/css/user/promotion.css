@@ -1,0 +1,167 @@
+/* ======================================
+   TRANG KHUYẾN MÃI NGƯỜI DÙNG
+====================================== */
+
+.user-promotion-page {
+    width: 100%;
+    min-height: 300px;
+    padding: 24px 4% 50px;
+    box-sizing: border-box;
+    font-family: 'Merriweather', serif;
+    color: #59a78e;
+}
+
+.user-promotion-title {
+    margin: 0 0 40px;
+    color: #59a78e;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.user-promotion-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 500px));
+    justify-content: space-evenly;
+    gap: 38px;
+    align-items: stretch;
+}
+
+.user-promotion-card {
+    display: flex;
+    min-width: 0;
+    min-height: 110px;
+    overflow: hidden;
+    border: 1px solid #59a78e;
+    border-radius: 11px;
+    background: #d9efbd;
+}
+
+.user-promotion-discount {
+    display: flex;
+    flex: 0 0 34%;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background: #59a78e;
+    color: #ffdf5a;
+    text-align: center;
+}
+
+.user-promotion-discount span {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.user-promotion-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-width: 0;
+    padding: 7px 10px;
+}
+
+.user-promotion-info h2 {
+    margin: 0;
+    color: #59a78e;
+    font-size: 16px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.user-promotion-info p {
+    margin: 0;
+    color: #59a78e;
+    font-size: 13px;
+    line-height: 1.25;
+}
+
+.user-promotion-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0;
+}
+
+.user-promotion-claim {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    min-height: 30px;
+    padding: 4px 19.5px;
+    border: none;
+    border-radius: 20px;
+    background: #59a78e;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.user-promotion-claim:hover {
+    background: #438d75;
+}
+
+.user-promotion-status {
+    display: inline-block;
+    max-width: 100%;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.user-promotion-status.upcoming {
+    background: #c9c9c1;
+    color: #77776f;
+}
+
+.user-promotion-status.available {
+    background: #59a78e;
+    color: #ffffff;
+}
+
+.user-promotion-status.claimed {
+    background: #c5e8d2;
+    color: #287346;
+}
+
+.user-promotion-status.expired,
+.user-promotion-status.depleted {
+    background: #c9c9c1;
+    color: #77776f;
+}
+
+.user-promotion-alert {
+    margin: -45px 0 30px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.user-promotion-alert.success {
+    background: #e2f4e9;
+    color: #287346;
+}
+
+.user-promotion-alert.error {
+    background: #fce7e7;
+    color: #b42318;
+}
+
+.user-promotion-empty {
+    grid-column: 1 / -1;
+    padding: 35px 15px;
+    color: #8a9d94;
+    font-size: 18px;
+    text-align: center;
+}

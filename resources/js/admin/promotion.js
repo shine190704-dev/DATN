@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const promotionMinimum = document.getElementById('promotionMinimum');
     const promotionStart = document.getElementById('promotionStart');
     const promotionEnd = document.getElementById('promotionEnd');
+    const promotionStartPicker = document.getElementById('promotionStartPicker');
+    const promotionEndPicker = document.getElementById('promotionEndPicker');
     const promotionQuantity = document.getElementById('promotionQuantity');
     const promotionStatus = document.getElementById('promotionStatus');
 
@@ -37,13 +39,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function parseDisplayDate(value) {
-        const match = String(value || '').match(/^(\d{2})\/(\d{2})\/(\d{2})$/);
+        const match = String(value || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
 
         if (!match) return null;
 
         const day = Number(match[1]);
         const month = Number(match[2]);
-        const year = 2000 + Number(match[3]);
+        const yearValue = Number(match[3]);
+        const year = match[3].length === 2 ? 2000 + yearValue : yearValue;
         const date = new Date(Date.UTC(year, month - 1, day));
 
         if (
@@ -54,11 +57,41 @@ document.addEventListener('DOMContentLoaded', function () {
             return null;
         }
 
-        return `${year}-${match[2]}-${match[1]}`;
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     }
 
     promotionStart.value = formatDateForDisplay(promotionStart.value);
     promotionEnd.value = formatDateForDisplay(promotionEnd.value);
+
+    [
+        [promotionStart, promotionStartPicker],
+        [promotionEnd, promotionEndPicker]
+    ].forEach(function ([dateInput, pickerInput]) {
+        pickerInput.addEventListener('change', function () {
+            dateInput.value = formatDateForDisplay(pickerInput.value);
+            dateInput.setCustomValidity('');
+        });
+    });
+
+    document.querySelectorAll('[data-date-picker]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const pickerInput = document.getElementById(button.dataset.datePicker);
+            const dateInput = pickerInput === promotionStartPicker
+                ? promotionStart
+                : promotionEnd;
+            const parsedDate = parseDisplayDate(dateInput.value);
+
+            if (parsedDate) {
+                pickerInput.value = parsedDate;
+            }
+
+            if (typeof pickerInput.showPicker === 'function') {
+                pickerInput.showPicker();
+            } else {
+                pickerInput.click();
+            }
+        });
+    });
 
     [promotionStart, promotionEnd].forEach(function (input) {
         input.addEventListener('input', function () {
@@ -74,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             const invalidInput = !startDate ? promotionStart : promotionEnd;
 
-            invalidInput.setCustomValidity('Vui lòng nhập ngày hợp lệ theo định dạng dd/mm/yy.');
+            invalidInput.setCustomValidity('Vui lòng nhập ngày hợp lệ theo dạng dd/mm/yy hoặc dd/mm/yyyy.');
             invalidInput.reportValidity();
             return;
         }
